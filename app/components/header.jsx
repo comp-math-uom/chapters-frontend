@@ -1,8 +1,14 @@
+"use client";
+
+import { toggleFilterText, isFilterTextVisible } from '../services/filterService';
 import styles from '../page.module.css';
+import { useState } from 'react';
 import Image from "next/image";
-import filterIcon from '../data/noun-filter-6630842.svg';
+import LineFilter from '../data/line-filter.svg';
+import { toggleFilterText } from '../services/filterService.js';
 
 export default function Header() {
+    
     return (
         <header className="flex flex-col items-center justify-center py-16">
             <div className={"max-w-screen-lg w-full flex flex-col items-center justify-center"}>
@@ -27,8 +33,8 @@ export default function Header() {
                     </div>
                 </div>
                 <div className="relative h-10 flex items-center">
-                    <button className="h-full w-auto">
-                        <Image src={filterIcon} alt="Filter Icon" height={48} width={48} className="h-full w-auto"/>
+                    <button className="h-full w-auto" onClick={toggleFilter}>
+                        <Image src={LineFilter} alt="Filter Icon" height={48} width={48} className="h-full w-auto"/>
                     </button>
                 </div>
             </div>
