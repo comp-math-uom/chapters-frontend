@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Image from "next/image";
-import LineFilter from '../data/line-filter.svg';
-import Filtered from '../data/fill-filter.svg';
-import ArrowDown from '../data/arrow-down.svg';
+import LineFilter from '../assets/img/line-filter.svg';
+import Filtered from '../assets/img/fill-filter.svg';
+import ArrowDown from '../assets/img/arrow-down.svg';
 import { toggleFilterText } from '../services/filterService.js';
 
 
