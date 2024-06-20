@@ -7,23 +7,27 @@ import Filtered from '../data/fill-filter.svg';
 import ArrowDown from '../data/arrow-down.svg';
 import { toggleFilterText } from '../services/filterService.js';
 
+
 export default function Header() {
     const [filterIcon, setFilterIcon] = useState(LineFilter); 
     const [showText, setShowText] = useState(false);
-
+    const [YearOpen, setYearOpen] = useState(false);
+    const [BatchOpen, setBatchOpen] = useState(false);
+    const [MonthOpen, setMonthOpen] = useState(false);
+    const [FieldOpen, setFeildOpen] = useState(false);
+      
     const handleToggleFilter = () => {
         toggleFilterText(); 
         
         if (filterIcon === LineFilter) {
             setFilterIcon(Filtered);
             setShowText(true);
-            console.log("hi");
         } else {
             setFilterIcon(LineFilter);
             setShowText(false);
-            console.log("hello");
         }
     };
+
     
     return (
         <header className="w-full flex flex-col items-center justify-center py-16">
@@ -58,28 +62,73 @@ export default function Header() {
                 <div className="w-full mt-10 flex items-center justify-center text-lg text-gray-500">
                     <ul className="flex flex-wrap gap-4 list-none">
                         <li className="relative flex items-center border border-gray-500 rounded px-4">
-                            <span className="mr-2">
-                                <Image src={ArrowDown} alt="Arrow Down" />
-                            </span>
-                            <select className="bg-transparent outline-none appearance-none ml-2">
-                                <option value="">Year</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                            </select>
+                            <div onClick={() => setYearOpen(!YearOpen)} className="cursor-pointer flex items-center">
+                                <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
+                                Year
+                            </div>
+                            {YearOpen && (
+                                <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg">
+                                    <ul aria-orientation="vertical" className="py-2">
+                                        <li className="px-4 py-2 hover:bg-gray-100">2022</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">2023</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">2024</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">2025</li>
+                                    </ul>
+                                </div>
+                            )}
                         </li>
-                        <li className="flex items-center border border-gray-500 rounded px-4">
-                            <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
-                            Batch
+                        <li className="relative flex items-center border border-gray-500 rounded px-4">
+                            <div onClick={() => setBatchOpen(!BatchOpen)} className="cursor-pointer flex items-center">
+                                <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
+                                Batch
+                            </div>
+                            {BatchOpen && (
+                                <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg">
+                                    <ul aria-orientation="vertical" className="py-2">
+                                        <li className="px-4 py-2 hover:bg-gray-100">Batch 21</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">Batch 22</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">Batch 23</li>
+                                    </ul>
+                                </div>
+                            )}
                         </li>
-                        <li className="flex items-center border border-gray-500 rounded px-4">
-                            <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
-                            Month
+                        <li className="relative flex items-center border border-gray-500 rounded px-4">
+                            <div onClick={() => setMonthOpen(!MonthOpen)} className="cursor-pointer flex items-center">
+                                <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
+                                Month
+                            </div>
+                            {MonthOpen && (
+                                <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg">
+                                    <ul aria-orientation="vertical" className="py-2">
+                                        <li className="px-4 py-2 hover:bg-gray-100">January</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">February</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">March</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">April</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">May</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">June</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">July</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">August</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">September</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">October</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">November</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">December</li>
+                                    </ul>
+                                </div>
+                            )}
                         </li>
-                        <li className="flex items-center border border-gray-500 rounded px-4">
-                            <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
-                            Field
+                        <li className="relative flex items-center border border-gray-500 rounded px-4">
+                            <div onClick={() => setFeildOpen(!FieldOpen)} className="cursor-pointer flex items-center">
+                                <Image src={ArrowDown} alt="Arrow Down" className="mr-2" />
+                                Feild
+                            </div>
+                            {FieldOpen && (
+                                <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg">
+                                    <ul aria-orientation="vertical" className="py-2">
+                                        <li className="px-4 py-2 hover:bg-gray-100">Hardware</li>
+                                        <li className="px-4 py-2 hover:bg-gray-100">Software</li>
+                                    </ul>
+                                </div>
+                            )}
                         </li>
                         <li className="flex items-center">
                             <button className="border border-gray-500 rounded px-4 py-2 bg-gray-200">
