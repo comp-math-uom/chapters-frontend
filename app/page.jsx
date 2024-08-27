@@ -4,10 +4,12 @@ import Navbar from "./components/Navbar";
 
 export default function Home() {
     return (
-        <div className="container flex flex-col justify-center px-20 m-auto">
+        <div className="container-fluid flex flex-col justify-center m-auto">
             <Navbar />
-            <Header />
             
+            <div className="container flex flex-col justify-center m-auto">
+                <Header />                
+            </div>
         </div>
     );
 }
