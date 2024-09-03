@@ -13,7 +13,9 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
+        anton: ['Anton', 'sans-serif'],
         impact: ['Impact', 'sans-serif'],
+        anybody: ['Anybody', 'sans-serif'],
       },
     },
   },
