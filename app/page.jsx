@@ -1,7 +1,11 @@
+import React from "react";
+import Header from './components/header';
+import Navbar from "./components/Navbar";
+
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>CHAPTERS - Landing Page</h1>
-    </main>
-  );
+    return (
+        <div className="container-fluid flex flex-col justify-center m-auto">
+            <Navbar />
+        </div>
+    );
 }
