@@ -1,9 +1,12 @@
-import Image from "next/image";
+import React from "react";
+import MediaGallery from "@/app/components/MeidaGallery";
+import Header from "@/app/components/header";
 
 export default function Home() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <h1>CHAPTERS - Portfolio Page</h1>
-        </main>
+        <div className="container flex flex-col justify-center m-auto px-20">
+            <Header />
+            <MediaGallery />
+        </div>
     );
 }
