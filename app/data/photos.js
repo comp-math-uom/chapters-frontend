@@ -3,7 +3,7 @@ function assetLink(asset, width) {
 }
 
 const photos = [
-    { asset: "image01.018d1d35.jpg", width: 1080, height: 780 },
+    { asset: "image01.018d1d35.jpg", width: 1080, height: 780, },
     { asset: "image02.cf33eff7.jpg", width: 1080, height: 1620 },
     { asset: "image03.cdc32b45.jpg", width: 1080, height: 720 },
     { asset: "image04.9a1f6335.jpg", width: 1080, height: 720 },

@@ -1,6 +1,7 @@
 import React from "react";
 import MediaGallery from "@/app/components/MeidaGallery";
-import Header from "@/app/components/header";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 
 export default function Home() {
     return (

@@ -30,8 +30,8 @@ export default function Header() {
 
     
     return (
-        <header className="w-full flex flex-col items-center justify-center py-16">
-            <div className={"max-w-2xl w-full flex flex-col items-center justify-center"}>
+        <div className="w-full flex flex-col items-center justify-center py-16">
+            <div className="max-w-2xl w-full flex flex-col items-center justify-center">
                 <h1 className="text-6xl font-bold text-gray-800 font-anton">PORTFOLIO</h1>
                 <p className="mt-4 text-lg text-gray-500 text-center font-anybody">
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -149,6 +149,6 @@ export default function Header() {
                     </div>
                 </div>
             )}
-        </header>
+        </div>
     );
 }
