@@ -1,42 +1,82 @@
 "use client";
 
+import {
+    Box,
+    Container,
+    Grid,
+    GridItem,
+    Heading,
+    Text,
+    Input,
+    Button,
+    Stack,
+    Flex,
+    Divider
+} from "@chakra-ui/react";
+
 export default function Footer() {
     return (
-        <footer className="bg-white text-gray-700 border-t border-gray-200 mt-20">
-            <div className="max-w-7xl mx-auto px-4 py-12">
+        <Box as="footer" bg="white" color="gray.700" borderTop="1px" borderColor="gray.200" mt="20">
+            <Container maxW="7xl" px="4" py="12">
                 {/* Main Footer Content */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap="8">
                     {/* Brand Section */}
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-bold text-black">CHAPTERS</h3>
-                        <p className="text-gray-600 text-sm">
-                            Capturing adventures and sharing stories from the great outdoors.
-                        </p>
-
-                    </div>
+                    <GridItem>
+                        <Stack spacing="4">
+                            <Heading as="h3" fontSize="xl" color="black" fontWeight="bold">
+                                CHAPTERS
+                            </Heading>
+                            <Text fontSize="sm" color="gray.600">
+                                Capturing adventures and sharing stories from the great outdoors.
+                            </Text>
+                        </Stack>
+                    </GridItem>
 
                     {/* Newsletter */}
-                    <div className="space-y-4">
-                        <h4 className="text-lg font-semibold text-black">Stay Updated</h4>
-                        <p className="text-gray-600 text-sm">Subscribe to our newsletter for the latest updates and stories.</p>
-                        <div className="flex space-x-2">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="border border-gray-300 px-4 py-2 rounded-lg flex-grow text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-                            />
-                            <button className="bg-black hover:bg-gray-800 px-4 py-2 rounded-lg text-white text-sm transition-colors">
-                                Subscribe
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                    <GridItem>
+                        <Stack spacing="4">
+                            <Heading as="h4" fontSize="lg" color="black" fontWeight="semibold">
+                                Stay Updated
+                            </Heading>
+                            <Text fontSize="sm" color="gray.600">
+                                Subscribe to our newsletter for the latest updates and stories.
+                            </Text>
+                            <Flex gap="2">
+                                <Input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    size="md"
+                                    fontSize="sm"
+                                    focusBorderColor="gray.400"
+                                    borderRadius="lg"
+                                />
+                                <Button
+                                    bg="black"
+                                    color="white"
+                                    _hover={{ bg: "gray.800" }}
+                                    size="md"
+                                    fontSize="sm"
+                                    borderRadius="lg"
+                                    px="4"
+                                >
+                                    Subscribe
+                                </Button>
+                            </Flex>
+                        </Stack>
+                    </GridItem>
+                </Grid>
 
                 {/* Bottom Bar */}
-                <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-600 text-sm">
-                    <p>&copy; {new Date().getFullYear()} CHAPTERS. All rights reserved.</p>
-                </div>
-            </div>
-        </footer>
+                <Divider mt="12" borderColor="gray.200" />
+                <Text
+                    textAlign="center"
+                    fontSize="sm"
+                    color="gray.600"
+                    mt="8"
+                >
+                    &copy; {new Date().getFullYear()} CHAPTERS. All rights reserved.
+                </Text>
+            </Container>
+        </Box>
     );
 }
