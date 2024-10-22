@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/app/components/Navbar";
+import Footer from "@/app/components/Footer";
 
 export const metadata = {
     title: "CHAPTERS | Portfolio",
@@ -8,10 +9,10 @@ export const metadata = {
 
 export default function PortfolioLayout({ children }) {
     return (
-        <div className="flex min-h-screen flex-col justify-between">
+        <div className="flex flex-col min-h-screen">
             <Navbar />
             {children}
-            <h1>CHAPTERS - Footer</h1>
+            <Footer />
         </div>
     );
 }

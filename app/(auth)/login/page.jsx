@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-function Page() {
+export default function Page() {
     const router = useRouter();
     const username = useRef(null);
     const password = useRef(null);
@@ -63,5 +63,3 @@ function Page() {
         </div>
     );
 }
-
-export default Page;
