@@ -5,6 +5,7 @@ import MediaGallery from "@/app/components/MeidaGallery";
 import PortfolioHeader from "@/app/components/PortfolioHeader";
 import PortfolioService from "@/app/services/portfolioService";
 import FloatingButton from "@/app/components/FloatingButton";
+import NoSearchResults from "@/app/components/NoResult";
 
 export default function Home() {
 
@@ -33,7 +34,8 @@ export default function Home() {
     return (
         <div className="container flex flex-col justify-center m-auto px-20">
             <PortfolioHeader filterFn={handleFilter} resetFn={handleReset} />
-            <MediaGallery galleryItems={galleryItems} />
+            {galleryItems.length > 0 && <MediaGallery galleryItems={galleryItems}/>}
+            {galleryItems.length === 0 && <NoSearchResults onClear={handleReset}/>}
             <FloatingButton url="/portfolio/add-item" />
         </div>
     );
