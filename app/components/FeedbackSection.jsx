@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import portfolioService, {feedbackService} from "@/app/services/portfolioService";
 import {Box, Heading, Text, VStack, Container, Button, HStack, Avatar} from '@chakra-ui/react';
+import {feedbackService} from "@/app/services/feedbackService";
 
 const FeedbackSection = () => {
     const [feedbacks, setFeedbacks] = useState([]);

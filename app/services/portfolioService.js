@@ -29,11 +29,4 @@ const portfolioService = {
         photos.splice(index, 1);
     }
 };
-
-export const feedbackService={
-    async fetchFeedbacks(){
-        return FeedbackData;
-    }
-}
-
 export default portfolioService;
