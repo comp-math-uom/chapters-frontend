@@ -1,6 +1,7 @@
 "use client";
 
 import PortfolioForm from "@/app/components/PortfolioForm";
+import FeedbackSection from "@/app/components/FeedbackSection";
 
 export default function Page() {
     const handleSubmit = (values, actions) => {
@@ -28,6 +29,7 @@ export default function Page() {
                 Edit Post
             </h1>
             <PortfolioForm initialValues={initialValues} handleSubmit={handleSubmit}/>
+            <FeedbackSection/>
         </div>
     );
 }

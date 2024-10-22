@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import MediaGallery from "@/app/components/MeidaGallery";
 import PortfolioHeader from "@/app/components/PortfolioHeader";
 import PortfolioService from "@/app/services/portfolioService";
+import FloatingButton from "@/app/components/FloatingButton";
 
 export default function Home() {
 
@@ -33,6 +34,7 @@ export default function Home() {
         <div className="container flex flex-col justify-center m-auto px-20">
             <PortfolioHeader filterFn={handleFilter} resetFn={handleReset} />
             <MediaGallery galleryItems={galleryItems} />
+            <FloatingButton url="/portfolio/add-item" />
         </div>
     );
 }

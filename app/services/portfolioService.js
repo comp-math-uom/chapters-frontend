@@ -1,5 +1,6 @@
 import photos from "@/app/data/photos";
 import contributors from "@/app/data/contributors";
+import {FeedbackData} from "@/app/data/Feedbacks";
 
 const portfolioService = {
     async fetchGalleryItems() {
@@ -62,5 +63,4 @@ const portfolioService = {
         photos.splice(index, 1);
     }
 };
-
 export default portfolioService;
