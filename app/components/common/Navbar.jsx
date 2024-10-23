@@ -18,7 +18,7 @@ function Navbar() {
       <div className="fixed top-0 left-0 right-0 bg-white z-50">
         <div className="flex items-center justify-between p-5 container m-auto">
           <div className="ml-14">
-            <Link href="/public" passHref>
+            <Link href="/" passHref>
               <h1 className="m-0 text-3xl font-impact cursor-pointer">CHAPTERS</h1>
             </Link>
           </div>
