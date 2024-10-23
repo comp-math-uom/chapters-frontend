@@ -1,6 +1,7 @@
-import React from "react";
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/Footer";
+import React, {Suspense} from "react";
+import Navbar from "@/app/components/common/Navbar";
+import Footer from "@/app/components/common/Footer";
+import Loading from "@/app/(portfolio)/loading";
 
 export const metadata = {
     title: "CHAPTERS | Portfolio",
@@ -11,7 +12,9 @@ export default function PortfolioLayout({ children }) {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            {children}
+            <Suspense fallback={<Loading />}>
+                {children}
+            </Suspense>
             <Footer />
         </div>
     );
