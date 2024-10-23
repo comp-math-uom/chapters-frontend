@@ -1,7 +1,7 @@
 "use client";
 
-import PortfolioForm from "@/app/components/PortfolioForm";
-import FeedbackSection from "@/app/components/FeedbackSection";
+import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
+import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 
 export default function Page() {
     const handleSubmit = (values, actions) => {
