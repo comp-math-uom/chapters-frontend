@@ -126,7 +126,7 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                         <Tooltip hasArrow label="Advanced filter" borderRadius="md">
                             <Button
                                 onClick={handleToggleFilter}
-                                background="transparent"
+                                bg="transparent"
                                 _hover={{background: "transparent"}}
                                 width="100%"
                                 height="100%"
