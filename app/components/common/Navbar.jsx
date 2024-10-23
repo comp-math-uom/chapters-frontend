@@ -15,8 +15,8 @@ function Navbar() {
   }, []);
 
   return (
-      <div>
-        <div className="fixed top-0 w-full bg-white z-50 border-b border-gray-400 flex items-center justify-between p-5 container m-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white z-50">
+        <div className="flex items-center justify-between p-5 container m-auto">
           <div className="ml-14">
             <Link href="/public" passHref>
               <h1 className="m-0 text-3xl font-impact cursor-pointer">CHAPTERS</h1>
@@ -24,25 +24,25 @@ function Navbar() {
           </div>
           <div className="flex items-center gap-5">
             {username ? (
-              <div className="flex items-center gap-2">
-                <p className="text-base text-black text-decoration-none">{username}</p>
-                {profilePic && (
-                  <img
-                    src={profilePic}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full"
-                  />
-                )}
-              </div>
+                <div className="flex items-center gap-2">
+                  <p className="text-base text-black text-decoration-none">{username}</p>
+                  {profilePic && (
+                      <img
+                          src={profilePic}
+                          alt="Profile"
+                          className="w-10 h-10 rounded-full"
+                      />
+                  )}
+                </div>
             ) : (
-              <div className="flex space-x-4 mr-14">
-                <Link href="/Signin" className="hover:underline">Sign In</Link> &nbsp; &nbsp; |
-                <Link href="#" className="hover:underline">Sign Up</Link>
-              </div>
+                <div className="flex space-x-4 mr-14">
+                  <Link href="/Signin" className="hover:underline">Sign In</Link> &nbsp; &nbsp; |
+                  <Link href="#" className="hover:underline">Sign Up</Link>
+                </div>
             )}
           </div>
         </div>
-          <hr/>
+        <hr/>
       </div>
   );
 }
