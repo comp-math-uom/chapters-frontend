@@ -1,12 +1,11 @@
 import {Field, Form, Formik} from "formik";
 import {Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea} from "@chakra-ui/react";
 import {SingleDatepicker} from "chakra-dayzed-datepicker";
-import SearchTagsField from "@/app/components/SearchTagInput";
-import ImageUploadField from "@/app/components/imageFileUpload";
+import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import Link from "next/link";
 import {Select as MultiSelect, CreatableSelect} from "chakra-react-select";
 import {useEffect, useState} from "react";
-import portfolioService from "./../services/portfolioService"
+import portfolioService from "../../services/portfolioService"
 
 export default function PortfolioForm({initialValues, handleSubmit}) {
 

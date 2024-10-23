@@ -2,9 +2,9 @@
 
 import {useState} from 'react';
 import Image from "next/image";
-import LineFilter from '../assets/img/line-filter.svg';
-import Filtered from '../assets/img/fill-filter.svg';
-import {toggleFilterText} from '../services/filterService.js';
+import LineFilter from '../../assets/img/line-filter.svg';
+import Filtered from '../../assets/img/fill-filter.svg';
+import {toggleFilterText} from '../../services/filterService.js';
 import {
     Box,
     Button,

@@ -1,7 +1,7 @@
 "use client";
 
 import PhotoAlbum from "react-photo-album";
-import GalleryItem from "@/app/components/GalleryItem";
+import GalleryItem from "@/app/components/portfolio/GalleryItem";
 
 export default function MediaGallery({ galleryItems }) {
 

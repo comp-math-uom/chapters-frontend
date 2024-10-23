@@ -1,6 +1,6 @@
 import React from "react";
-import PortfolioHeader from './components/PortfolioHeader';
-import Navbar from "./components/Navbar";
+import PortfolioHeader from './components/portfolio/PortfolioHeader';
+import Navbar from "./components/common/Navbar";
 
 export default function Home() {
     return (
