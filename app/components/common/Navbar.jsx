@@ -16,8 +16,8 @@ function Navbar() {
 
   return (
       <div>
-        <div className="flex items-center justify-between p-5 container m-auto">
-          <div>
+        <div className="fixed top-0 w-full bg-white z-50 border-b border-gray-400 flex items-center justify-between p-5 container m-auto">
+          <div className="ml-14">
             <Link href="/public" passHref>
               <h1 className="m-0 text-3xl font-impact cursor-pointer">CHAPTERS</h1>
             </Link>
@@ -35,7 +35,7 @@ function Navbar() {
                 )}
               </div>
             ) : (
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 mr-14">
                 <Link href="/Signin" className="hover:underline">Sign In</Link> &nbsp; &nbsp; |
                 <Link href="#" className="hover:underline">Sign Up</Link>
               </div>
