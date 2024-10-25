@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  prod:
+    image: chapters-frontend
+    container_name: chapters-frontend
+    build:
+      context: ./
+      target: prod
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
