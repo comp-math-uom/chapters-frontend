@@ -2,7 +2,9 @@
 const nextConfig = {
 reactStrictMode: true,
     images: {
-        domains: ["assets.react-photo-album.com"],
+        remotePatterns: [
+            { hostname: "assets.react-photo-album.com" }
+        ]
     }
 };
 
