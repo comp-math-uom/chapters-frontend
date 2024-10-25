@@ -11,11 +11,13 @@ export const metadata = {
 export default function PortfolioLayout({ children }) {
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <Suspense fallback={<Loading />}>
-                {children}
-            </Suspense>
-            <Footer />
+            <Navbar/>
+            <main className="flex-grow pt-[73px]"> {/* Add padding-top here */}
+                <Suspense fallback={<Loading/>}>
+                    {children}
+                </Suspense>
+            </main>
+            <Footer/>
         </div>
     );
 }

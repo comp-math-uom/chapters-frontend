@@ -1,5 +1,3 @@
-"use client";
-
 import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
 
 export default function Page() {

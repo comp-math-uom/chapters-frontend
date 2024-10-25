@@ -89,8 +89,8 @@ export default function PortfolioHeader({filterFn, resetFn}) {
     }
 
     return (
-        <Box width="full" py={16} pt={36}>
-            <VStack spacing={10} align="center">
+        <Box width="full" py={16}>
+            <VStack spacing={8} align="center">
                 <Box maxW="2xl" textAlign="center">
                     <Heading as="h1" size="4xl" fontWeight="bold" className={'font-anton'}>
                         PORTFOLIO
@@ -126,7 +126,7 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                         <Tooltip hasArrow label="Advanced filter" borderRadius="md">
                             <Button
                                 onClick={handleToggleFilter}
-                                background="transparent"
+                                bg="transparent"
                                 _hover={{background: "transparent"}}
                                 width="100%"
                                 height="100%"
