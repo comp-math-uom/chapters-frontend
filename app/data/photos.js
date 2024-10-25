@@ -1,0 +1,249 @@
+function assetLink(asset, width) {
+    return `https://assets.react-photo-album.com/_next/image?url=${encodeURIComponent(`/_next/static/media/${asset}`)}&w=${width}&q=75`;
+}
+
+const photos = [
+    {
+        asset: "image01.018d1d35.jpg",
+        width: 1080,
+        height: 780,
+        topic: "NATURE",
+        description: "A beautiful scene of nature capturing the essence of the wilderness. The lush greenery and serene environment evoke a sense of peace and tranquility.",
+        date: "2024-10-01",
+        batch: "Batch 21",
+        featured: true,
+        visible: true,
+        searchTags: ["nature", "outdoors", "greenery", "landscape"]
+    },
+    {
+        asset: "image02.cf33eff7.jpg",
+        width: 1080,
+        height: 1620,
+        topic: "PORTRAIT",
+        description: "A stunning portrait photograph that brings out the character and personality of the subject. The lighting highlights the details, adding depth and emotion.",
+        date: "2024-09-15",
+        batch: "Batch 22",
+        featured: false,
+        visible: true,
+        searchTags: ["portrait", "face", "expression", "people"]
+    },
+    {
+        asset: "image03.cdc32b45.jpg",
+        width: 1080,
+        height: 720,
+        topic: "CITYSCAPE",
+        description: "An urban cityscape showcasing the towering skyscrapers and bustling streets. The dynamic atmosphere of the city is captured beautifully.",
+        date: "2024-08-10",
+        batch: "Batch 23",
+        featured: true,
+        visible: false,
+        searchTags: ["city", "urban", "buildings", "nightlife"]
+    },
+    {
+        asset: "image04.9a1f6335.jpg",
+        width: 1080,
+        height: 720,
+        topic: "TRAVEL",
+        description: "A travel photograph that inspires adventure and exploration. It captures the spirit of wandering through unknown paths.",
+        date: "2024-07-25",
+        batch: "Batch 21",
+        featured: false,
+        visible: true,
+        searchTags: ["travel", "adventure", "exploration", "journey"]
+    },
+    {
+        asset: "image05.d7ef12b4.jpg",
+        width: 1080,
+        height: 1620,
+        topic: "FASHION",
+        description: "A stylish fashion shot emphasizing the latest trends and designer wear. It exudes elegance and modern aesthetics.",
+        date: "2024-06-30",
+        batch: "Batch 22",
+        featured: true,
+        visible: true,
+        searchTags: ["fashion", "style", "clothing", "trends"]
+    },
+    {
+        asset: "image06.4ab952e3.jpg",
+        width: 1080,
+        height: 607,
+        topic: "LANDSCAPE",
+        description: "A picturesque landscape photograph that showcases the beauty of nature. The vast scenery is breathtaking and serene.",
+        date: "2024-05-05",
+        batch: "Batch 23",
+        featured: false,
+        visible: false,
+        searchTags: ["landscape", "scenery", "outdoors", "nature"]
+    },
+    {
+        asset: "image07.ac608196.jpg",
+        width: 1080,
+        height: 608,
+        topic: "ARCHITECTURE",
+        description: "A detailed architectural shot capturing the structural elements and design of a modern building. The lines and shapes create a captivating view.",
+        date: "2024-04-11",
+        batch: "Batch 21",
+        featured: true,
+        visible: true,
+        searchTags: ["architecture", "building", "design", "modern"]
+    },
+    {
+        asset: "image08.95e095b5.jpg",
+        width: 1080,
+        height: 720,
+        topic: "WILDLIFE",
+        description: "A wildlife photo featuring a majestic animal in its natural habitat. The photograph conveys the raw beauty of the animal kingdom.",
+        date: "2024-03-20",
+        batch: "Batch 22",
+        featured: false,
+        visible: true,
+        searchTags: ["wildlife", "animal", "nature", "habitat"]
+    },
+    {
+        asset: "image09.fa6c4764.jpg",
+        width: 1080,
+        height: 1549,
+        topic: "ABSTRACT",
+        description: "An abstract photograph that challenges the viewer's perception. The shapes and colors evoke various interpretations and emotions.",
+        date: "2024-02-14",
+        batch: "Batch 23",
+        featured: true,
+        visible: false,
+        searchTags: ["abstract", "art", "modern", "creative"]
+    },
+    {
+        asset: "image10.411ea655.jpg",
+        width: 1080,
+        height: 720,
+        topic: "FOOD",
+        description: "A delicious-looking food photograph that showcases a gourmet dish. The presentation is mouth-watering and aesthetically pleasing.",
+        date: "2024-01-28",
+        batch: "Batch 21",
+        featured: false,
+        visible: true,
+        searchTags: ["food", "gourmet", "cuisine", "delicious"]
+    },
+    {
+        asset: "image11.f3ea483a.jpg",
+        width: 1080,
+        height: 694,
+        topic: "SPORTS",
+        description: "A dynamic sports photograph capturing the intensity and action of the game. The movement and energy are palpable.",
+        date: "2023-12-31",
+        batch: "Batch 22",
+        featured: true,
+        visible: true,
+        searchTags: ["sports", "action", "athlete", "game"]
+    },
+    {
+        asset: "image12.5a9347ea.jpg",
+        width: 1080,
+        height: 1620,
+        topic: "MACRO",
+        description: "A macro photograph focusing on the intricate details of a small subject. The close-up reveals textures and patterns otherwise unseen.",
+        date: "2023-11-15",
+        batch: "Batch 23",
+        featured: false,
+        visible: false,
+        searchTags: ["macro", "close-up", "details", "texture"]
+    },
+    {
+        asset: "image13.ce46dd98.jpg",
+        width: 1080,
+        height: 720,
+        topic: "NIGHT",
+        description: "A night scene photograph capturing the ambient lighting and shadows. The mood is mysterious and intriguing.",
+        date: "2023-10-05",
+        batch: "Batch 21",
+        featured: true,
+        visible: true,
+        searchTags: ["night", "dark", "lights", "city"]
+    },
+    {
+        asset: "image14.68b2812c.jpg",
+        width: 1080,
+        height: 1440,
+        topic: "STREET",
+        description: "A candid street photograph that captures the essence of everyday life. The scene tells a story of the hustle and bustle.",
+        date: "2023-09-18",
+        batch: "Batch 22",
+        featured: false,
+        visible: true,
+        searchTags: ["street", "candid", "life", "urban"]
+    },
+    {
+        asset: "image15.4461facf.jpg",
+        width: 1080,
+        height: 1620,
+        topic: "UNDERWATER",
+        description: "An underwater photograph showcasing the beauty of marine life. The vibrant colors and fascinating creatures are mesmerizing.",
+        date: "2023-08-03",
+        batch: "Batch 23",
+        featured: true,
+        visible: false,
+        searchTags: ["underwater", "marine", "ocean", "sea"]
+    },
+    {
+        asset: "image16.5ad17d8b.jpg",
+        width: 1080,
+        height: 810,
+        topic: "AERIAL",
+        description: "An aerial shot capturing a bird's-eye view of the landscape. The perspective provides a new appreciation for the vastness of the scenery.",
+        date: "2023-07-12",
+        batch: "Batch 21",
+        featured: false,
+        visible: true,
+        searchTags: ["aerial", "drone", "view", "landscape"]
+    },
+    {
+        asset: "image17.a242e897.jpg",
+        width: 1080,
+        height: 595,
+        topic: "INDUSTRIAL",
+        description: "A photograph of an industrial setting that showcases machinery and structures. The scene conveys the power and functionality of industry.",
+        date: "2023-06-01",
+        batch: "Batch 22",
+        featured: true,
+        visible: true,
+        searchTags: ["industrial", "machinery", "factory", "work"]
+    },
+    {
+        asset: "image18.0479bde8.jpg",
+        width: 1080,
+        height: 160,
+        topic: "PANORAMA",
+        description: "A wide panoramic photograph that covers a large scenic view. The sweeping vista is impressive and awe-inspiring.",
+        date: "2023-05-10",
+        batch: "Batch 23",
+        featured: false,
+        visible: false,
+        searchTags: ["panorama", "wide", "scenic", "view"]
+    }
+].map((
+    {
+        asset,
+        width,
+        height,
+        topic,
+        date,
+        batch,
+        description,
+        featured,
+        searchTags,
+        visible
+    }) => (
+        {
+            src: assetLink(asset, width),
+            width,
+            height,
+            topic,
+            date,
+            batch,
+            description,
+            featured,
+            searchTags,
+            visible
+        })
+);
+
+export default photos;
