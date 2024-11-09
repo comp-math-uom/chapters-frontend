@@ -13,7 +13,7 @@ import {
 import { useField, useFormikContext } from 'formik';
 import { FiUpload } from 'react-icons/fi';
 
-const ImageUploadField = ({ name, label }) => {
+export default function ImageUploadField({ name, label }) {
     const [preview, setPreview] = useState(null);
     const [field, meta, helpers] = useField(name);
     const { setFieldValue } = useFormikContext();
@@ -89,5 +89,3 @@ const ImageUploadField = ({ name, label }) => {
         </FormControl>
     );
 };
-
-export default ImageUploadField;

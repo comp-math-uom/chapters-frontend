@@ -1,3 +1,5 @@
+"use client";
+
 import {Field, Form, Formik} from "formik";
 import {Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea} from "@chakra-ui/react";
 import {SingleDatepicker} from "chakra-dayzed-datepicker";
