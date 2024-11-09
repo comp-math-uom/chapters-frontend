@@ -127,7 +127,7 @@ export default function Page() {
                     </Box>
 
                     <Text color="gray.700" fontSize="sm">
-                        Don't have an account?{' '}
+                        Don not have an account?{' '}
                         <Button variant="link" color="gray.600" _hover={{ color: "gray.700" }} fontSize="sm">
                             <Link href={"/auth/signup"}>
                                 Sign up
