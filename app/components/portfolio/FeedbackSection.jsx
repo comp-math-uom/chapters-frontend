@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {Box, Heading, Text, VStack, Container, Button, HStack, Avatar} from '@chakra-ui/react';
+import {Box, Heading, Text, VStack, Button, HStack, Avatar} from '@chakra-ui/react';
 import {feedbackService} from "@/app/services/feedbackService";
 
-const FeedbackSection = () => {
+export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"}) {
     const [feedbacks, setFeedbacks] = useState([]);
 
     useEffect(() => {
@@ -24,14 +24,13 @@ const FeedbackSection = () => {
 
     return (
         <div>
-            <Heading mb={6}>Feedbacks</Heading>
-            <VStack spacing={4} align="stretch">
-                {feedbacks.map((feedback) => (
+            <Heading as={as} size={size} mb={6}>Feedbacks</Heading>
+            <hr />
+            <VStack spacing={0} align="stretch">
+                {feedbacks.map((feedback, index) => (
                     <Box
                         key={feedback.id}
                         p={4}
-                        borderBottomWidth="1px"
-                        borderColor="gray.200"
                     >
                         <HStack justify="space-between" mb={2}>
                             <HStack spacing={3}>
@@ -45,21 +44,20 @@ const FeedbackSection = () => {
                                     <Text fontSize="sm" color="gray.500">{feedback.timeAgo}</Text>
                                 </VStack>
                             </HStack>
-                            <Button
+                            {isAdmin && <Button
                                 size="sm"
                                 variant="ghost"
                                 colorScheme="red"
                                 onClick={() => handleDelete(feedback.id)}
                             >
                                 Delete Feedback
-                            </Button>
+                            </Button>}
                         </HStack>
-                        <Text pl={10}>{feedback.content}</Text>
+                        <Text pl={10} mb={5}>{feedback.content}</Text>
+                        {index !== feedbacks.length - 1 && <hr/>}
                     </Box>
                 ))}
             </VStack>
         </div>
     );
-};
-
-export default FeedbackSection;
+}

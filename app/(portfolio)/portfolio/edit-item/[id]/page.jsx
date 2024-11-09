@@ -29,7 +29,7 @@ export default function Page() {
                 Edit Post
             </h1>
             <PortfolioForm initialValues={initialValues} handleSubmit={handleSubmit}/>
-            <FeedbackSection/>
+            <FeedbackSection isAdmin={true}/>
         </div>
     );
 }
