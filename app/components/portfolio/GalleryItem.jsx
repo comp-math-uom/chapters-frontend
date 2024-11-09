@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";

@@ -2,7 +2,8 @@ import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
 
 export default function Page() {
 
-    const handleSubmit = (values, actions) => {
+    const handleSubmit = async (values, actions) => {
+        'use server'
         console.log(values);
     }
 

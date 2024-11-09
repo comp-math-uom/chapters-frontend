@@ -1,3 +1,5 @@
+"use client";
+
 import {useEffect, useState} from "react";
 import {Box, Heading, Text, VStack, Button, HStack, Avatar} from '@chakra-ui/react';
 import {feedbackService} from "@/app/services/feedbackService";

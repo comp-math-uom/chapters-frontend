@@ -1,10 +1,9 @@
-"use client";
-
 import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
 import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 
 export default function Page() {
-    const handleSubmit = (values, actions) => {
+    const handleSubmit = async (values, actions) => {
+        'use server'
         const formData = new FormData();
         formData.append('title', values.title);
         formData.append('description', values.description);

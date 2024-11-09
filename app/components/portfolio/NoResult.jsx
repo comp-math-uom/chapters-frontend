@@ -34,7 +34,7 @@ export default function NoSearchResults({ onClear }) {
             </Text>
 
             <Text className="text-gray-600 max-w-md">
-                We couldn't find any items matching your search criteria. Try adjusting your filters or search terms.
+                We could not find any items matching your search criteria. Try adjusting your filters or search terms.
             </Text>
 
             <Button
