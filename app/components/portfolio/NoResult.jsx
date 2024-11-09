@@ -17,7 +17,7 @@ const SearchIcon = () => (
     </svg>
 );
 
-const NoSearchResults = ({ onClear }) => {
+export default function NoSearchResults({ onClear }) {
     return (
         <VStack
             spacing={4}
@@ -48,5 +48,3 @@ const NoSearchResults = ({ onClear }) => {
         </VStack>
     );
 };
-
-export default NoSearchResults;
