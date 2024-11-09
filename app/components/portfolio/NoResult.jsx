@@ -17,7 +17,7 @@ const SearchIcon = () => (
     </svg>
 );
 
-const NoSearchResults = ({ onClear }) => {
+export default function NoSearchResults({ onClear }) {
     return (
         <VStack
             spacing={4}
@@ -34,7 +34,7 @@ const NoSearchResults = ({ onClear }) => {
             </Text>
 
             <Text className="text-gray-600 max-w-md">
-                We couldn't find any items matching your search criteria. Try adjusting your filters or search terms.
+                We could not find any items matching your search criteria. Try adjusting your filters or search terms.
             </Text>
 
             <Button
@@ -48,5 +48,3 @@ const NoSearchResults = ({ onClear }) => {
         </VStack>
     );
 };
-
-export default NoSearchResults;
