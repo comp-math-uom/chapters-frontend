@@ -97,7 +97,7 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                     </Heading>
                     <Text mt={4} fontSize="lg" color="gray.500" className={'font-anybody'}>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever.
+                        Lorem Ipsum has been the standard dummy text ever.
                     </Text>
                 </Box>
 
