@@ -1,11 +1,15 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {Box, Heading, Text, VStack, Button, HStack, Avatar} from '@chakra-ui/react';
-import {feedbackService} from "@/app/services/feedbackService";
+import { useEffect, useState } from "react";
+import { Box, Heading, Text, VStack, Button, HStack, Avatar } from '@chakra-ui/react';
+import { feedbackService } from "@/app/services/feedbackService";
+import { useDisclosure } from "@chakra-ui/react";
+import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
-export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"}) {
+export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl" }) {
     const [feedbacks, setFeedbacks] = useState([]);
+    const { isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure();
+    const [feedbackToDelete, setFeedbackToDelete] = useState(null);
 
     useEffect(() => {
         const loadFeedBacks = async () => {
@@ -19,9 +23,18 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
         loadFeedBacks();
     }, []);
 
-    const handleDelete = (feedbackId) => {
-        // Implement delete functionality here
-        console.log("Delete feedback:", feedbackId);
+    const handleDeleteConfirm = () => {
+        if (feedbackToDelete) {
+            // Implement delete functionality here
+            console.log("Delete feedback:", feedbackToDelete.id);
+            setFeedbackToDelete(null);
+            onCloseDeleteModal();
+        }
+    };
+
+    const handleDeleteClick = (feedback) => {
+        setFeedbackToDelete(feedback);
+        onOpenDeleteModal();
     };
 
     return (
@@ -50,16 +63,22 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
                                 size="sm"
                                 variant="ghost"
                                 colorScheme="red"
-                                onClick={() => handleDelete(feedback.id)}
+                                onClick={() => handleDeleteClick(feedback)}
                             >
                                 Delete Feedback
                             </Button>}
                         </HStack>
                         <Text pl={10} mb={5}>{feedback.content}</Text>
-                        {index !== feedbacks.length - 1 && <hr/>}
+                        {index !== feedbacks.length - 1 && <hr />}
                     </Box>
                 ))}
             </VStack>
+            <DeleteConfirmModal
+                isOpen={isOpenDeleteModal}
+                onClose={onCloseDeleteModal}
+                onDelete={handleDeleteConfirm}
+                itemToDelete={feedbackToDelete}
+            />
         </div>
     );
 }
