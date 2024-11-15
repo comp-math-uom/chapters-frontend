@@ -1,4 +1,5 @@
-import {Flex, Spinner, Text} from "@chakra-ui/react";
+import {Container, Flex, Spinner, Text} from "@chakra-ui/react";
+import LoadingSpinner from "@/app/components/portfolio/LoadingSpinner";
 
 export default function Loading() {
     return (
@@ -8,15 +9,9 @@ export default function Loading() {
             justifyContent="center"
             direction="column"
         >
-            <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="black"
-                size="xl"
-                mb={5}
-            />
-            <Text>Please wait...</Text>
+            <Container>
+                <LoadingSpinner />
+            </Container>
         </Flex>
     );
 }
