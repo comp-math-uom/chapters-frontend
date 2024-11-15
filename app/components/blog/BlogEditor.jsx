@@ -8,13 +8,23 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { all, createLowlight } from 'lowlight';
 import { Bold, Italic, Link2, Code, WrapText, List, ListOrdered, Braces, Minus,
     Heading2, Heading3, Heading4, Heading1, Heading5, Heading6 } from 'lucide-react';
-import { ButtonGroup, IconButton, Textarea, useColorModeValue } from '@chakra-ui/react';
+import {
+    ButtonGroup,
+    IconButton,
+    Input,
+    Box,
+    useColorModeValue,
+    Popover,
+    PopoverTrigger,
+    PopoverContent, PopoverCloseButton, PopoverArrow, PopoverHeader, PopoverBody, PopoverFooter, Button
+} from '@chakra-ui/react';
 import styles from './blogEditor.module.scss';
 
 const lowlight = createLowlight(all);
 
 const BlogEditor = () => {
     const [content, setContent] = useState('');
+    const [linkUrl, setLinkUrl] = useState('');
     const bgColor = useColorModeValue('white', 'gray.100');
 
     const editor = useEditor({
@@ -59,29 +69,23 @@ const BlogEditor = () => {
         }
     }, [editor]);
 
+    const addLink = useCallback(() => {
+        if (editor && linkUrl) {
+            editor.chain().focus().setLink({ href: linkUrl }).run();
+            setLinkUrl('');
+        }
+    }, [editor, linkUrl]);
+
     if (!editor) {
         return null;
     }
 
     return (
         <div className={styles.editor}>
-            <Textarea
-                variant="unstyled"
-                placeholder="Title"
-                size="lg"
-                className={styles.titleInput}
-                resize="none"
-                rows={1}
-            />
-
-            <Textarea
-                variant="unstyled"
-                placeholder="Subtitle"
-                size="md"
-                className={styles.subtitleInput}
-                resize="none"
-                rows={1}
-            />
+            <Box bg="gray.50" px={5} pt={5} mb={5} borderRadius="md">
+                <Input variant="unstyled" placeholder="Title" size="lg" className={styles.titleInput} />
+                <Input variant="unstyled" placeholder="Subtitle" size="md" className={styles.subtitleInput} />
+            </Box>
 
             <div className={styles.toolbar}>
                 <ButtonGroup size="sm" spacing={2} className="mb-2">
@@ -96,17 +100,6 @@ const BlogEditor = () => {
                         aria-label="Italic"
                         onClick={() => editor.chain().focus().toggleItalic().run()}
                         colorScheme={editor.isActive('italic') ? 'blue' : 'gray'}
-                    />
-                    <IconButton
-                        icon={<Link2 className="w-4 h-4"/>}
-                        aria-label="Link"
-                        onClick={() => {
-                            const url = window.prompt('Enter link URL');
-                            if (url) {
-                                editor.chain().focus().setLink({href: url}).run();
-                            }
-                        }}
-                        colorScheme={editor.isActive('link') ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Code className="w-4 h-4"/>}
@@ -179,7 +172,43 @@ const BlogEditor = () => {
                         aria-label="LB"
                         onClick={() => editor.chain().focus().setHardBreak().run()}
                     />
+                    <Popover>
+                        <PopoverTrigger>
+                            <IconButton
+                                icon={<Link2 className="w-4 h-4" />}
+                                aria-label="Link"
+                                colorScheme={editor.isActive('link') ? 'blue' : 'gray'}
+                                onClick={() => {
+                                    if (linkUrl) {
+                                        editor.chain().focus().setLink({href: url}).run();
+                                    }
+                                }}
+                            />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverBody>
+                                <Input
+                                    placeholder="Enter link URL"
+                                    value={linkUrl}
+                                    onChange={(e) => setLinkUrl(e.target.value)}
+                                />
+                            </PopoverBody>
+                            <PopoverFooter display="flex" justifyContent="flex-end">
+                                <Button bg="black"
+                                        color="white"
+                                        _hover={{ bg: "gray.800" }}
+                                        size="md"
+                                        fontSize="sm"
+                                        borderRadius="lg"
+                                        px="4" onClick={addLink}>
+                                    Add Link
+                                </Button>
+                            </PopoverFooter>
+                        </PopoverContent>
+                    </Popover>
                 </ButtonGroup>
+
             </div>
 
             <div
