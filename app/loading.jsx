@@ -1,5 +1,5 @@
 import {Container, Flex, Spinner, Text} from "@chakra-ui/react";
-import LoadingSpinner from "@/app/components/portfolio/LoadingSpinner";
+import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 
 export default function Loading() {
     return (
