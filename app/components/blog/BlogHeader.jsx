@@ -10,7 +10,7 @@ export default function BlogHeader({title,author,date,info,likes,comments}){
                     {title}
                 </Heading>
                 <HStack spacing={2} color="gray.600">
-                    <Text>{author}</Text>
+                    <Text>Written by {author}</Text>
                     <Text>|</Text>
                     <Text>{date}</Text>
                     <Text>|</Text>
