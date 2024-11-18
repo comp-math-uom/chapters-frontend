@@ -7,9 +7,9 @@ export default function Page() {
                 title="Evolution of AI"
                 author="S.S.Kulathunga"
                 date="June 06 2024"
-                info="AI evolution"
                 likes={23}
                 comments={3}
+                hashtags={['history','AI','evolution']}
             />
         </div>
     );
