@@ -1,11 +1,14 @@
 "use client";
 
 import {Field, Form, Formik} from "formik";
-import {Button, FormControl, FormLabel} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, useToast} from "@chakra-ui/react";
 import {CreatableSelect} from "chakra-react-select";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
+import {useBlog} from "@/app/providers/BlogProvider";
 
-export default function BlogSettingsForm({initialValues, handleSubmit, handleCancel}) {
+export default function BlogSettingsForm({initialValues, handleCancel}) {
+    const toast = useToast();
+    const { validateBlog, blogTitle, blogContent } = useBlog();
 
     const validate = (values) => {
         const errors = {};
@@ -27,8 +30,36 @@ export default function BlogSettingsForm({initialValues, handleSubmit, handleCan
         }
     }
 
+    const handleFormSubmit = (values, formikActions) => {
+        // First validate the blog content and title
+        const isValid = validateBlog();
+
+        if (!isValid) {
+            toast({
+                title: "Validation Error",
+                description: "Please check the blog title and content requirements.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            formikActions.setSubmitting(false);
+            return;
+        }
+
+        // Combine blog data with form values
+        const completeData = {
+            ...values,
+            title: blogTitle,
+            content: blogContent,
+        };
+        //TODO:  Call the parent handleSubmit function
+        // handleSubmit(completeData, formikActions);
+        formikActions.setSubmitting(false);
+
+    };
+
     return (
-        <Formik initialValues={initialFormValues} onSubmit={handleSubmit} validate={validate}>
+        <Formik initialValues={initialFormValues} onSubmit={handleFormSubmit} validate={validate}>
             {(props) => (
                 <Form className="flex flex-col justify-between" style={{height: "calc(100vh - 100px)"}} onKeyDown={handleKeyDown}>
                     <div>
