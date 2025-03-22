@@ -14,19 +14,21 @@ import {
     IconButton,
     Input,
     Box,
+    Text,
     useColorModeValue,
     Popover,
     PopoverTrigger,
-    PopoverContent, PopoverArrow, PopoverBody, PopoverFooter, Button
+    PopoverContent, PopoverArrow, PopoverBody, PopoverFooter, Button, FormControl, FormErrorMessage
 } from '@chakra-ui/react';
 import styles from './blogEditor.module.scss';
+import {useBlog} from "@/app/providers/BlogProvider";
 
 const lowlight = createLowlight(all);
 
 const BlogEditor = () => {
-    const [content, setContent] = useState('');
     const [linkUrl, setLinkUrl] = useState('');
     const bgColor = useColorModeValue('white', 'gray.100');
+    const { blogTitle, setBlogTitle, blogContent, setContent, errors } = useBlog();
 
     const editor = useEditor({
         extensions: [
@@ -55,9 +57,10 @@ const BlogEditor = () => {
                 openOnClick: false,
             })
         ],
-        content: content,
+        content: blogContent,
         onUpdate: ({ editor }) => {
             setContent(editor.getHTML());
+            errors.content = null;
         },
         editorProps: {
             attributes: {
@@ -84,10 +87,27 @@ const BlogEditor = () => {
         return null;
     }
 
+    const handleTitleChange = (title) => {
+        errors.title = null;
+        setBlogTitle(title);
+    }
+
     return (
         <div className={styles.editor}>
             <Box bg="gray.50" px={5} pt={5} mb={5} borderRadius="md">
-                <Input variant="unstyled" placeholder="Title" size="lg" className={styles.titleInput} />
+                <FormControl isInvalid={errors?.title}>
+                    <Input
+                        variant="unstyled"
+                        placeholder="Title"
+                        size="lg"
+                        className={styles.titleInput}
+                        value={blogTitle}
+                        onChange={(e) => handleTitleChange(e.target.value)}
+                    />
+                    {errors?.title && (
+                        <FormErrorMessage pb={5}>{errors.title}</FormErrorMessage>
+                    )}
+                </FormControl>
             </Box>
 
             <div className={styles.toolbar}>
@@ -215,11 +235,11 @@ const BlogEditor = () => {
 
             </div>
 
-            <div
-                className={styles.editorContent}
-                style={{ backgroundColor: bgColor }}
-            >
-                <EditorContent editor={editor} />
+            <div className={styles.editorContent} style={{ backgroundColor: bgColor }} >
+                <EditorContent editor={editor}/>
+                {errors?.content && (
+                    <Text color="red.500" m={3}>{errors.content}</Text>
+                )}
             </div>
         </div>
     );
