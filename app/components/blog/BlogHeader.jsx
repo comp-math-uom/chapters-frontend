@@ -4,7 +4,7 @@ import { BsShare } from 'react-icons/bs';
 
 export default function BlogHeader({blog}){
     return(
-        <Box width={'full'} py={16}>
+        <Box width={'full'} paddingTop={16} px={20}>
             <VStack spacing={2} align={"left"}>
                 <Heading as="h1" size="4xl" fontWeight="bold" className={'font-anton'}>
                     {blog.title}
@@ -12,7 +12,7 @@ export default function BlogHeader({blog}){
                 <HStack spacing={2}>
                     <Avatar src={blog.avatar}/>
                     <VStack align={"left"}>
-                        <HStack spacing={2} color="gray.600" fontSize={"xl"}>
+                        <HStack spacing={2} color="gray.700" fontSize={"lg"}>
                             <Text>Written by {blog.author}</Text>
                             <Text>|</Text>
                             <Text>{blog.date}</Text>
@@ -22,7 +22,7 @@ export default function BlogHeader({blog}){
                                 <Text
                                     key={index}
                                     fontSize="m"
-                                    color="gray.500"
+                                    color="gray.600"
                                 >
                                     #{tag}
                                 </Text>
