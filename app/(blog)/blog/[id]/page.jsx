@@ -1,7 +1,8 @@
-import { notFound } from 'next/navigation';
+"use client";
 
-export default function Page({ params }) {
+import {notFound} from 'next/navigation';
 
+export default function Page({params}) {
     if (params.id !== "69") {
         return notFound();
     }

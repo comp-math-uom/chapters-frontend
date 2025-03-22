@@ -6,6 +6,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { all, createLowlight } from 'lowlight';
+import Link from '@tiptap/extension-link';
 import { Bold, Italic, Link2, Code, WrapText, List, ListOrdered, Braces, Minus,
     Heading2, Heading3, Heading4, Heading1, Heading5, Heading6 } from 'lucide-react';
 import {
@@ -16,7 +17,7 @@ import {
     useColorModeValue,
     Popover,
     PopoverTrigger,
-    PopoverContent, PopoverCloseButton, PopoverArrow, PopoverHeader, PopoverBody, PopoverFooter, Button
+    PopoverContent, PopoverArrow, PopoverBody, PopoverFooter, Button
 } from '@chakra-ui/react';
 import styles from './blogEditor.module.scss';
 
@@ -50,6 +51,9 @@ const BlogEditor = () => {
             CodeBlockLowlight.configure({
                 lowlight,
             }),
+            Link.configure({
+                openOnClick: false,
+            })
         ],
         content: content,
         onUpdate: ({ editor }) => {
@@ -71,8 +75,8 @@ const BlogEditor = () => {
 
     const addLink = useCallback(() => {
         if (editor && linkUrl) {
-            editor.chain().focus().setLink({ href: linkUrl }).run();
-            setLinkUrl('');
+            editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl }).run();
+            setLinkUrl(linkUrl);
         }
     }, [editor, linkUrl]);
 
@@ -84,7 +88,6 @@ const BlogEditor = () => {
         <div className={styles.editor}>
             <Box bg="gray.50" px={5} pt={5} mb={5} borderRadius="md">
                 <Input variant="unstyled" placeholder="Title" size="lg" className={styles.titleInput} />
-                <Input variant="unstyled" placeholder="Subtitle" size="md" className={styles.subtitleInput} />
             </Box>
 
             <div className={styles.toolbar}>
@@ -179,8 +182,9 @@ const BlogEditor = () => {
                                 aria-label="Link"
                                 colorScheme={editor.isActive('link') ? 'blue' : 'gray'}
                                 onClick={() => {
-                                    if (linkUrl) {
-                                        editor.chain().focus().setLink({href: url}).run();
+                                    // If there's already a link at the current selection, unset it
+                                    if (editor.isActive('link')) {
+                                        editor.chain().focus().unsetLink().run();
                                     }
                                 }}
                             />
