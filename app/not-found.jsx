@@ -32,10 +32,8 @@ export default function NotFound() {
                     bg="black"
                     color="white"
                     _hover={{ bg: "gray.800" }}
-                    size="md"
-                    fontSize="sm"
-                    borderRadius="lg"
-                    px="4"
+                    borderRadius="md"
+                    py={5}
                 >
                     <Link href="/">
                         Go to Home
