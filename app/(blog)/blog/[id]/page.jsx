@@ -1,3 +1,6 @@
+"use client";
+
+import {notFound} from 'next/navigation';
 import { notFound } from 'next/navigation';
 import BlogHeader from "@/app/components/blog/BlogHeader";
 import blogService from "@/app/services/blogService";
