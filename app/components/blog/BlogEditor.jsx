@@ -6,6 +6,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { all, createLowlight } from 'lowlight';
+import Link from '@tiptap/extension-link';
 import { Bold, Italic, Link2, Code, WrapText, List, ListOrdered, Braces, Minus,
     Heading2, Heading3, Heading4, Heading1, Heading5, Heading6 } from 'lucide-react';
 import {
@@ -13,19 +14,21 @@ import {
     IconButton,
     Input,
     Box,
+    Text,
     useColorModeValue,
     Popover,
     PopoverTrigger,
-    PopoverContent, PopoverCloseButton, PopoverArrow, PopoverHeader, PopoverBody, PopoverFooter, Button
+    PopoverContent, PopoverArrow, PopoverBody, PopoverFooter, Button, FormControl, FormErrorMessage
 } from '@chakra-ui/react';
 import styles from './blogEditor.module.scss';
+import {useBlog} from "@/app/providers/BlogProvider";
 
 const lowlight = createLowlight(all);
 
 const BlogEditor = () => {
-    const [content, setContent] = useState('');
     const [linkUrl, setLinkUrl] = useState('');
     const bgColor = useColorModeValue('white', 'gray.100');
+    const { blogTitle, setBlogTitle, blogContent, setContent, errors } = useBlog();
 
     const editor = useEditor({
         extensions: [
@@ -50,10 +53,14 @@ const BlogEditor = () => {
             CodeBlockLowlight.configure({
                 lowlight,
             }),
+            Link.configure({
+                openOnClick: false,
+            })
         ],
-        content: content,
+        content: blogContent,
         onUpdate: ({ editor }) => {
             setContent(editor.getHTML());
+            errors.content = null;
         },
         editorProps: {
             attributes: {
@@ -71,8 +78,8 @@ const BlogEditor = () => {
 
     const addLink = useCallback(() => {
         if (editor && linkUrl) {
-            editor.chain().focus().setLink({ href: linkUrl }).run();
-            setLinkUrl('');
+            editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl }).run();
+            setLinkUrl(linkUrl);
         }
     }, [editor, linkUrl]);
 
@@ -80,11 +87,27 @@ const BlogEditor = () => {
         return null;
     }
 
+    const handleTitleChange = (title) => {
+        errors.title = null;
+        setBlogTitle(title);
+    }
+
     return (
         <div className={styles.editor}>
             <Box bg="gray.50" px={5} pt={5} mb={5} borderRadius="md">
-                <Input variant="unstyled" placeholder="Title" size="lg" className={styles.titleInput} />
-                <Input variant="unstyled" placeholder="Subtitle" size="md" className={styles.subtitleInput} />
+                <FormControl isInvalid={errors?.title}>
+                    <Input
+                        variant="unstyled"
+                        placeholder="Title"
+                        size="lg"
+                        className={styles.titleInput}
+                        value={blogTitle}
+                        onChange={(e) => handleTitleChange(e.target.value)}
+                    />
+                    {errors?.title && (
+                        <FormErrorMessage pb={5}>{errors.title}</FormErrorMessage>
+                    )}
+                </FormControl>
             </Box>
 
             <div className={styles.toolbar}>
@@ -179,8 +202,9 @@ const BlogEditor = () => {
                                 aria-label="Link"
                                 colorScheme={editor.isActive('link') ? 'blue' : 'gray'}
                                 onClick={() => {
-                                    if (linkUrl) {
-                                        editor.chain().focus().setLink({href: url}).run();
+                                    // If there's already a link at the current selection, unset it
+                                    if (editor.isActive('link')) {
+                                        editor.chain().focus().unsetLink().run();
                                     }
                                 }}
                             />
@@ -211,11 +235,11 @@ const BlogEditor = () => {
 
             </div>
 
-            <div
-                className={styles.editorContent}
-                style={{ backgroundColor: bgColor }}
-            >
-                <EditorContent editor={editor} />
+            <div className={styles.editorContent} style={{ backgroundColor: bgColor }} >
+                <EditorContent editor={editor}/>
+                {errors?.content && (
+                    <Text color="red.500" m={3}>{errors.content}</Text>
+                )}
             </div>
         </div>
     );
