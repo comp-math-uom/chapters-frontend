@@ -3,7 +3,8 @@ const nextConfig = {
     reactStrictMode: true,
     images: {
         remotePatterns: [
-            {hostname: "assets.react-photo-album.com"}
+            {hostname: "assets.react-photo-album.com"},
+            {hostname: "picsum.photos"}
         ]
     },
     output: "standalone"
