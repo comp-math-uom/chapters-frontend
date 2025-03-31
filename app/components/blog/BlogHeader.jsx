@@ -9,7 +9,7 @@ export default function BlogHeader({blog}){
                 <Heading as="h1" size="4xl" fontWeight="bold" className={'font-anton'}>
                     {blog.title}
                 </Heading>
-                <HStack spacing={2}>
+                <HStack spacing={2} mt={5}>
                     <Avatar src={blog.avatar}/>
                     <VStack align={"left"}>
                         <HStack spacing={2} color="gray.700" fontSize={"lg"}>
