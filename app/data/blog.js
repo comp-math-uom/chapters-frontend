@@ -19,9 +19,9 @@ export const blog = [
         likes: 45,
         comments: 4,
         avatar: "https://avatar.iran.liara.run/public",
-        hashtags: ['history','evolution'],
+        hashtags: ['history', 'evolution'],
         coverImage: "https://picsum.photos/seed/picsum/200/300",
-        content:  "<p><code>qwdwded</code> </p><p></p><p></p><pre><code>efdedfwefwefwefd</code></pre>"
+        content: "<p><code>qwdwded</code> </p><p></p><p></p><pre><code>efdedfwefwefwefd</code></pre>"
     }
 ]
 

@@ -1,14 +1,14 @@
 "use client";
 import Link from 'next/link';
-import React, {useEffect, useState} from 'react';
-import {Avatar, Button, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
-import {FiLogOut, FiUser} from "react-icons/fi";
-import {useNav} from "@/app/providers/NavigationProvider";
+import React, { useEffect, useState } from 'react';
+import { Avatar, Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { FiLogOut, FiUser } from "react-icons/fi";
+import { useNav } from "@/app/providers/NavigationProvider";
 
 function Navbar() {
     const [username, setUsername] = useState();
     const [profilePic, setProfilePic] = useState();
-    const { navActionButton } = useNav();
+    const {navActionButton} = useNav();
 
     useEffect(() => {
         let un = localStorage.getItem("username");

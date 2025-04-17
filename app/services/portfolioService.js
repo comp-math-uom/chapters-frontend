@@ -1,7 +1,11 @@
 import photos from "@/app/data/photos";
 import contributors from "@/app/data/contributors";
+import axios from "axios";
+
+const API_URL = "http://localhost:3000/api/portfolio";
 
 const portfolioService = {
+
     async fetchGalleryItems() {
         return photos;
     },
@@ -48,8 +52,8 @@ const portfolioService = {
         return filteredItems;
     },
 
-    async addGalleryItem(photo) {
-        photos.push(photo);
+    async addGalleryItem(data) {
+        return await axios.post(API_URL, data)
     },
 
     async updateGalleryItem(id, photo) {

@@ -5,6 +5,6 @@ export const metadata = {
     description: "Chapters - AI/ML Portal",
 };
 
-export default function Layout({ children }) {
+export default function Layout({children}) {
     return <InnerLayout>{children}</InnerLayout>;
 }
