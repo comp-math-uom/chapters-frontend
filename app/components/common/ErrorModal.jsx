@@ -1,6 +1,16 @@
 'use client';
 
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text } from '@chakra-ui/react';
+import {
+    Button,
+    Flex,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Text
+} from '@chakra-ui/react';
 import { WarningIcon } from '@chakra-ui/icons';
 
 export default function ErrorModal({isOpen, onClose, errorMessage}) {
@@ -10,7 +20,7 @@ export default function ErrorModal({isOpen, onClose, errorMessage}) {
             <ModalContent>
                 <ModalHeader>
                     <Flex align="center" gap={2}>
-                        <WarningIcon color="red.500" />
+                        <WarningIcon color="red.500"/>
                         <Text>Error</Text>
                     </Flex>
                 </ModalHeader>

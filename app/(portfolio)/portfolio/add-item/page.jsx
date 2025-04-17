@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from "next/navigation";
 import PortfolioForm from '@/app/components/portfolio/PortfolioForm';
 import portfolioService from '@/app/services/portfolioService';
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
-import { useRouter } from "next/navigation";
 
 export default function Page() {
-    const router = useRouter()
+    const router = useRouter();
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
