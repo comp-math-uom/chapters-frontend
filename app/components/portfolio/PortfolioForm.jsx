@@ -8,10 +8,12 @@ import Link from "next/link";
 import { CreatableSelect, Select as MultiSelect } from "chakra-react-select";
 import { useEffect, useState } from "react";
 import portfolioService from "../../services/portfolioService"
+import { log } from "next/dist/server/typescript/utils";
 
 export default function PortfolioForm({initialValues, handleSubmit}) {
 
     const [contributors, setContributors] = useState([]);
+    const [batches, setBatches] = useState([]);
 
     const validate = (values) => {
         const errors = {};
@@ -58,6 +60,10 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
         portfolioService.fetContributors().then((data) => {
             setContributors(data);
         });
+
+        portfolioService.fetchBatches().then((data) => {
+            setBatches(data);
+        });
     }, []);
 
     return (
@@ -91,9 +97,11 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                                     <FormControl isInvalid={form.errors.batch && form.touched.batch} className="mb-10">
                                         <FormLabel>Batch</FormLabel>
                                         <Select {...field} placeholder='Select Batch'>
-                                            <option value="Batch 23">Batch 23</option>
-                                            <option value="Batch 22">Batch 22</option>
-                                            <option value="Batch 21">Batch 21</option>
+                                            {batches.map((batch) => {
+                                                console.log(batch, initialValues)
+                                                return (<option key={batch.value} value={batch.value}
+                                                        selected={initialValues?.batch === batch.value}>{batch.label}</option>)
+                                            })}
                                         </Select>
                                         <FormErrorMessage>{form.errors.batch}</FormErrorMessage>
                                     </FormControl>
@@ -214,14 +222,14 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                             </Field>
                             <div className="flex">
                                 <Field name="visible">
-                                    {({field, form}) => (
+                                    {({field}) => (
                                         <FormControl className="mb-6">
                                             <Checkbox  {...field} defaultChecked>Visible</Checkbox>
                                         </FormControl>
                                     )}
                                 </Field>
                                 <Field name="featured">
-                                    {({field, form}) => (
+                                    {({field}) => (
                                         <FormControl className="mb-6">
                                             <Checkbox  {...field}>Featured</Checkbox>
                                         </FormControl>
@@ -232,7 +240,7 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
 
                         <div className="md:w-1/2 w-full">
                             <Field name='image' className="w-1/2">
-                                {({field, form}) => (
+                                {() => (
                                     <ImageUploadField
                                         name="image"
                                         label="Upload Image"

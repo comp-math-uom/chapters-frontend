@@ -1,16 +1,26 @@
 'use client';
 
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text } from '@chakra-ui/react';
+import {
+    Button,
+    Flex,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Text
+} from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 
-export default function SuccessModal({ isOpen, onClose, successMessage }) {
+export default function SuccessModal({isOpen, onClose, successMessage}) {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
-            <ModalOverlay />
+            <ModalOverlay/>
             <ModalContent>
                 <ModalHeader>
                     <Flex align="center" gap={2}>
-                        <CheckCircleIcon color="green.500" />
+                        <CheckCircleIcon color="green.500"/>
                         <Text>Success</Text>
                     </Flex>
                 </ModalHeader>

@@ -9,6 +9,7 @@ export default function GalleryItem({photo: galleryItem, wrapperStyle}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [selectedPhoto, setSelectedPhoto] = useState(null);
 
+
     const handleItemClick = () => {
         setSelectedPhoto(galleryItem);
         onOpen();
