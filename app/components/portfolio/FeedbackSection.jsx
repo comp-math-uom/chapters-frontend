@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Heading, Text, VStack, Button, HStack, Avatar } from '@chakra-ui/react';
+import { Avatar, Box, Button, Heading, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import { feedbackService } from "@/app/services/feedbackService";
-import { useDisclosure } from "@chakra-ui/react";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
-export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl" }) {
+export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"}) {
     const [feedbacks, setFeedbacks] = useState([]);
-    const { isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure();
+    const {isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal} = useDisclosure();
     const [feedbackToDelete, setFeedbackToDelete] = useState(null);
 
     useEffect(() => {
@@ -40,7 +39,7 @@ export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl
     return (
         <div>
             <Heading as={as} size={size} mb={6}>Feedbacks</Heading>
-            <hr />
+            <hr/>
             <VStack spacing={0} align="stretch">
                 {feedbacks.map((feedback, index) => (
                     <Box
@@ -69,7 +68,7 @@ export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl
                             </Button>}
                         </HStack>
                         <Text pl={10} mb={5}>{feedback.content}</Text>
-                        {index !== feedbacks.length - 1 && <hr />}
+                        {index !== feedbacks.length - 1 && <hr/>}
                     </Box>
                 ))}
             </VStack>

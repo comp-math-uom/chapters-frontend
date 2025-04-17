@@ -7,16 +7,16 @@ import {
     Container,
     Flex,
     FormControl,
-    FormLabel,
     FormErrorMessage,
+    FormLabel,
     Heading,
+    HStack,
     Input,
     Stack,
     Text,
     VStack,
-    HStack,
 } from '@chakra-ui/react';
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import Link from "next/link";
 
 export default function Page() {
@@ -60,7 +60,7 @@ export default function Page() {
             actions.setSubmitting(false);
         } catch (error) {
             actions.setSubmitting(false);
-            actions.setStatus({ error: 'Signup failed. Please try again.' });
+            actions.setStatus({error: 'Signup failed. Please try again.'});
         }
     };
 
@@ -98,9 +98,11 @@ export default function Page() {
                                 <Form>
                                     <Stack spacing={5}>
                                         <HStack spacing={4}>
-                                            <Field name="firstName" validate={(value) => validateField(value, 'First name')}>
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.firstName && form.touched.firstName}>
+                                            <Field name="firstName"
+                                                   validate={(value) => validateField(value, 'First name')}>
+                                                {({field, form}) => (
+                                                    <FormControl
+                                                        isInvalid={form.errors.firstName && form.touched.firstName}>
                                                         <FormLabel color="gray.700">First Name</FormLabel>
                                                         <Input
                                                             {...field}
@@ -116,9 +118,11 @@ export default function Page() {
                                                 )}
                                             </Field>
 
-                                            <Field name="lastName" validate={(value) => validateField(value, 'Last name')}>
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.lastName && form.touched.lastName}>
+                                            <Field name="lastName"
+                                                   validate={(value) => validateField(value, 'Last name')}>
+                                                {({field, form}) => (
+                                                    <FormControl
+                                                        isInvalid={form.errors.lastName && form.touched.lastName}>
                                                         <FormLabel color="gray.700">Last Name</FormLabel>
                                                         <Input
                                                             {...field}
@@ -136,7 +140,7 @@ export default function Page() {
                                         </HStack>
 
                                         <Field name="email" validate={validateEmail}>
-                                            {({ field, form }) => (
+                                            {({field, form}) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
                                                     <FormLabel color="gray.700">Email address</FormLabel>
                                                     <Input
@@ -155,7 +159,7 @@ export default function Page() {
                                         </Field>
 
                                         <Field name="password" validate={validatePassword}>
-                                            {({ field, form }) => (
+                                            {({field, form}) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
                                                     <FormLabel color="gray.700">Password</FormLabel>
                                                     <Input
@@ -173,9 +177,11 @@ export default function Page() {
                                             )}
                                         </Field>
 
-                                        <Field name="confirmPassword" validate={(value) => validateConfirmPassword(props.values.password, value)}>
-                                            {({ field, form }) => (
-                                                <FormControl isInvalid={form.errors.confirmPassword && form.touched.confirmPassword}>
+                                        <Field name="confirmPassword"
+                                               validate={(value) => validateConfirmPassword(props.values.password, value)}>
+                                            {({field, form}) => (
+                                                <FormControl
+                                                    isInvalid={form.errors.confirmPassword && form.touched.confirmPassword}>
                                                     <FormLabel color="gray.700">Confirm Password</FormLabel>
                                                     <Input
                                                         {...field}
@@ -219,8 +225,8 @@ export default function Page() {
 
                     <Text color="gray.700" fontSize="sm">
                         Already have an account?{' '}
-                        <Button variant="link" color="gray.600" _hover={{ color: "gray.700" }} fontSize="sm" >
-                            <Link href={"/auth/login"} >
+                        <Button variant="link" color="gray.600" _hover={{color: "gray.700"}} fontSize="sm">
+                            <Link href={"/auth/login"}>
                                 Sign in
                             </Link>
                         </Button>

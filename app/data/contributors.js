@@ -24,6 +24,6 @@ const contributors = [
         image: "https://bit.ly/code-beast",
         email: "heshanhfernando@gmail.com"
     }
-].map(({ name, email, image }) => ({ label: name, value: email, image: image }));
+].map(({name, email, image}) => ({label: name, value: email, image: image}));
 
 export default contributors;

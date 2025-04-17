@@ -1,12 +1,12 @@
 "use client";
 
-import {Field, Form, Formik} from "formik";
-import {Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea} from "@chakra-ui/react";
-import {SingleDatepicker} from "chakra-dayzed-datepicker";
+import { Field, Form, Formik } from "formik";
+import { Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea } from "@chakra-ui/react";
+import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import Link from "next/link";
-import {Select as MultiSelect, CreatableSelect} from "chakra-react-select";
-import {useEffect, useState} from "react";
+import { CreatableSelect, Select as MultiSelect } from "chakra-react-select";
+import { useEffect, useState } from "react";
 import portfolioService from "../../services/portfolioService"
 
 export default function PortfolioForm({initialValues, handleSubmit}) {
@@ -172,43 +172,44 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                             </Field>
                             <Field name='searchTags'>
                                 {({field, form}) => (
-                                    <FormControl className="mb-6" isInvalid={form.errors.searchTags && form.touched.searchTags}>
+                                    <FormControl className="mb-6"
+                                                 isInvalid={form.errors.searchTags && form.touched.searchTags}>
                                         <FormLabel>Search Tags</FormLabel>
-                                    <CreatableSelect
-                                        isMulti
-                                        value={field.value.map(tag => ({ value: tag, label: tag }))}
-                                        name={field.name}
-                                        onChange={(selectedOptions) => {
-                                            const values = selectedOptions.map(option => option.value);
-                                            form.setFieldValue('searchTags', values);
-                                        }}
-                                        onBlur={field.onBlur}
-                                        placeholder="Enter Search Tags"
-                                        components={{
-                                            DropdownIndicator: null,  // Removes the dropdown arrow
-                                            IndicatorSeparator: null, // Removes the separator
-                                            Menu: () => null,         // Removes the dropdown menu completely
-                                        }}
-                                        chakraStyles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                borderRadius: 'md',
-                                                cursor: 'text',
-                                            }),
-                                            valueContainer: (provided) => ({
-                                                ...provided,
-                                                padding: '2px 8px',
-                                            }),
-                                        }}
-                                        onCreateOption={(inputValue) => {
-                                            if (field.value.length >= 5) {
-                                                // Optionally show a toast or alert here
-                                                return;
-                                            }
-                                            const newValue = [...field.value, inputValue];
-                                            form.setFieldValue('searchTags', newValue);
-                                        }}
-                                    /></FormControl>
+                                        <CreatableSelect
+                                            isMulti
+                                            value={field.value.map(tag => ({value: tag, label: tag}))}
+                                            name={field.name}
+                                            onChange={(selectedOptions) => {
+                                                const values = selectedOptions.map(option => option.value);
+                                                form.setFieldValue('searchTags', values);
+                                            }}
+                                            onBlur={field.onBlur}
+                                            placeholder="Enter Search Tags"
+                                            components={{
+                                                DropdownIndicator: null,  // Removes the dropdown arrow
+                                                IndicatorSeparator: null, // Removes the separator
+                                                Menu: () => null,         // Removes the dropdown menu completely
+                                            }}
+                                            chakraStyles={{
+                                                control: (provided) => ({
+                                                    ...provided,
+                                                    borderRadius: 'md',
+                                                    cursor: 'text',
+                                                }),
+                                                valueContainer: (provided) => ({
+                                                    ...provided,
+                                                    padding: '2px 8px',
+                                                }),
+                                            }}
+                                            onCreateOption={(inputValue) => {
+                                                if (field.value.length >= 5) {
+                                                    // Optionally show a toast or alert here
+                                                    return;
+                                                }
+                                                const newValue = [...field.value, inputValue];
+                                                form.setFieldValue('searchTags', newValue);
+                                            }}
+                                        /></FormControl>
                                 )}
                             </Field>
                             <div className="flex">
@@ -242,8 +243,8 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                     </div>
 
                     <div className="flex justify-end">
-                        <Button mt={4} colorScheme='gray' mr={4} className="w-1/6">
-                            <Link href={'/portfolio'}>
+                        <Button mt={4} colorScheme='gray' mr={4} className="w-1/6" isLoading={props.isSubmitting}>
+                            <Link style={{width: '100%'}} href={'/portfolio'}>
                                 Cancel
                             </Link>
                         </Button>

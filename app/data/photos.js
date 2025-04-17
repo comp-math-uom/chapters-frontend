@@ -232,18 +232,18 @@ const photos = [
         searchTags,
         visible
     }) => (
-        {
-            src: assetLink(asset, width),
-            width,
-            height,
-            topic,
-            date,
-            batch,
-            description,
-            featured,
-            searchTags,
-            visible
-        })
+    {
+        src: assetLink(asset, width),
+        width,
+        height,
+        topic,
+        date,
+        batch,
+        description,
+        featured,
+        searchTags,
+        visible
+    })
 );
 
 export default photos;

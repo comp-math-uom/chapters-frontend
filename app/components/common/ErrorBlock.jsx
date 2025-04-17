@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import {Box, Container, Heading, Icon, Text, VStack} from '@chakra-ui/react';
-import {WarningIcon} from '@chakra-ui/icons';
+import { Box, Container, Heading, Icon, Text, VStack } from '@chakra-ui/react';
+import { WarningIcon } from '@chakra-ui/icons';
 
-export default function ErrorBlock({ msg }) {
+export default function ErrorBlock({msg}) {
 
     return (
         <Container maxW="container.xl" p={0}>

@@ -1,14 +1,14 @@
 "use client";
 
-import {Field, Form, Formik} from "formik";
-import {Button, FormControl, FormLabel, useToast} from "@chakra-ui/react";
-import {CreatableSelect} from "chakra-react-select";
+import { Field, Form, Formik } from "formik";
+import { Button, FormControl, FormLabel, useToast } from "@chakra-ui/react";
+import { CreatableSelect } from "chakra-react-select";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
-import {useBlog} from "@/app/providers/BlogProvider";
+import { useBlog } from "@/app/providers/BlogProvider";
 
 export default function BlogSettingsForm({initialValues, handleCancel}) {
     const toast = useToast();
-    const { validateBlog, blogTitle, blogContent } = useBlog();
+    const {validateBlog, blogTitle, blogContent} = useBlog();
 
     const validate = (values) => {
         const errors = {};
@@ -61,7 +61,8 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
     return (
         <Formik initialValues={initialFormValues} onSubmit={handleFormSubmit} validate={validate}>
             {(props) => (
-                <Form className="flex flex-col justify-between" style={{height: "calc(100vh - 100px)"}} onKeyDown={handleKeyDown}>
+                <Form className="flex flex-col justify-between" style={{height: "calc(100vh - 100px)"}}
+                      onKeyDown={handleKeyDown}>
                     <div>
                         <Field name='image' className="w-1/2">
                             {({field, form}) => (
