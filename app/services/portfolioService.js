@@ -2,7 +2,7 @@ import photos from "@/app/data/photos";
 import contributors from "@/app/data/contributors";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/portfolio";
+const API_URL = "http://localhost:3000/portfolio";
 
 const portfolioService = {
 
@@ -62,8 +62,9 @@ const portfolioService = {
     },
 
     async deleteGalleryItem(id) {
-        const index = photos.findIndex(photo => photo.id === id);
-        photos.splice(index, 1);
+        // const index = photos.findIndex(photo => photo.id === id);
+        // photos.splice(index, 1);
+        return await axios.delete(`${API_URL}/${id}`);
     }
 };
 export default portfolioService;
