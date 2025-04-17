@@ -26,6 +26,9 @@ import contributors from "@/app/data/contributors";
 import Link from "next/link";
 import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
+import portfolioService from "@/app/services/portfolioService";
+import ErrorModal from "@/app/components/common/ErrorModal";
+import SuccessModal from "@/app/components/common/SuccessModal";
 
 export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = false}) {
     const [comment, setComment] = useState("");
@@ -34,6 +37,9 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
     const imageRef = useRef(null);
     const {isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete} = useDisclosure();
     const [itemToDelete, setItemToDelete] = useState(null);
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
 
     const handleAddComment = () => {
         if (comment.trim()) {
@@ -47,7 +53,24 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
         onOpenDelete();
     }
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        try {
+            let response = await portfolioService.deleteGalleryItem(itemToDelete);
+            if (response.status === 200) {
+                setModalMessage("Post deleted successfully!");
+                setIsSuccessModalOpen(true);
+            } else {
+                setModalMessage("Failed to delete the post. Please try again.");
+                setIsErrorModalOpen(true);
+            }
+        } catch (error) {
+            setModalMessage("Post added successfully!");
+            setIsSuccessModalOpen(true);
+        }
+    }
+
+    const handleSuccessModalClose = () => {
+        setIsSuccessModalOpen(false);
         onClose();
     }
 
@@ -149,6 +172,16 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                                 </VStack>
                             </Box>
                         </Box>
+                        <ErrorModal
+                            isOpen={isErrorModalOpen}
+                            onClose={() => setIsErrorModalOpen(false)}
+                            errorMessage={modalMessage}
+                        />
+                        <SuccessModal
+                            isOpen={isSuccessModalOpen}
+                            onClose={handleSuccessModalClose}
+                            successMessage={modalMessage}
+                        />
                     </ModalBody>
                 </ModalContent>
             </Modal>

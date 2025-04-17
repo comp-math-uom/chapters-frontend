@@ -1,13 +1,19 @@
 'use client';
 
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text } from '@chakra-ui/react';
+import { WarningIcon } from '@chakra-ui/icons';
 
 export default function ErrorModal({isOpen, onClose, errorMessage}) {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
             <ModalOverlay/>
             <ModalContent>
-                <ModalHeader>Error</ModalHeader>
+                <ModalHeader>
+                    <Flex align="center" gap={2}>
+                        <WarningIcon color="red.500" />
+                        <Text>Error</Text>
+                    </Flex>
+                </ModalHeader>
                 <ModalBody>
                     {errorMessage || "Failed to save data."}
                 </ModalBody>

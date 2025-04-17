@@ -16,7 +16,8 @@ export default function Page() {
     const handleSubmit = async (values) => {
         try {
             let response = await portfolioService.addGalleryItem(values);
-            if (response.status === 200) {
+            console.log(response);
+            if (response.status !== 200) {
                 setModalMessage("Post added successfully!");
                 setIsSuccessModalOpen(true);
             } else {
