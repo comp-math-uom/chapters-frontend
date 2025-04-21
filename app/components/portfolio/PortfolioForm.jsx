@@ -1,17 +1,19 @@
 "use client";
 
-import {Field, Form, Formik} from "formik";
-import {Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea} from "@chakra-ui/react";
-import {SingleDatepicker} from "chakra-dayzed-datepicker";
+import { Field, Form, Formik } from "formik";
+import { Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea } from "@chakra-ui/react";
+import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import Link from "next/link";
-import {Select as MultiSelect, CreatableSelect} from "chakra-react-select";
-import {useEffect, useState} from "react";
+import { CreatableSelect, Select as MultiSelect } from "chakra-react-select";
+import { useEffect, useState } from "react";
 import portfolioService from "../../services/portfolioService"
+import { log } from "next/dist/server/typescript/utils";
 
 export default function PortfolioForm({initialValues, handleSubmit}) {
 
     const [contributors, setContributors] = useState([]);
+    const [batches, setBatches] = useState([]);
 
     const validate = (values) => {
         const errors = {};
@@ -58,6 +60,10 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
         portfolioService.fetContributors().then((data) => {
             setContributors(data);
         });
+
+        portfolioService.fetchBatches().then((data) => {
+            setBatches(data);
+        });
     }, []);
 
     return (
@@ -91,9 +97,11 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                                     <FormControl isInvalid={form.errors.batch && form.touched.batch} className="mb-10">
                                         <FormLabel>Batch</FormLabel>
                                         <Select {...field} placeholder='Select Batch'>
-                                            <option value="Batch 23">Batch 23</option>
-                                            <option value="Batch 22">Batch 22</option>
-                                            <option value="Batch 21">Batch 21</option>
+                                            {batches.map((batch) => {
+                                                console.log(batch, initialValues)
+                                                return (<option key={batch.value} value={batch.value}
+                                                        selected={initialValues?.batch === batch.value}>{batch.label}</option>)
+                                            })}
                                         </Select>
                                         <FormErrorMessage>{form.errors.batch}</FormErrorMessage>
                                     </FormControl>
@@ -172,55 +180,56 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                             </Field>
                             <Field name='searchTags'>
                                 {({field, form}) => (
-                                    <FormControl className="mb-6" isInvalid={form.errors.searchTags && form.touched.searchTags}>
+                                    <FormControl className="mb-6"
+                                                 isInvalid={form.errors.searchTags && form.touched.searchTags}>
                                         <FormLabel>Search Tags</FormLabel>
-                                    <CreatableSelect
-                                        isMulti
-                                        value={field.value.map(tag => ({ value: tag, label: tag }))}
-                                        name={field.name}
-                                        onChange={(selectedOptions) => {
-                                            const values = selectedOptions.map(option => option.value);
-                                            form.setFieldValue('searchTags', values);
-                                        }}
-                                        onBlur={field.onBlur}
-                                        placeholder="Enter Search Tags"
-                                        components={{
-                                            DropdownIndicator: null,  // Removes the dropdown arrow
-                                            IndicatorSeparator: null, // Removes the separator
-                                            Menu: () => null,         // Removes the dropdown menu completely
-                                        }}
-                                        chakraStyles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                borderRadius: 'md',
-                                                cursor: 'text',
-                                            }),
-                                            valueContainer: (provided) => ({
-                                                ...provided,
-                                                padding: '2px 8px',
-                                            }),
-                                        }}
-                                        onCreateOption={(inputValue) => {
-                                            if (field.value.length >= 5) {
-                                                // Optionally show a toast or alert here
-                                                return;
-                                            }
-                                            const newValue = [...field.value, inputValue];
-                                            form.setFieldValue('searchTags', newValue);
-                                        }}
-                                    /></FormControl>
+                                        <CreatableSelect
+                                            isMulti
+                                            value={field.value.map(tag => ({value: tag, label: tag}))}
+                                            name={field.name}
+                                            onChange={(selectedOptions) => {
+                                                const values = selectedOptions.map(option => option.value);
+                                                form.setFieldValue('searchTags', values);
+                                            }}
+                                            onBlur={field.onBlur}
+                                            placeholder="Enter Search Tags"
+                                            components={{
+                                                DropdownIndicator: null,  // Removes the dropdown arrow
+                                                IndicatorSeparator: null, // Removes the separator
+                                                Menu: () => null,         // Removes the dropdown menu completely
+                                            }}
+                                            chakraStyles={{
+                                                control: (provided) => ({
+                                                    ...provided,
+                                                    borderRadius: 'md',
+                                                    cursor: 'text',
+                                                }),
+                                                valueContainer: (provided) => ({
+                                                    ...provided,
+                                                    padding: '2px 8px',
+                                                }),
+                                            }}
+                                            onCreateOption={(inputValue) => {
+                                                if (field.value.length >= 5) {
+                                                    // Optionally show a toast or alert here
+                                                    return;
+                                                }
+                                                const newValue = [...field.value, inputValue];
+                                                form.setFieldValue('searchTags', newValue);
+                                            }}
+                                        /></FormControl>
                                 )}
                             </Field>
                             <div className="flex">
                                 <Field name="visible">
-                                    {({field, form}) => (
+                                    {({field}) => (
                                         <FormControl className="mb-6">
                                             <Checkbox  {...field} defaultChecked>Visible</Checkbox>
                                         </FormControl>
                                     )}
                                 </Field>
                                 <Field name="featured">
-                                    {({field, form}) => (
+                                    {({field}) => (
                                         <FormControl className="mb-6">
                                             <Checkbox  {...field}>Featured</Checkbox>
                                         </FormControl>
@@ -231,7 +240,7 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
 
                         <div className="md:w-1/2 w-full">
                             <Field name='image' className="w-1/2">
-                                {({field, form}) => (
+                                {() => (
                                     <ImageUploadField
                                         name="image"
                                         label="Upload Image"
@@ -242,8 +251,8 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                     </div>
 
                     <div className="flex justify-end">
-                        <Button mt={4} colorScheme='gray' mr={4} className="w-1/6">
-                            <Link href={'/portfolio'}>
+                        <Button mt={4} colorScheme='gray' mr={4} className="w-1/6" isLoading={props.isSubmitting}>
+                            <Link style={{width: '100%'}} href={'/portfolio'}>
                                 Cancel
                             </Link>
                         </Button>

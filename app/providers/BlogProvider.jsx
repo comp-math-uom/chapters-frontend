@@ -1,12 +1,12 @@
 // BlogContext.js
 'use client'
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 // Create a context
 const BlogContext = createContext();
 
 // Create a provider component
-export function BlogProvider({ children }) {
+export function BlogProvider({children}) {
     const [blogTitle, setBlogTitle] = useState('');
     const [blogContent, setContent] = useState('');
     const [errors, setErrors] = useState({});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, VStack, Text, Button } from '@chakra-ui/react';
+import { Box, Button, Text, VStack } from '@chakra-ui/react';
 
 const SearchIcon = () => (
     <svg
@@ -12,12 +12,12 @@ const SearchIcon = () => (
         strokeLinejoin="round"
         className="w-8 h-8"
     >
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
     </svg>
 );
 
-export default function NoSearchResults({ onClear }) {
+export default function NoSearchResults({onClear}) {
     return (
         <VStack
             spacing={4}
@@ -26,7 +26,7 @@ export default function NoSearchResults({ onClear }) {
             className="w-full mx-auto text-center bg-gray-50 rounded-lg"
         >
             <Box className="p-4 bg-gray-100 rounded-full">
-                <SearchIcon />
+                <SearchIcon/>
             </Box>
 
             <Text className="text-2xl font-semibold text-gray-900">
