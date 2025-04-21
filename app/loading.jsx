@@ -1,4 +1,4 @@
-import {Container, Flex, Spinner, Text} from "@chakra-ui/react";
+import { Container, Flex } from "@chakra-ui/react";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 
 export default function Loading() {
@@ -10,7 +10,7 @@ export default function Loading() {
             direction="column"
         >
             <Container>
-                <LoadingSpinner />
+                <LoadingSpinner/>
             </Container>
         </Flex>
     );

@@ -1,4 +1,4 @@
-import { VStack, Heading, Flex, Tooltip, Avatar } from "@chakra-ui/react";
+import { Avatar, Flex, Heading, Tooltip, VStack } from "@chakra-ui/react";
 import React from "react";
 
 export default function ContributorsList({contributors}) {
@@ -9,7 +9,7 @@ export default function ContributorsList({contributors}) {
             </Heading>
             <Flex
                 gap={7}
-                style={{ width: "calc(70vw / 2)" }}
+                style={{width: "calc(70vw / 2)"}}
                 overflowX="auto"
                 className="scrollable-container"
             >
