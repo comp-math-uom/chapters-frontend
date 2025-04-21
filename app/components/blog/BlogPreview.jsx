@@ -29,7 +29,7 @@ export default function BlogPreview({blogPreview}) {
                     </Box>
                 </Flex>
                 <Button variant='outline'>
-                    <Link href={blogPreview.link}>
+                    <Link className="w-full h-full flex items-center justify-center" href={blogPreview.link}>
                         Read
                     </Link>
                 </Button>
