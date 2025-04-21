@@ -6,15 +6,15 @@ import {
     Container,
     Flex,
     FormControl,
-    FormLabel,
     FormErrorMessage,
+    FormLabel,
     Heading,
     Input,
     Stack,
     Text,
     VStack
 } from '@chakra-ui/react';
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import Link from "next/link";
 
 export default function Page() {
@@ -41,7 +41,7 @@ export default function Page() {
             actions.setSubmitting(false);
         } catch (error) {
             actions.setSubmitting(false);
-            actions.setStatus({ error: 'Login failed. Please try again.' });
+            actions.setStatus({error: 'Login failed. Please try again.'});
         }
     };
 
@@ -59,12 +59,12 @@ export default function Page() {
                     </VStack>
 
                     <Box w="full" bg="white" rounded="lg" shadow="lg" p={8}>
-                        <Formik initialValues={{ email: '', password: '' }} onSubmit={handleSubmit}>
+                        <Formik initialValues={{email: '', password: ''}} onSubmit={handleSubmit}>
                             {(props) => (
                                 <Form>
                                     <Stack spacing={5}>
                                         <Field name="email" validate={validateEmail}>
-                                            {({ field, form }) => (
+                                            {({field, form}) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
                                                     <FormLabel color="gray.700">Email address</FormLabel>
                                                     <Input
@@ -83,7 +83,7 @@ export default function Page() {
                                         </Field>
 
                                         <Field name="password" validate={validatePassword}>
-                                            {({ field, form }) => (
+                                            {({field, form}) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
                                                     <FormLabel color="gray.700">Password</FormLabel>
                                                     <Input
@@ -128,7 +128,7 @@ export default function Page() {
 
                     <Text color="gray.700" fontSize="sm">
                         Don not have an account?{' '}
-                        <Button variant="link" color="gray.600" _hover={{ color: "gray.700" }} fontSize="sm">
+                        <Button variant="link" color="gray.600" _hover={{color: "gray.700"}} fontSize="sm">
                             <Link href={"/auth/signup"}>
                                 Sign up
                             </Link>

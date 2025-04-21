@@ -1,22 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import {
-    Box,
-    Text,
-    Image,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    Icon,
-    Center
-} from '@chakra-ui/react';
+import { Box, Center, FormControl, FormErrorMessage, FormLabel, Icon, Image, Text } from '@chakra-ui/react';
 import { useField, useFormikContext } from 'formik';
 import { FiUpload } from 'react-icons/fi';
 
-export default function ImageUploadField({ name, label }) {
+export default function ImageUploadField({name, label}) {
     const [preview, setPreview] = useState(null);
     const [field, meta, helpers] = useField(name);
-    const { setFieldValue } = useFormikContext();
+    const {setFieldValue} = useFormikContext();
 
     const onDrop = useCallback((acceptedFiles) => {
         const file = acceptedFiles[0];
@@ -29,7 +20,7 @@ export default function ImageUploadField({ name, label }) {
         }
     }, [name, setFieldValue]);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({
         onDrop,
         accept: {
             'image/*': ['.jpeg', '.jpg', '.png']
@@ -43,11 +34,11 @@ export default function ImageUploadField({ name, label }) {
             <FormLabel>{label}</FormLabel>
             <Box
                 {...getRootProps()}
-                border={meta.error ? "2px solid": "1px"}
+                border={meta.error ? "2px solid" : "1px"}
                 borderRadius="md"
                 borderColor={meta.error && meta.touched ? "red.500" : "gray.200"}
                 p={6}
-                style={{ height: 400 }}
+                style={{height: 400}}
                 _active={{
                     borderColor: "blue.500"
                 }}
@@ -62,8 +53,9 @@ export default function ImageUploadField({ name, label }) {
             >
                 <input {...getInputProps()} />
                 {!preview ? (
-                    <Center flexDirection="column" justifyContent="center" alignItems="center" style={{"height": "100%"}}>
-                        <Icon as={FiUpload} w={8} h={8} color="gray.400" mb={2} />
+                    <Center flexDirection="column" justifyContent="center" alignItems="center"
+                            style={{"height": "100%"}}>
+                        <Icon as={FiUpload} w={8} h={8} color="gray.400" mb={2}/>
                         <Text textAlign="center" color="gray.500">
                             {isDragActive
                                 ? "Drop the image here"

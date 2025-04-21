@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Avatar,
     Box,
@@ -20,12 +20,15 @@ import {
     useDisclosure,
     VStack
 } from "@chakra-ui/react";
-import {ChevronRightIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
+import { ChevronRightIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import ContributorsList from "@/app/components/portfolio/ContributorsList";
 import contributors from "@/app/data/contributors";
 import Link from "next/link";
 import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
+import portfolioService from "@/app/services/portfolioService";
+import ErrorModal from "@/app/components/common/ErrorModal";
+import SuccessModal from "@/app/components/common/SuccessModal";
 
 export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = false}) {
     const [comment, setComment] = useState("");
@@ -34,6 +37,9 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
     const imageRef = useRef(null);
     const {isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete} = useDisclosure();
     const [itemToDelete, setItemToDelete] = useState(null);
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
 
     const handleAddComment = () => {
         if (comment.trim()) {
@@ -47,7 +53,24 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
         onOpenDelete();
     }
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        try {
+            let response = await portfolioService.deleteGalleryItem(itemToDelete);
+            if (response.status === 200) {
+                setModalMessage("Post deleted successfully!");
+                setIsSuccessModalOpen(true);
+            } else {
+                setModalMessage("Failed to delete the post. Please try again.");
+                setIsErrorModalOpen(true);
+            }
+        } catch (error) {
+            setModalMessage("Post added successfully!");
+            setIsSuccessModalOpen(true);
+        }
+    }
+
+    const handleSuccessModalClose = () => {
+        setIsSuccessModalOpen(false);
         onClose();
     }
 
@@ -76,10 +99,12 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                             />
                         </Box>
                         <Box flex={1} px={2} height="80vh">
-                            <HStack className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"} paddingLeft={4}>
+                            <HStack className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"}
+                                    paddingLeft={4}>
                                 {isAdmin &&
                                     <Flex gap={2}>
-                                        <IconButton variant='ghost' colorScheme='gray' aria-label='Delete' onClick={onClickDelete}
+                                        <IconButton variant='ghost' colorScheme='gray' aria-label='Delete'
+                                                    onClick={onClickDelete}
                                                     icon={<DeleteIcon/>}/>
                                         <Link href={`/portfolio/edit-item/${4}`}>
                                             <IconButton variant='ghost' colorScheme='gray' aria-label='Edit'
@@ -93,20 +118,26 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                             <Box flex={1} px={7} overflowY="auto" maxHeight="calc(80vh - 60px)" overflowX="clip">
                                 <ModalHeader pl={0}>{galleryItem.topic}</ModalHeader>
                                 <Text mb={4} textAlign="justify">
-                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                                    praesentium
                                     voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
                                     occaecati
-                                    cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi,
+                                    cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia
+                                    animi,
                                     id
-                                    est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
-                                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus
+                                    est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
+                                    distinctio.
+                                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
+                                    minus
                                     id
                                     quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
                                     repellendus.
                                     Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe
                                     eveniet
-                                    ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic
-                                    tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur
+                                    ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum
+                                    hic
+                                    tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
+                                    consequatur
                                     aut
                                     perferendis doloribus asperiores repellat.
                                 </Text>
@@ -141,6 +172,16 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                                 </VStack>
                             </Box>
                         </Box>
+                        <ErrorModal
+                            isOpen={isErrorModalOpen}
+                            onClose={() => setIsErrorModalOpen(false)}
+                            errorMessage={modalMessage}
+                        />
+                        <SuccessModal
+                            isOpen={isSuccessModalOpen}
+                            onClose={handleSuccessModalClose}
+                            successMessage={modalMessage}
+                        />
                     </ModalBody>
                 </ModalContent>
             </Modal>

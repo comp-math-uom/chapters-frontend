@@ -1,7 +1,12 @@
 import photos from "@/app/data/photos";
 import contributors from "@/app/data/contributors";
+import axios from "axios";
+import batches from "@/app/data/batches";
+
+const API_URL = "http://localhost:3000/portfolio";
 
 const portfolioService = {
+
     async fetchGalleryItems() {
         return photos;
     },
@@ -10,8 +15,12 @@ const portfolioService = {
         return contributors;
     },
 
+    async fetchBatches() {
+        return batches;
+    },
+
     async fetchGalleryItem(id) {
-        return photos.find(photo => photo.id === id);
+        return photos.find(photo => photo.id == id);
     },
 
     async filterItems(filterQuery) {
@@ -48,18 +57,16 @@ const portfolioService = {
         return filteredItems;
     },
 
-    async addGalleryItem(photo) {
-        photos.push(photo);
+    async addGalleryItem(data) {
+        return await axios.post(API_URL, data)
     },
 
-    async updateGalleryItem(id, photo) {
-        const index = photos.findIndex(photo => photo.id === id);
-        photos[index] = photo;
+    async updateGalleryItem(data) {
+        return await axios.put(`${API_URL}/${data.id}`, data)
     },
 
     async deleteGalleryItem(id) {
-        const index = photos.findIndex(photo => photo.id === id);
-        photos.splice(index, 1);
+        return await axios.delete(`${API_URL}/${id}`);
     }
 };
 export default portfolioService;
