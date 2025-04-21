@@ -47,7 +47,7 @@ export default function Page() {
         if (id) {
             fetchData();
         }
-    }, [id]);
+    }, [id, portfolioItem]);
 
     const handleSubmit = async (values) => {
         try {
