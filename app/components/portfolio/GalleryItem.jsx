@@ -6,8 +6,9 @@ import { useState } from "react";
 import GalleryModal from "@/app/components/portfolio/GalleryModal";
 
 export default function GalleryItem({photo: galleryItem, wrapperStyle}) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const [selectedPhoto, setSelectedPhoto] = useState(null);
+
 
     const handleItemClick = () => {
         setSelectedPhoto(galleryItem);
@@ -35,7 +36,7 @@ export default function GalleryItem({photo: galleryItem, wrapperStyle}) {
             </div>
 
             {selectedPhoto && (
-                <GalleryModal isOpen={isOpen} onClose={onClose} galleryItem={galleryItem} isAdmin={true} />
+                <GalleryModal isOpen={isOpen} onClose={onClose} galleryItem={galleryItem} isAdmin={true}/>
             )}
         </>
     );

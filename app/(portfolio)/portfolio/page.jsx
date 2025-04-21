@@ -1,13 +1,13 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import MediaGallery from "@/app/components/portfolio/MeidaGallery";
 import PortfolioHeader from "@/app/components/portfolio/PortfolioHeader";
 import PortfolioService from "@/app/services/portfolioService";
 import FloatingButton from "@/app/components/portfolio/FloatingButton";
 import NoSearchResults from "@/app/components/portfolio/NoResult";
-import LoadingSpinner from "@/app/components/portfolio/LoadingSpinner";
-import ErrorBlock from "@/app/components/portfolio/ErrorBlock";
+import LoadingSpinner from "@/app/components/common/LoadingSpinner";
+import ErrorBlock from "@/app/components/common/ErrorBlock";
 
 export default function Home() {
 
@@ -44,7 +44,7 @@ export default function Home() {
             {galleryItems.length > 0 && !isLoading && !isError && <MediaGallery galleryItems={galleryItems}/>}
             {galleryItems.length === 0 && !isLoading && !isError && <NoSearchResults onClear={handleReset}/>}
             {isLoading && <LoadingSpinner/>}
-            {isError && !isLoading && <ErrorBlock />}
+            {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later."/>}
             {isAdmin && <FloatingButton url="/portfolio/add-item"/>}
         </div>
     );

@@ -1,10 +1,10 @@
 "use client";
 
-import {useState} from 'react';
+import { useState } from 'react';
 import Image from "next/image";
 import LineFilter from '../../assets/img/line-filter.svg';
 import Filtered from '../../assets/img/fill-filter.svg';
-import {toggleFilterText} from '../../services/filterService.js';
+import { toggleFilterText } from '../../services/filterService.js';
 import {
     Box,
     Button,
@@ -20,7 +20,7 @@ import {
     Tooltip,
     VStack,
 } from "@chakra-ui/react";
-import {SearchIcon} from "@chakra-ui/icons";
+import { SearchIcon } from "@chakra-ui/icons";
 
 export default function PortfolioHeader({filterFn, resetFn}) {
     const [filterIcon, setFilterIcon] = useState(LineFilter);
@@ -198,7 +198,8 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                             Clear
                         </Button>
 
-                        <Button bg="black" color="white" _hover={{bg: "gray.800"}} w="16%" onClick={() => handleFilterClick(true)}>
+                        <Button bg="black" color="white" _hover={{bg: "gray.800"}} w="16%"
+                                onClick={() => handleFilterClick(true)}>
                             Filter
                         </Button>
                     </HStack>
