@@ -1,8 +1,8 @@
-import {Avatar, Box, Button, Card, CardBody, CardFooter, Flex, Heading, Image, Text} from "@chakra-ui/react";
+import { Avatar, Box, Button, Card, CardBody, CardFooter, Flex, Heading, Image, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
 
-export default function BlogPreview({ blogPreview }) {
+export default function BlogPreview({blogPreview}) {
     return (
         <Card maxW='sm' className="mt-10" boxShadow='md'>
             <Image

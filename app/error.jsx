@@ -1,12 +1,8 @@
 'use client'
 
-import {useEffect} from 'react'
-import {Box, Button, Flex, Heading, Text} from "@chakra-ui/react";
+import { useEffect } from 'react'
+import { Flex } from "@chakra-ui/react";
 import Navbar from "@/app/components/common/Navbar";
-import Image from "next/image";
-import img from "@/public/img/404.svg";
-import {FaHome} from "react-icons/fa";
-import Link from "next/link";
 import Footer from "@/app/components/common/Footer";
 import ErrorBlock from "@/app/components/common/ErrorBlock";
 

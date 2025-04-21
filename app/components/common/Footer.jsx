@@ -1,25 +1,13 @@
 "use client";
 
-import {
-    Box,
-    Container,
-    Grid,
-    GridItem,
-    Heading,
-    Text,
-    Input,
-    Button,
-    Stack,
-    Flex,
-    Divider
-} from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Flex, Grid, GridItem, Heading, Input, Stack, Text } from "@chakra-ui/react";
 
 export default function Footer() {
     return (
         <Box as="footer" bg="white" color="gray.700" borderTop="1px" borderColor="gray.200" mt="20">
             <Container maxW="7xl" px="4" py="12">
                 {/* Main Footer Content */}
-                <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap="8">
+                <Grid templateColumns={{base: "1fr", md: "repeat(2, 1fr)"}} gap="8">
                     {/* Brand Section */}
                     <GridItem>
                         <Stack spacing="4">
@@ -53,7 +41,7 @@ export default function Footer() {
                                 <Button
                                     bg="black"
                                     color="white"
-                                    _hover={{ bg: "gray.800" }}
+                                    _hover={{bg: "gray.800"}}
                                     size="md"
                                     fontSize="sm"
                                     borderRadius="lg"
@@ -67,7 +55,7 @@ export default function Footer() {
                 </Grid>
 
                 {/* Bottom Bar */}
-                <Divider mt="12" borderColor="gray.200" />
+                <Divider mt="12" borderColor="gray.200"/>
                 <Text
                     textAlign="center"
                     fontSize="sm"

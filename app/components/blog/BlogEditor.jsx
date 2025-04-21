@@ -1,31 +1,55 @@
 'use client'
 
-import React, { useState, useCallback } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import React, { useCallback, useState } from 'react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { all, createLowlight } from 'lowlight';
-import { Bold, Italic, Link2, Code, WrapText, List, ListOrdered, Braces, Minus,
-    Heading2, Heading3, Heading4, Heading1, Heading5, Heading6 } from 'lucide-react';
+import Link from '@tiptap/extension-link';
 import {
+    Bold,
+    Braces,
+    Code,
+    Heading1,
+    Heading2,
+    Heading3,
+    Heading4,
+    Heading5,
+    Heading6,
+    Italic,
+    Link2,
+    List,
+    ListOrdered,
+    Minus,
+    WrapText
+} from 'lucide-react';
+import {
+    Box,
+    Button,
     ButtonGroup,
+    FormControl,
+    FormErrorMessage,
     IconButton,
     Input,
-    Box,
-    useColorModeValue,
     Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverContent,
+    PopoverFooter,
     PopoverTrigger,
-    PopoverContent, PopoverCloseButton, PopoverArrow, PopoverHeader, PopoverBody, PopoverFooter, Button
+    Text,
+    useColorModeValue
 } from '@chakra-ui/react';
 import styles from './blogEditor.module.scss';
+import { useBlog } from "@/app/providers/BlogProvider";
 
 const lowlight = createLowlight(all);
 
 const BlogEditor = () => {
-    const [content, setContent] = useState('');
     const [linkUrl, setLinkUrl] = useState('');
     const bgColor = useColorModeValue('white', 'gray.100');
+    const {blogTitle, setBlogTitle, blogContent, setContent, errors} = useBlog();
 
     const editor = useEditor({
         extensions: [
@@ -50,10 +74,14 @@ const BlogEditor = () => {
             CodeBlockLowlight.configure({
                 lowlight,
             }),
+            Link.configure({
+                openOnClick: false,
+            })
         ],
-        content: content,
-        onUpdate: ({ editor }) => {
+        content: blogContent,
+        onUpdate: ({editor}) => {
             setContent(editor.getHTML());
+            errors.content = null;
         },
         editorProps: {
             attributes: {
@@ -65,14 +93,14 @@ const BlogEditor = () => {
     const addImage = useCallback(() => {
         const url = window.prompt('Enter image URL');
         if (url && editor) {
-            editor.chain().focus().setImage({ src: url }).run();
+            editor.chain().focus().setImage({src: url}).run();
         }
     }, [editor]);
 
     const addLink = useCallback(() => {
         if (editor && linkUrl) {
-            editor.chain().focus().setLink({ href: linkUrl }).run();
-            setLinkUrl('');
+            editor.chain().focus().extendMarkRange('link').setLink({href: linkUrl}).run();
+            setLinkUrl(linkUrl);
         }
     }, [editor, linkUrl]);
 
@@ -80,11 +108,27 @@ const BlogEditor = () => {
         return null;
     }
 
+    const handleTitleChange = (title) => {
+        errors.title = null;
+        setBlogTitle(title);
+    }
+
     return (
         <div className={styles.editor}>
             <Box bg="gray.50" px={5} pt={5} mb={5} borderRadius="md">
-                <Input variant="unstyled" placeholder="Title" size="lg" className={styles.titleInput} />
-                <Input variant="unstyled" placeholder="Subtitle" size="md" className={styles.subtitleInput} />
+                <FormControl isInvalid={errors?.title}>
+                    <Input
+                        variant="unstyled"
+                        placeholder="Title"
+                        size="lg"
+                        className={styles.titleInput}
+                        value={blogTitle}
+                        onChange={(e) => handleTitleChange(e.target.value)}
+                    />
+                    {errors?.title && (
+                        <FormErrorMessage pb={5}>{errors.title}</FormErrorMessage>
+                    )}
+                </FormControl>
             </Box>
 
             <div className={styles.toolbar}>
@@ -111,38 +155,38 @@ const BlogEditor = () => {
                     <IconButton
                         icon={<Heading1 className="w-4 h-4"/>}
                         aria-label="H1"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                        colorScheme={editor.isActive('heading', { level: 1 }) ? 'blue' : 'gray'}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 1}).run()}
+                        colorScheme={editor.isActive('heading', {level: 1}) ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Heading2 className="w-4 h-4"/>}
                         aria-label="H2"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                        colorScheme={editor.isActive('heading', { level: 2 }) ? 'blue' : 'gray'}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 2}).run()}
+                        colorScheme={editor.isActive('heading', {level: 2}) ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Heading3 className="w-4 h-4"/>}
                         aria-label="H3"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                        colorScheme={editor.isActive('heading', { level: 3 }) ? 'blue' : 'gray'}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 3}).run()}
+                        colorScheme={editor.isActive('heading', {level: 3}) ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Heading4 className="w-4 h-4"/>}
                         aria-label="H4"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-                        colorScheme={editor.isActive('heading', { level: 4 }) ? 'blue' : 'gray'}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 4}).run()}
+                        colorScheme={editor.isActive('heading', {level: 4}) ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Heading5 className="w-4 h-4"/>}
                         aria-label="H5"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-                        colorScheme={editor.isActive('heading', { level: 5 }) ? 'blue' : 'gray'}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 5}).run()}
+                        colorScheme={editor.isActive('heading', {level: 5}) ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Heading6 className="w-4 h-4"/>}
                         aria-label="H6"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-                        colorScheme={editor.isActive('heading', { level: 6 }) ? 'blue' : 'gray'}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 6}).run()}
+                        colorScheme={editor.isActive('heading', {level: 6}) ? 'blue' : 'gray'}
                     />
                     <IconButton
                         icon={<Minus className="w-4 h-4"/>}
@@ -175,18 +219,19 @@ const BlogEditor = () => {
                     <Popover>
                         <PopoverTrigger>
                             <IconButton
-                                icon={<Link2 className="w-4 h-4" />}
+                                icon={<Link2 className="w-4 h-4"/>}
                                 aria-label="Link"
                                 colorScheme={editor.isActive('link') ? 'blue' : 'gray'}
                                 onClick={() => {
-                                    if (linkUrl) {
-                                        editor.chain().focus().setLink({href: url}).run();
+                                    // If there's already a link at the current selection, unset it
+                                    if (editor.isActive('link')) {
+                                        editor.chain().focus().unsetLink().run();
                                     }
                                 }}
                             />
                         </PopoverTrigger>
                         <PopoverContent>
-                            <PopoverArrow />
+                            <PopoverArrow/>
                             <PopoverBody>
                                 <Input
                                     placeholder="Enter link URL"
@@ -197,7 +242,7 @@ const BlogEditor = () => {
                             <PopoverFooter display="flex" justifyContent="flex-end">
                                 <Button bg="black"
                                         color="white"
-                                        _hover={{ bg: "gray.800" }}
+                                        _hover={{bg: "gray.800"}}
                                         size="md"
                                         fontSize="sm"
                                         borderRadius="lg"
@@ -211,11 +256,11 @@ const BlogEditor = () => {
 
             </div>
 
-            <div
-                className={styles.editorContent}
-                style={{ backgroundColor: bgColor }}
-            >
-                <EditorContent editor={editor} />
+            <div className={styles.editorContent} style={{backgroundColor: bgColor}}>
+                <EditorContent editor={editor}/>
+                {errors?.content && (
+                    <Text color="red.500" m={3}>{errors.content}</Text>
+                )}
             </div>
         </div>
     );
