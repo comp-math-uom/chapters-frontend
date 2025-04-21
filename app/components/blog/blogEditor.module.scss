@@ -1,0 +1,124 @@
+.editor {
+  width: 100%;
+}
+
+.titleInput {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.subtitleInput {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.toolbar {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0.5rem;
+}
+
+.editorContent {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+}
+
+/* TipTap Editor Styles */
+.editorContent :global(.ProseMirror) {
+  min-height: 200px;
+  padding: 1rem;
+}
+
+.editorContent :global(.ProseMirror:focus) {
+  outline: none;
+}
+
+/* Heading Styles */
+.editorContent :global(.ProseMirror h1) {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 1em 0;
+}
+
+.editorContent :global(.ProseMirror h2) {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.83em 0;
+}
+
+.editorContent :global(.ProseMirror h3) {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 1em 0;
+}
+
+.editorContent :global(.ProseMirror h4) {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 1.33em 0;
+}
+
+.editorContent :global(.ProseMirror h5) {
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 1.67em 0;
+}
+
+.editorContent :global(.ProseMirror h6) {
+  font-size: 0.67em;
+  font-weight: bold;
+  margin: 2.33em 0;
+}
+
+/* List Styles */
+.editorContent :global(.ProseMirror ul) {
+  list-style-type: disc;
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.editorContent :global(.ProseMirror ol) {
+  list-style-type: decimal;
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.editorContent :global(.ProseMirror li) {
+  margin: 0.5em 0;
+}
+
+/* Code Styles */
+.editorContent :global(.ProseMirror code) {
+  background-color: #f0f0f0;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.editorContent :global(.ProseMirror pre) {
+  background-color: #f5f5f5;
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+/* Horizontal Rule */
+.editorContent :global(.ProseMirror hr) {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2em 0;
+}
+
+/* Link Styles */
+.editorContent :global(.ProseMirror a) {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Image Styles */
+.editorContent :global(.ProseMirror img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+}
