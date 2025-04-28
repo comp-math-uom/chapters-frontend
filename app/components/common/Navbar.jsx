@@ -25,6 +25,16 @@ function Navbar() {
                         <h1 className="m-0 text-3xl font-impact cursor-pointer">CHAPTERS</h1>
                     </Link>
                 </div>
+
+                {/* Navigation Links */}
+                <div className="flex items-center space-x-8">
+                    <Link passHref href="/portfolio" className="font-impact hover:text-gray-700">PORTFOLIO</Link>
+                    <Link passHref href="/blog" className="font-impact hover:text-gray-700">BLOG</Link>
+                    <Link passHref href="/forum" className="font-impact hover:text-gray-700">FORUM</Link>
+                    <Link passHref href="/about" className="font-impact hover:text-gray-700">ABOUT US</Link>
+                    <Link passHref href="/contact" className="font-impact hover:text-gray-700">CONTACT US</Link>
+                </div>
+
                 <div className="flex items-center gap-5">
                     {navActionButton.label !== "" && (
                         <Button variant="ghost" onClick={navActionButton.action}>
