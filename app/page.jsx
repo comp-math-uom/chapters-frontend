@@ -1,10 +1,17 @@
 import React from "react";
 import Navbar from "./components/common/Navbar";
+import HeroSection from "./components/landing/HeroSection";
+// import AchievementsSection from "./components/landing/AchievementsSection";
 
 export default function Home() {
     return (
-        <div className="container-fluid flex flex-col justify-center m-auto">
+        <div className="container-fluid flex flex-col justify-center items-center m-auto">
             <Navbar/>
+            <main className="flex flex-col w-full container px-20 mt-20">
+                <HeroSection />
+                {/*<AchievementsSection />*/}
+                {/* You can add more sections here as you develop them */}
+            </main>
         </div>
     );
 }
