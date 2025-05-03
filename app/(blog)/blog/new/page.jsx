@@ -18,7 +18,7 @@ export default function Page() {
                 action: onOpen
             }
         );
-    }, [setNavActionButton]);
+    }, [onOpen, setNavActionButton]);
 
     return (
         <BlogProvider>
