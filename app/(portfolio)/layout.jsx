@@ -12,7 +12,7 @@ export default function PortfolioLayout({children}) {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar/>
-            <main className="flex-grow pt-[73px]"> {/* Add padding-top here */}
+            <main className="flex-grow pt-[73px]">
                 <Suspense fallback={<Loading/>}>
                     {children}
                 </Suspense>
