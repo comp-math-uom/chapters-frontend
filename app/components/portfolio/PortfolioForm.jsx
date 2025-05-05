@@ -8,7 +8,6 @@ import Link from "next/link";
 import { CreatableSelect, Select as MultiSelect } from "chakra-react-select";
 import { useEffect, useState } from "react";
 import portfolioService from "../../services/portfolioService"
-import { log } from "next/dist/server/typescript/utils";
 
 export default function PortfolioForm({initialValues, handleSubmit}) {
 
