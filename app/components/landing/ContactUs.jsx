@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 function ContactUs() {
     const [formData, setFormData] = useState({
@@ -59,16 +60,39 @@ function ContactUs() {
     };
 
     return (
-        <div className="flex flex-col md:flex-row gap-8 my-16 w-full">
+        <motion.div
+            className="flex flex-col md:flex-row gap-8 my-16 w-full"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+        >
             {/* Left side - Contact information and image */}
-            <div className="w-full md:w-1/3 flex flex-col items-center">
+            <motion.div
+                className="w-full md:w-1/3 flex flex-col items-center"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+            >
                 <h2 className="text-5xl w-full font-bold text-right mb-6">CONTACT US</h2>
                 <p className="text-right mb-8">
                     Interested in learning more about our program, the AI Students Chapter,
                     potential collaborations, or have specific inquiries? Please do not
                     hesitate to reach out. We welcome connection and discussion.
                 </p>
-                <div className="mt-4">
+                <motion.div
+                    className="mt-4"
+                    animate={{
+                        y: [0, -10, 0],
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        ease: "easeInOut"
+                    }}
+                >
                     <Image
                         src={'/img/call.png'}
                         alt="Contact Icon"
@@ -77,15 +101,27 @@ function ContactUs() {
                         style={{ objectFit: "contain" }}
                         priority
                     />
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
 
             {/* Right side - Contact form */}
-            <div className="w-full md:w-2/3">
+            <motion.div
+                className="w-full md:w-2/3"
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+            >
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         {/* Email field */}
-                        <div className="flex flex-col w-full md:w-1/2">
+                        <motion.div
+                            className="flex flex-col w-full md:w-1/2"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.6 }}
+                        >
                             <label htmlFor="email" className="mb-2 font-medium">Email</label>
                             <input
                                 type="email"
@@ -97,10 +133,16 @@ function ContactUs() {
                                 className="p-3 border border-gray-700 rounded-2xl"
                                 required
                             />
-                        </div>
+                        </motion.div>
 
                         {/* Name field */}
-                        <div className="flex flex-col w-full md:w-1/2">
+                        <motion.div
+                            className="flex flex-col w-full md:w-1/2"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.7 }}
+                        >
                             <label htmlFor="name" className="mb-2 font-medium">Name</label>
                             <input
                                 type="text"
@@ -112,11 +154,17 @@ function ContactUs() {
                                 className="p-3 border border-gray-700 rounded-2xl"
                                 required
                             />
-                        </div>
+                        </motion.div>
                     </div>
 
                     {/* Subject field */}
-                    <div className="flex flex-col">
+                    <motion.div
+                        className="flex flex-col"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.8 }}
+                    >
                         <label htmlFor="subject" className="mb-2 font-medium">Subject</label>
                         <input
                             type="text"
@@ -128,10 +176,16 @@ function ContactUs() {
                             className="p-3 border border-gray-700 rounded-2xl"
                             required
                         />
-                    </div>
+                    </motion.div>
 
                     {/* Message field */}
-                    <div className="flex flex-col">
+                    <motion.div
+                        className="flex flex-col"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.9 }}
+                    >
                         <label htmlFor="message" className="mb-2 font-medium">Message</label>
                         <textarea
                             id="message"
@@ -142,10 +196,18 @@ function ContactUs() {
                             className="p-3 border border-gray-700 rounded-2xl h-36"
                             required
                         />
-                    </div>
+                    </motion.div>
 
                     {/* Submit button */}
-                    <div className="mt-4">
+                    <motion.div
+                        className="mt-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 1 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
                         <button
                             type="submit"
                             disabled={formStatus.isSubmitting}
@@ -153,23 +215,33 @@ function ContactUs() {
                         >
                             {formStatus.isSubmitting ? "Submitting..." : "Submit"}
                         </button>
-                    </div>
+                    </motion.div>
 
                     {/* Success or error message */}
                     {formStatus.isSubmitted && (
-                        <div className="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
+                        <motion.div
+                            className="mt-4 p-3 bg-green-100 text-green-700 rounded-md"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
                             Thank you! Your message has been sent successfully.
-                        </div>
+                        </motion.div>
                     )}
 
                     {formStatus.error && (
-                        <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
+                        <motion.div
+                            className="mt-4 p-3 bg-red-100 text-red-700 rounded-md"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
                             {formStatus.error}
-                        </div>
+                        </motion.div>
                     )}
                 </form>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
 
