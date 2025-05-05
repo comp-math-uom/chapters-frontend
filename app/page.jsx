@@ -4,6 +4,7 @@ import HeroSection from "./components/landing/HeroSection";
 import ContactUs from "@/app/components/landing/ContactUs";
 import WeAre from "@/app/components/landing/WeAre";
 import Blog from "@/app/components/landing/Blog";
+import AchievementsSection from "@/app/components/landing/AchievementsSection";
 // import AchievementsSection from "./components/landing/AchievementsSection";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
             <Navbar/>
             <main className="flex flex-col w-full container px-20 mt-20">
                 <HeroSection />
+                <AchievementsSection/>
                 <Blog />
                 <WeAre />
                 <ContactUs />
