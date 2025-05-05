@@ -8,7 +8,7 @@ function Blog() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-32">
                 <div className="w-full md:w-1/3">
                     <div className="relative">
-                        <div className="absolute top-0 right-0 w-48 h-48 bg-blue-300 rounded-full -z-10 translate-x-1/4"></div>
+                        <div className="absolute top-0 right-0 w-48 h-48 rounded-full -z-10 translate-x-1/4"></div>
                         <Image
                             src={'/img/blog.png'}
                             width="410"
@@ -29,7 +29,7 @@ function Blog() {
                         unique viewpoints from the forefront of our program.
                     </p>
                     <div>
-                        <Link href="/blogs">
+                        <Link href="/blog">
                             <button className="px-6 py-3 border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors duration-300">
                                 READ LATEST ARTICLES
                             </button>
