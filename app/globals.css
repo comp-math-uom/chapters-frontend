@@ -5,4 +5,5 @@
 html,
 body {
     font-family: Anton, sans-serif;
+    scroll-behavior: smooth;
 }

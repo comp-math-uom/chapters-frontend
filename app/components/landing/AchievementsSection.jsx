@@ -1,7 +1,7 @@
 
 "use client";
 import React, {useEffect, useState} from "react";
-import {Box, Container, Heading, SimpleGrid, Flex,} from "@chakra-ui/react";
+import {Box, Container, Heading, SimpleGrid, Flex, Text} from "@chakra-ui/react";
 import Image from "next/image";
 import achievementService from "@/app/services/achivementService";
 import AchievementCard from "@/app/components/landing/AchievementCard";
@@ -48,16 +48,17 @@ function AchievementsSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
         >
-            <Box as="section" py={16} px={4} borderBottom="1px" borderColor="gray.200">
+            <Box as="section" py={{ base: 8, md: 16 }} px={4} borderBottom="1px" borderColor="gray.200">
                 <Container maxW="container.xl">
-                    <Flex direction="row" justify={'center'} align="flex-start" mb={10}>
+                    <Flex direction={{ base: "column", md: "row" }} justify={'center'} align={{ base: "center", md: "flex-start" }} mb={{ base: 6, md: 10 }} gap={{ base: 4, md: 0 }}>
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.7 }}
+                            className="text-center md:text-left"
                         >
-                            <Heading as="h2" fontSize="6xl" fontWeight="bold" mb={6}>ACHIEVEMENTS</Heading>
+                            <Heading as="h2" fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }} fontWeight="bold" mb={6}>ACHIEVEMENTS</Heading>
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
@@ -76,12 +77,13 @@ function AchievementsSection() {
                                 scale: { duration: 0.7 }
                             }}
                         >
-                            <Box position="relative">
+                            <Box position="relative" className="max-w-xs sm:max-w-sm md:max-w-md mx-auto md:mx-0">
                                 <Image
                                     src="/img/achievements.png"
                                     alt="Robot holding a trophy"
                                     width={447}
                                     height={281}
+                                    className="w-full h-auto"
                                     priority
                                 />
                             </Box>
@@ -95,8 +97,8 @@ function AchievementsSection() {
                         viewport={{ once: true, margin: "-50px" }}
                     >
                         <SimpleGrid
-                            columns={{ base: 1, md: 3 }}
-                            spacing={6}
+                            columns={{ base: 1, md: 2, lg: 3 }}
+                            spacing={{ base: 4, md: 6 }}
                         >
                             {achievementPreviews.map((achievement, index) => (
                                 <motion.div

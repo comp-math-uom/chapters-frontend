@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 function WeAre() {
     return (
         <motion.div
-            className="w-full bg-black text-white rounded-3xl p-12 my-16"
+            className="w-full bg-black text-white rounded-3xl p-6 sm:p-8 md:p-12 my-8 md:my-16 ml-4 md:ml-0"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -20,7 +20,7 @@ function WeAre() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
                     <motion.h2
-                        className="text-6xl font-bold mb-6"
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -29,7 +29,7 @@ function WeAre() {
                         WE ARE
                     </motion.h2>
                     <motion.p
-                        className="text-lg"
+                        className="text-base md:text-lg"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -46,14 +46,14 @@ function WeAre() {
                 </motion.div>
 
                 <motion.div
-                    className="w-full md:w-1/2 flex justify-center"
+                    className="w-full md:w-1/2 flex justify-center mt-6 md:mt-0"
                     initial={{ opacity: 0, x: 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
                     <motion.div
-                        className="bg-white p-6 rounded-3xl w-full max-w-md"
+                        className="bg-white p-4 sm:p-6 rounded-3xl w-full max-w-xs sm:max-w-sm md:max-w-md"
                         whileHover={{
                             y: -10,
                             boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)"
