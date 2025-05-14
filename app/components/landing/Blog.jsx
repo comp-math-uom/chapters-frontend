@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 
 function Blog() {
     return (
-        <div className="w-full my-16">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-32">
+        <div className="w-full my-8 md:my-16 ml-4 md:ml-0">
+            <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8 md:gap-16 lg:gap-32">
                 <motion.div
-                    className="w-full md:w-1/3"
+                    className="w-full md:w-1/3 mt-8 md:mt-0"
                     initial={{ opacity: 0, x: -40 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -32,7 +32,7 @@ function Blog() {
                                 width="410"
                                 height="385"
                                 alt="AI Robot with Dashboard"
-                                className="w-full max-w-md mx-auto"
+                                className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto"
                             />
                         </motion.div>
                     </div>
@@ -46,7 +46,7 @@ function Blog() {
                     transition={{ duration: 0.7 }}
                 >
                     <motion.h2
-                        className="text-6xl font-bold mb-6"
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -55,7 +55,7 @@ function Blog() {
                         BLOGS
                     </motion.h2>
                     <motion.p
-                        className="text-lg mb-8"
+                        className="text-base md:text-lg mb-6 md:mb-8"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -76,7 +76,7 @@ function Blog() {
                         whileTap={{ scale: 0.95 }}
                     >
                         <Link href="/blog">
-                            <button className="px-6 py-3 border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors duration-300">
+                            <button className="px-4 sm:px-6 py-2 sm:py-3 border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors duration-300">
                                 READ LATEST ARTICLES
                             </button>
                         </Link>
