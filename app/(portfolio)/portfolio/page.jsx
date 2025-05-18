@@ -31,6 +31,7 @@ export default function Home() {
         const loadInitialItems = async () => {
             const items = await PortfolioService.fetchGalleryItems();
             setGalleryItems(items);
+            console.log(galleryItems);
         };
 
         loadInitialItems().then(_ => {
@@ -39,7 +40,7 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="container flex flex-col justify-center m-auto px-20">
+        <div className="container flex flex-col justify-center m-auto px-4 sm:px-6 md:px-10 lg:px-20">
             <PortfolioHeader filterFn={handleFilter} resetFn={handleReset}/>
             {galleryItems.length > 0 && !isLoading && !isError && <MediaGallery galleryItems={galleryItems}/>}
             {galleryItems.length === 0 && !isLoading && !isError && <NoSearchResults onClear={handleReset}/>}

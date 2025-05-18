@@ -31,7 +31,7 @@ export default function PortfolioHeader({filterFn, resetFn}) {
     const [selectedBatch, setSelectedBatch] = useState('');
     const [selectedField, setSelectedField] = useState('');
 
-    const monthLIst = [
+    const monthList = [
         {name: "January", number: 1},
         {name: "February", number: 2},
         {name: "March", number: 3},
@@ -145,64 +145,87 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                 </Flex>
 
                 {showText && (
-                    <HStack spacing={4} w="full" maxW="93%" justify="space-between">
-                        <Select
-                            placeholder="Select Year"
-                            value={selectedYear}
-                            onChange={(e) => setSelectedYear(e.target.value)}
-                            w="16%"
-                            borderWidth="2px"
+                    <Box w="full" maxW="93%">
+                        <HStack
+                            spacing={4}
+                            justify="space-between"
+                            flexDirection={{ base: "column", md: "row" }}
+                            w="full"
                         >
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                        </Select>
+                            <Select
+                                placeholder="Select Year"
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(e.target.value)}
+                                w={{ base: "full", md: "16%" }}
+                                mb={{ base: 2, md: 0 }}
+                                borderWidth="2px"
+                            >
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </Select>
 
-                        <Select
-                            placeholder="Select Month"
-                            value={selectedMonth}
-                            onChange={(e) => setSelectedMonth(e.target.value)}
-                            w="16%"
-                            borderWidth="2px"
-                        >
-                            {monthLIst.map((month) => (
-                                <option key={month.number} value={month.number}>{month.name}</option>
-                            ))}
-                        </Select>
+                            <Select
+                                placeholder="Select Month"
+                                value={selectedMonth}
+                                onChange={(e) => setSelectedMonth(e.target.value)}
+                                w={{ base: "full", md: "16%" }}
+                                mb={{ base: 2, md: 0 }}
+                                borderWidth="2px"
+                            >
+                                {monthList.map((month) => (
+                                    <option key={month.number} value={month.number}>{month.name}</option>
+                                ))}
+                            </Select>
 
-                        <Select
-                            placeholder="Select Batch"
-                            value={selectedBatch}
-                            onChange={(e) => setSelectedBatch(e.target.value)}
-                            w="16%"
-                            borderWidth="2px"
-                        >
-                            <option value="Batch 21">Batch 21</option>
-                            <option value="Batch 22">Batch 22</option>
-                            <option value="Batch 23">Batch 23</option>
-                        </Select>
+                            <Select
+                                placeholder="Select Batch"
+                                value={selectedBatch}
+                                onChange={(e) => setSelectedBatch(e.target.value)}
+                                w={{ base: "full", md: "16%" }}
+                                mb={{ base: 2, md: 0 }}
+                                borderWidth="2px"
+                            >
+                                <option value="Batch 21">Batch 21</option>
+                                <option value="Batch 22">Batch 22</option>
+                                <option value="Batch 23">Batch 23</option>
+                            </Select>
 
-                        <Select
-                            placeholder="Select Field"
-                            value={selectedField}
-                            onChange={(e) => setSelectedField(e.target.value)}
-                            w="16%"
-                            borderWidth="2px"
-                        >
-                            <option value="Hardware">Hardware</option>
-                            <option value="Software">Software</option>
-                        </Select>
+                            <Select
+                                placeholder="Select Field"
+                                value={selectedField}
+                                onChange={(e) => setSelectedField(e.target.value)}
+                                w={{ base: "full", md: "16%" }}
+                                mb={{ base: 2, md: 0 }}
+                                borderWidth="2px"
+                            >
+                                <option value="Hardware">Hardware</option>
+                                <option value="Software">Software</option>
+                            </Select>
 
-                        <Button w="16%" onClick={handleReset}>
-                            Clear
-                        </Button>
+                            <Flex
+                                w={{ base: "full", md: "auto" }}
+                                gap={2}
+                                justify={{ base: "space-between", md: "flex-end" }}
+                                mt={{ base: 2, md: 0 }}
+                            >
+                                <Button w={{ base: "48%", md: "auto" }} onClick={handleReset}>
+                                    Clear
+                                </Button>
 
-                        <Button bg="black" color="white" _hover={{bg: "gray.800"}} w="16%"
-                                onClick={() => handleFilterClick(true)}>
-                            Filter
-                        </Button>
-                    </HStack>
+                                <Button
+                                    bg="black"
+                                    color="white"
+                                    _hover={{bg: "gray.800"}}
+                                    w={{ base: "48%", md: "auto" }}
+                                    onClick={() => handleFilterClick(true)}
+                                >
+                                    Filter
+                                </Button>
+                            </Flex>
+                        </HStack>
+                    </Box>
                 )}
             </VStack>
         </Box>
