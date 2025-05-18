@@ -13,10 +13,18 @@ export default async function Page({params}) {
         return notFound();
     }
     return (
-        <div className="container flex flex-wrap justify-center m-auto gap-20 px-80">
+        <div className="container flex flex-wrap justify-center m-auto gap-4 md:gap-10 lg:gap-20 px-4 md:px-8 lg:px-20 xl:px-40 2xl:px-60">
             <BlogHeader blog={blog}/>
-            <Image src={blog.coverImage} alt={"Cover Image"} width={750} height={500}
-                   style={{objectFit: "cover", width: '750px', height: '500px'}}/>
+            <div className="w-full flex justify-center">
+                <Image
+                    src={blog.coverImage}
+                    alt={"Cover Image"}
+                    width={750}
+                    height={500}
+                    className="w-full md:w-[80%] lg:w-[750px] h-auto mb-8 md:mb-0 object-cover"
+                    style={{maxHeight: '500px'}}
+                />
+            </div>
             <BlogContent blog={blog}/>
         </div>
     );

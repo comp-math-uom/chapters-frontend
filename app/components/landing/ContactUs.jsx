@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -60,8 +61,8 @@ function ContactUs() {
     };
 
     return (
-        <motion.div
-            className="flex flex-col md:flex-row gap-8 my-16 w-full"
+        <motion.div id="contactUs"
+            className="flex flex-col md:flex-row gap-8 my-8 md:my-16 w-full ml-4 md:ml-0"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -69,20 +70,20 @@ function ContactUs() {
         >
             {/* Left side - Contact information and image */}
             <motion.div
-                className="w-full md:w-1/3 flex flex-col items-center"
+                className="w-full md:w-1/3 flex flex-col items-center md:items-end"
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
             >
-                <h2 className="text-5xl w-full font-bold text-right mb-6">CONTACT US</h2>
-                <p className="text-right mb-8">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl w-full font-bold text-center md:text-right mb-4 md:mb-6">CONTACT US</h2>
+                <p className="text-center md:text-right mb-6 md:mb-8 text-sm sm:text-base">
                     Interested in learning more about our program, the AI Students Chapter,
                     potential collaborations, or have specific inquiries? Please do not
                     hesitate to reach out. We welcome connection and discussion.
                 </p>
                 <motion.div
-                    className="mt-4"
+                    className="mt-4 w-full max-w-xs"
                     animate={{
                         y: [0, -10, 0],
                     }}
@@ -96,9 +97,9 @@ function ContactUs() {
                     <Image
                         src={'/img/call.png'}
                         alt="Contact Icon"
-                        width="272"
-                        height="235"
-                        style={{ objectFit: "contain" }}
+                        width={272}
+                        height={235}
+                        className="w-full h-auto mx-auto md:mr-0"
                         priority
                     />
                 </motion.div>
@@ -122,7 +123,7 @@ function ContactUs() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.6 }}
                         >
-                            <label htmlFor="email" className="mb-2 font-medium">Email</label>
+                            <label htmlFor="email" className="mb-2 font-medium text-sm sm:text-base">Email</label>
                             <input
                                 type="email"
                                 id="email"
@@ -130,7 +131,7 @@ function ContactUs() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="Enter your Email"
-                                className="p-3 border border-gray-700 rounded-2xl"
+                                className="p-2 sm:p-3 border border-gray-700 rounded-2xl"
                                 required
                             />
                         </motion.div>
@@ -143,7 +144,7 @@ function ContactUs() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.7 }}
                         >
-                            <label htmlFor="name" className="mb-2 font-medium">Name</label>
+                            <label htmlFor="name" className="mb-2 font-medium text-sm sm:text-base">Name</label>
                             <input
                                 type="text"
                                 id="name"
@@ -151,7 +152,7 @@ function ContactUs() {
                                 value={formData.name}
                                 onChange={handleChange}
                                 placeholder="Enter your name"
-                                className="p-3 border border-gray-700 rounded-2xl"
+                                className="p-2 sm:p-3 border border-gray-700 rounded-2xl"
                                 required
                             />
                         </motion.div>
@@ -165,7 +166,7 @@ function ContactUs() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.8 }}
                     >
-                        <label htmlFor="subject" className="mb-2 font-medium">Subject</label>
+                        <label htmlFor="subject" className="mb-2 font-medium text-sm sm:text-base">Subject</label>
                         <input
                             type="text"
                             id="subject"
@@ -173,7 +174,7 @@ function ContactUs() {
                             value={formData.subject}
                             onChange={handleChange}
                             placeholder="Enter subject"
-                            className="p-3 border border-gray-700 rounded-2xl"
+                            className="p-2 sm:p-3 border border-gray-700 rounded-2xl"
                             required
                         />
                     </motion.div>
@@ -186,14 +187,14 @@ function ContactUs() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.9 }}
                     >
-                        <label htmlFor="message" className="mb-2 font-medium">Message</label>
+                        <label htmlFor="message" className="mb-2 font-medium text-sm sm:text-base">Message</label>
                         <textarea
                             id="message"
                             name="message"
                             value={formData.message}
                             onChange={handleChange}
                             placeholder="Enter your message"
-                            className="p-3 border border-gray-700 rounded-2xl h-36"
+                            className="p-2 sm:p-3 border border-gray-700 rounded-2xl h-24 sm:h-36"
                             required
                         />
                     </motion.div>
@@ -211,7 +212,7 @@ function ContactUs() {
                         <button
                             type="submit"
                             disabled={formStatus.isSubmitting}
-                            className="bg-black text-white py-3 px-8 rounded-md hover:bg-gray-800 transition-colors"
+                            className="bg-black text-white py-2 sm:py-3 px-6 sm:px-8 rounded-md hover:bg-gray-800 transition-colors text-sm sm:text-base"
                         >
                             {formStatus.isSubmitting ? "Submitting..." : "Submit"}
                         </button>
@@ -220,7 +221,7 @@ function ContactUs() {
                     {/* Success or error message */}
                     {formStatus.isSubmitted && (
                         <motion.div
-                            className="mt-4 p-3 bg-green-100 text-green-700 rounded-md"
+                            className="mt-4 p-3 bg-green-100 text-green-700 rounded-md text-sm sm:text-base"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
@@ -231,7 +232,7 @@ function ContactUs() {
 
                     {formStatus.error && (
                         <motion.div
-                            className="mt-4 p-3 bg-red-100 text-red-700 rounded-md"
+                            className="mt-4 p-3 bg-red-100 text-red-700 rounded-md text-sm sm:text-base"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
