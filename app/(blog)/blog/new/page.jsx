@@ -31,7 +31,7 @@ export default function Page() {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <div className="container flex flex-wrap justify-center m-auto px-56 gap-20 mt-20">
+            <div className="container flex flex-wrap justify-center m-auto px-4 md:px-8 lg:px-20 xl:px-32 gap-4 md:gap-10 lg:gap-20 mt-8 md:mt-12 lg:mt-20">
                 <BlogEditor/>
             </div>
         </BlogProvider>

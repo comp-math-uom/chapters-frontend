@@ -4,13 +4,13 @@ import Link from "next/link";
 
 export default function BlogPreview({blogPreview}) {
     return (
-        <Card maxW='sm' className="mt-10" boxShadow='md'>
+        <Card maxW={['100%', 'sm']} className="mt-10" boxShadow='md'>
             <Image
                 height="300px"
                 objectFit="cover"
                 borderTopRadius="md"
                 src={blogPreview.coverImage}
-                alt='Chakra UI'
+                alt='Blog Preview'
             />
             <CardBody>
                 <Heading as='h4' size='md' className="mb-3">
@@ -23,7 +23,7 @@ export default function BlogPreview({blogPreview}) {
 
             <CardFooter justify='space-between' flexWrap='wrap' sx={{'& > button': {minW: '136px'}}}>
                 <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                    <Avatar name='Segun Adebayo' src={blogPreview.avatar}/>
+                    <Avatar name={blogPreview.author} src={blogPreview.avatar}/>
                     <Box>
                         <Text> {blogPreview.author} </Text>
                     </Box>

@@ -63,8 +63,8 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
             {(props) => (
                 <Form className="flex flex-col justify-between" style={{height: "calc(100vh - 100px)"}}
                       onKeyDown={handleKeyDown}>
-                    <div>
-                        <Field name='image' className="w-1/2">
+                    <div className="px-2">
+                        <Field name='image' className="w-full sm:w-3/4 md:w-1/2">
                             {({field, form}) => (
                                 <ImageUploadField
                                     name="image"
@@ -117,19 +117,21 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
                         </Field>
                     </div>
 
-                    <div className="flex justify-between w-full">
+                    <div className="flex flex-col sm:flex-row justify-between w-full gap-4 px-2">
                         <Button
                             mt={4}
                             colorScheme='gray'
-                            mr={4}
-                            className="w-1/2"
+                            className="w-full sm:w-1/2"
                             onClick={handleCancel}
                             isLoading={props.isSubmitting}>
                             Cancel
                         </Button>
                         <Button bg="black"
                                 color="white"
-                                _hover={{bg: "gray.800"}} mt={4} colorScheme='teal' className="w-1/2"
+                                _hover={{bg: "gray.800"}}
+                                mt={4}
+                                colorScheme='teal'
+                                className="w-full sm:w-1/2"
                                 isLoading={props.isSubmitting}
                                 type='submit'>
                             Publish
