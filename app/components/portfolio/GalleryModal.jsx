@@ -82,11 +82,15 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
 
     return (
         <>
-            <Modal isOpen={isOpen} onClose={onClose} size="5xl" closeOnOverlayClick={true} isCentered>
+            <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "5xl" }} closeOnOverlayClick={true} isCentered>
                 <ModalOverlay/>
-                <ModalContent style={{maxWidth: "100vw", width: "70vw", maxHeight: "80vh"}}>
-                    <ModalBody display="flex" padding={0} maxHeight="80vh">
-                        <Box flex={1} maxHeight="80vh" position="relative">
+                <ModalContent style={{ maxWidth: { base: "100%", md: "70vw" }, width: { base: "100%", md: "70vw" }, maxHeight: { base: "100vh", md: "80vh" }}}>
+                    <ModalBody display="flex" flexDirection={{ base: "column", md: "row" }} padding={0} maxHeight={{ base: "100vh", md: "80vh" }}>
+                        <Box
+                            flex={{ base: "none", md: 1 }}
+                            maxHeight={{ base: "40vh", md: "80vh" }}
+                            position="relative"
+                        >
                             <Image
                                 ref={imageRef}
                                 src={galleryItem.src}
@@ -98,7 +102,11 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                                 onLoad={() => setImageHeight(imageRef.current.clientHeight)}
                             />
                         </Box>
-                        <Box flex={1} px={2} height="80vh">
+                        <Box
+                            flex={1}
+                            px={2}
+                            height={{ base: "60vh", md: "80vh" }}
+                        >
                             <HStack className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"}
                                     paddingLeft={4}>
                                 {isAdmin &&
