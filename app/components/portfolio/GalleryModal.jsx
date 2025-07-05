@@ -26,7 +26,7 @@ import contributors from "@/app/data/contributors";
 import Link from "next/link";
 import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
-import portfolioService from "@/app/services/portfolioService";
+import portfolioService from "@/app/lib/services/portfolioService";
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 

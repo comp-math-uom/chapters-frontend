@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import MediaGallery from "@/app/components/portfolio/MeidaGallery";
 import PortfolioHeader from "@/app/components/portfolio/PortfolioHeader";
-import PortfolioService from "@/app/services/portfolioService";
+import PortfolioService from "@/app/lib/services/portfolioService";
 import FloatingButton from "@/app/components/portfolio/FloatingButton";
 import NoSearchResults from "@/app/components/portfolio/NoResult";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";

@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import {Box, Container, Heading, SimpleGrid, Flex, Text} from "@chakra-ui/react";
 import Image from "next/image";
-import achievementService from "@/app/services/achivementService";
+import achievementService from "@/app/lib/services/achivementService";
 import AchievementCard from "@/app/components/landing/AchievementCard";
 import { motion } from "framer-motion";
 
