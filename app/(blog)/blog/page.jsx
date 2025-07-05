@@ -19,10 +19,9 @@ export default function Home() {
         const fetchBlogPreviews = async () => {
             try {
                 setIsLoading(true);
-                const blogPreviews = await blogService.getBlogPreviews();
                 const apiResult = await blogService.getBlogPreviewsFromAPI();
-                console.log("API Result:", apiResult);            
-                setBlogPreviews(blogPreviews);
+                console.log("API Result:", apiResult);
+                setBlogPreviews(apiResult);
             } catch (error) {
                 console.error("Error fetching blog previews:", error);
             } finally {
