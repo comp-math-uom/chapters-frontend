@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Avatar, Box, Button, Heading, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
-import { feedbackService } from "@/app/services/feedbackService";
+import { feedbackService } from "@/app/lib/services/feedbackService";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
 export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"}) {
