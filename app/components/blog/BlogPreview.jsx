@@ -4,32 +4,32 @@ import Link from "next/link";
 
 export default function BlogPreview({blogPreview}) {
     return (
-        <Card maxW='sm' className="mt-10" boxShadow='md'>
+        <Card maxW={['100%', 'sm']} className="mt-10" boxShadow='md'>
             <Image
                 height="300px"
                 objectFit="cover"
                 borderTopRadius="md"
-                src={blogPreview.coverImage}
-                alt='Chakra UI'
+                src={blogPreview.post_image}
+                alt='Blog Preview'
             />
             <CardBody>
                 <Heading as='h4' size='md' className="mb-3">
                     {blogPreview.title}
                 </Heading>
                 <Text>
-                    {blogPreview.description}
+                    {blogPreview.content_preview}
                 </Text>
             </CardBody>
 
             <CardFooter justify='space-between' flexWrap='wrap' sx={{'& > button': {minW: '136px'}}}>
                 <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                    <Avatar name='Segun Adebayo' src={blogPreview.avatar}/>
+                    <Avatar name={blogPreview.user_display_name} src={blogPreview.user_image}/>
                     <Box>
-                        <Text> {blogPreview.author} </Text>
+                        <Text> {blogPreview.user_display_name} </Text>
                     </Box>
                 </Flex>
                 <Button variant='outline'>
-                    <Link className="w-full h-full flex items-center justify-center" href={blogPreview.link}>
+                    <Link className="w-full h-full flex items-center justify-center" href="/blog/post/1">
                         Read
                     </Link>
                 </Button>

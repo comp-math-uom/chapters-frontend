@@ -10,7 +10,7 @@ export default function InnerLayout({children}) {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar/>
-            <main className="flex-grow pt-[73px]">
+            <main className="flex-grow pt-[73px] w-full max-w-full overflow-x-hidden">
                 <Suspense fallback={<Loading/>}>
                     {children}
                 </Suspense>

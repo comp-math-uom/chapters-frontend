@@ -4,15 +4,15 @@ import { BsShare } from 'react-icons/bs';
 
 export default function BlogHeader({blog}) {
     return (
-        <Box width={'full'} paddingTop={16} px={20}>
+        <Box width={'full'} paddingTop={[6, 8, 12, 16]} px={[4, 8, 12, 20]}>
             <VStack spacing={2} align={"left"}>
-                <Heading as="h1" size="4xl" fontWeight="bold" className={'font-anton'}>
+                <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className={'font-anton'}>
                     {blog.title}
                 </Heading>
-                <HStack spacing={2} mt={5}>
+                <HStack spacing={2} mt={[3, 4, 5]} flexWrap="wrap">
                     <Avatar src={blog.avatar}/>
                     <VStack align={"left"}>
-                        <HStack spacing={2} color="gray.700" fontSize={"lg"}>
+                        <HStack spacing={2} color="gray.700" fontSize={["md", "lg"]} flexWrap="wrap">
                             <Text>Written by {blog.author}</Text>
                             <Text>|</Text>
                             <Text>{blog.date}</Text>
@@ -30,7 +30,7 @@ export default function BlogHeader({blog}) {
                         </Flex>
                     </VStack>
                 </HStack>
-                <HStack marginTop={6} spacing={6}>
+                <HStack marginTop={6} spacing={6} flexWrap="wrap">
                     <HStack className="cursor-pointer hover:opacity-80">
                         <BiLike size={23} className="text-gray-600"/>
                         <Text fontSize="sm" color="gray.600">{blog.likes}</Text>
