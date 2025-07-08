@@ -2,7 +2,7 @@
 
 import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
 import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
-import portfolioService from "@/app/services/portfolioService";
+import portfolioService from "@/app/lib/services/portfolioService";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -76,8 +76,8 @@ export default function Page() {
     }
 
     return (
-        <div className="container flex flex-col h-full m-auto justify-start px-20">
-            <h1 className="text-4xl font-bold my-10">
+        <div className="container flex flex-col h-full m-auto justify-start px-4 sm:px-6 md:px-10 lg:px-20">
+            <h1 className="text-3xl md:text-4xl font-bold my-6 md:my-10">
                 Edit Post
             </h1>
             <PortfolioForm initialValues={portfolioItem} handleSubmit={handleSubmit}/>

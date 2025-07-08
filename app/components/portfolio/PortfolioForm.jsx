@@ -7,7 +7,7 @@ import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import Link from "next/link";
 import { CreatableSelect, Select as MultiSelect } from "chakra-react-select";
 import { useEffect, useState } from "react";
-import portfolioService from "../../services/portfolioService"
+import portfolioService from "@/app/lib/services/portfolioService"
 
 export default function PortfolioForm({initialValues, handleSubmit}) {
 

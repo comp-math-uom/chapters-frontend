@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Navbar from "./components/common/Navbar";
 import HeroSection from "./components/landing/HeroSection";
 import ContactUs from "@/app/components/landing/ContactUs";
@@ -27,7 +26,7 @@ export default function Home() {
                 style={{ scaleX }}
             />
             <Navbar/>
-            <main className="flex flex-col w-full container px-20 mt-20">
+            <main className="flex flex-col w-full container px-4 sm:px-8 md:px-12 lg:px-20 mt-16 md:mt-20">
                 <HeroSection />
                 <AchievementsSection/>
                 <Portfolio />

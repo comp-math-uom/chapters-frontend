@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Avatar, Box, Button, Heading, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
-import { feedbackService } from "@/app/services/feedbackService";
+import { feedbackService } from "@/app/lib/services/feedbackService";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
 export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"}) {
@@ -46,7 +46,12 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
                         key={feedback.id}
                         p={4}
                     >
-                        <HStack justify="space-between" mb={2}>
+                        <HStack
+                            justify={{ base: "flex-start", md: "space-between" }}
+                            alignItems={{ base: "flex-start", md: "center" }}
+                            flexDirection={{ base: "column", md: "row" }}
+                            mb={2}
+                        >
                             <HStack spacing={3}>
                                 <Avatar
                                     size="sm"
@@ -63,11 +68,12 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
                                 variant="ghost"
                                 colorScheme="red"
                                 onClick={() => handleDeleteClick(feedback)}
+                                mt={{ base: 2, md: 0 }}
                             >
                                 Delete Feedback
                             </Button>}
                         </HStack>
-                        <Text pl={10} mb={5}>{feedback.content}</Text>
+                        <Text pl={{ base: 0, md: 10 }} mb={5}>{feedback.content}</Text>
                         {index !== feedbacks.length - 1 && <hr/>}
                     </Box>
                 ))}

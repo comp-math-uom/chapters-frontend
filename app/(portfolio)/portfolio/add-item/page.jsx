@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import PortfolioForm from '@/app/components/portfolio/PortfolioForm';
-import portfolioService from '@/app/services/portfolioService';
+import portfolioService from '@/app/lib/services/portfolioService';
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 
@@ -36,8 +36,8 @@ export default function Page() {
     };
 
     return (
-        <div className="container flex flex-col h-full m-auto justify-start px-20">
-            <h1 className="text-4xl font-bold my-10">
+        <div className="container flex flex-col h-full m-auto justify-start px-4 sm:px-6 md:px-10 lg:px-20">
+            <h1 className="text-3xl md:text-4xl font-bold my-6 md:my-10">
                 Add New Post
             </h1>
             <PortfolioForm handleSubmit={handleSubmit}/>
