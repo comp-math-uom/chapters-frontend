@@ -71,7 +71,7 @@ export const blogService = {
             const headers = {
                 'x-user-id': '1',
             };
-            const response = await axios.put(`${API_BASE_URL}/blogs/blog/${id}`, blogData, { headers });
+            const response = await axios.put(`${API_BASE_URL}/blogs/updateblog/${id}`, blogData, { headers });
             return response.data;
         } catch (error) {
             console.error(`Error updating blog with ID ${id}:`, error);

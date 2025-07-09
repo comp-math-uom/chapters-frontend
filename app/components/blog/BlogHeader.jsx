@@ -8,7 +8,7 @@ import DeleteConfirmModal from '@/app/components/common/DeleteConfirmModal';
 import blogService from '@/app/lib/services/blogService';
 import { useRouter } from 'next/navigation';
 
-export default function BlogHeader({blog}) {
+export default function BlogHeader({blog, blogId}) {
     const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
@@ -47,11 +47,11 @@ export default function BlogHeader({blog}) {
     const handleLike = async () => {
         try {
             if (isLiked) {
-                await blogService.likeBlog(blog.blog_id, userId, 0);
+                await blogService.likeBlog(blogId, userId, 0);
                 setIsLiked(false);
                 setLikesCount(likesCount - 1);
             } else {
-                await blogService.likeBlog(blog.blog_id, userId);
+                await blogService.likeBlog(blogId, userId);
                 setIsLiked(true);
                 setLikesCount(likesCount + 1);
             }
@@ -68,11 +68,15 @@ export default function BlogHeader({blog}) {
         }
     };
 
+    const handleEdit = () => {
+        router.push(`/blog/edit/${blogId}`);
+    };
+
     const handleDelete = async () => {
         setIsDeleting(true);
         try {
-            console.log('Deleting blog:', blog.blog_id);
-            await blogService.deleteBlog(blog.blog_id);
+            console.log('Deleting blog:', blogId);
+            await blogService.deleteBlog(blogId);
             console.log('Blog deleted successfully');
             router.push('/blog');
         } catch (error) {
@@ -87,7 +91,7 @@ export default function BlogHeader({blog}) {
         const checkIfLiked = async () => {
             try {
                 // Assuming blogService has a method to check if the blog is liked by the user
-                const liked = await blogService.isLikedByUser(blog.blog_id, userId);
+                const liked = await blogService.isLikedByUser(blogId, userId);
                 setIsLiked(liked);
             } catch (error) {
                 console.error('Error checking if blog is liked:', error);
@@ -95,7 +99,7 @@ export default function BlogHeader({blog}) {
         };
 
         checkIfLiked();
-    }, [blog.blog_id]);
+    }, [blogId]);
 
     return (
         <Box width={'full'} paddingTop={[6, 8, 12, 16]} px={[4, 8, 12, 20]}>
@@ -159,10 +163,8 @@ export default function BlogHeader({blog}) {
                             _hover={{ bg: "gray.100" }}
                         />
                         <MenuList>
-                            <MenuItem icon={<EditIcon />}>
-                                <Link href={`/blog/edit/${blog.id}`}>
-                                    Edit
-                                </Link>
+                            <MenuItem icon={<EditIcon />} onClick={handleEdit}>
+                                Edit
                             </MenuItem>
                             <MenuItem icon={<DeleteIcon />} onClick={onDeleteOpen}>
                                 Delete
