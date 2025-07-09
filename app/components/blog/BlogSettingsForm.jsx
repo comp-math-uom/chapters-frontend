@@ -8,6 +8,7 @@ import { useBlog } from "@/app/providers/BlogProvider";
 import blogService from "@/app/lib/services/blogService";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import axios from "axios";
 
 export default function BlogSettingsForm({initialValues, handleCancel, isEditMode = false, blogId}) {
     const toast = useToast();
@@ -23,6 +24,28 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
 
         fetchAuthors();
     }, []);
+
+    const uploadCoverImage = async (file) => {
+        // curl command: curl --location --request POST "https://api.imgbb.com/1/upload?expiration=600&key=YOUR_CLIENT_API_KEY" --form "image=R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        // I have base64 encoded the image and uploaded it to imgbb
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('key', process.env.NEXT_PUBLIC_IMAGEBB_API_KEY);
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`, formData);
+            return response.data.data.url;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            toast({
+                title: "Image Upload Error",
+                description: "Failed to upload the image. Please try again.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            return null;
+        }
+    };
 
     const validate = (values) => {
         debugger;
@@ -88,10 +111,12 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
                 imageBase64 = await convertToBase64(values.image);
             }
 
+            var imageUrl = await uploadCoverImage(values.image);
+  
             // Combine blog data with form values
             const completeData = {
                 ...values,
-                image: imageBase64,
+                post_image: imageUrl,
                 title: blogTitle,
                 content: blogContent,
                 comment_constraint: true,
