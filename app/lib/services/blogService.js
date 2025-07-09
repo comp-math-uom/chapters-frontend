@@ -1,5 +1,6 @@
 import { blogPreviews } from "@/app/data/blogPreviews";
 import { blog } from "@/app/data/blog";
+import { blogComments } from "@/app/data/blogComment";
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BLOG_API;
@@ -20,6 +21,9 @@ export const blogService = {
     },
     async getBlog(id) {
         return blog.find(blogEntry => blogEntry.id === id);
+    },
+    async getBlogComments() {
+        return blogComments;
     }
 }
 
