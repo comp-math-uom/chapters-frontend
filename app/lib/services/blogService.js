@@ -1,5 +1,4 @@
-import { blogPreviews } from "@/app/data/blogPreviews";
-import { blog } from "@/app/data/blog";
+import { authors } from "@/app/data/authors";
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BLOG_API;
@@ -15,11 +14,57 @@ export const blogService = {
         }
     },
 
-    async getBlogPreviews() {
-        return blogPreviews
+    async getBlogByIdFromAPI(id) {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/blogs/blog/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching blog with ID ${id}:`, error);
+            throw error;
+        }
     },
-    async getBlog(id) {
-        return blog.find(blogEntry => blogEntry.id === id);
+    
+    async createBlog(blogData) {
+        try {
+            const headers = {
+                'x-user-id': '1',
+            };
+            const response = await axios.post(`${API_BASE_URL}/blogs/createblog`, blogData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error("Error creating blog:", error);
+            throw error;
+        }
+    },
+
+    async updateBlog(id, blogData) {
+        try {
+            const headers = {
+                'x-user-id': '1',
+            };
+            const response = await axios.put(`${API_BASE_URL}/blogs/blog/${id}`, blogData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error updating blog with ID ${id}:`, error);
+            throw error;
+        }
+    },
+
+    async deleteBlog(id) {
+        try {
+            const headers = {
+                'x-user-id': '1',
+            };
+            const response = await axios.delete(`${API_BASE_URL}/blogs/blogs/${id}`, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error deleting blog with ID ${id}:`, error);
+            throw error;
+        }
+    },
+
+    async getAuthors() {
+        return authors;
     }
 }
 
