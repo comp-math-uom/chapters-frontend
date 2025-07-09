@@ -140,7 +140,7 @@ export default function BlogHeader({blog}) {
                             )}
                             <Text fontSize="sm" color="gray.600">{likesCount}</Text>
                         </HStack>                        
-                        <HStack spacing={1} className="cursor-pointer hover:opacity-80">
+                        <HStack spacing={1}>
                             <BiComment size={23} className="text-gray-600"/>
                             <Text fontSize="sm" color="gray.600">12</Text>
                         </HStack>

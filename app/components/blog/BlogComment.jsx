@@ -8,6 +8,8 @@ export default function BlogComment({comments,setComments}) {
     const [comment, setComment] = useState('');
     const [profilePic, setProfilePic] = useState();
     const [username, setUsername] = useState();
+    const [replyingTo, setReplyingTo] = useState(null);
+    const [replyText, setReplyText] = useState('');
 
     useEffect(() => {
         let un = localStorage.getItem("username") || "John Doe";
@@ -25,10 +27,58 @@ export default function BlogComment({comments,setComments}) {
             text: comment,
             time: "now",
             likes: 0,
-            avatar: profilePic || "/api/placeholder/40/40"
+            avatar: profilePic || "/api/placeholder/40/40",
+            replies: []
         };
         setComments([newComment, ...comments]);
         setComment("");
+    };
+
+    const handleReplyClick = (commentId) => {
+        setReplyingTo(commentId);
+        setReplyText('');
+    };
+
+    const handleCancelReply = () => {
+        setReplyingTo(null);
+        setReplyText('');
+    };
+
+    const handleSubmitReply = async (parentCommentId) => {
+        if (!replyText.trim()) return;
+        
+        try {
+            const newReply = {
+                id: Date.now(),
+                name: username,
+                username: username,
+                text: replyText,
+                time: "now",
+                likes: 0,
+                avatar: profilePic || "/api/placeholder/40/40",
+                parentId: parentCommentId
+            };
+
+            // Call blogService method to save the reply
+            await blogService.addCommentReply(parentCommentId, newReply);
+
+            // Update local state
+            const updatedComments = comments.map(comment => {
+                if (comment.id === parentCommentId) {
+                    return {
+                        ...comment,
+                        replies: [...(comment.replies || []), newReply]
+                    };
+                }
+                return comment;
+            });
+            
+            setComments(updatedComments);
+            setReplyingTo(null);
+            setReplyText('');
+        } catch (error) {
+            console.error('Error submitting reply:', error);
+        }
     };
 
     return (
@@ -98,10 +148,84 @@ export default function BlogComment({comments,setComments}) {
                                         p={0}
                                         h="auto"
                                         _hover={{ bg: "transparent", color: "gray.600" }}
+                                        onClick={() => handleReplyClick(commentItem.id)}
                                     >
                                         Reply
                                     </Button>
                                 </HStack>
+
+                                {/* Reply Input Section */}
+                                {replyingTo === commentItem.id && (
+                                    <Box mt={4} pl={0}>
+                                        <HStack spacing={3} align="flex-start">
+                                            <Avatar
+                                                name={username}
+                                                src={profilePic}
+                                                size="sm"
+                                            />
+                                            <VStack spacing={3} flex={1} align="stretch">
+                                                <Input
+                                                    placeholder={`Reply to ${commentItem.name}...`}
+                                                    value={replyText}
+                                                    onChange={(e) => setReplyText(e.target.value)}
+                                                    size="sm"
+                                                    fontSize="sm"
+                                                    focusBorderColor="gray.400"
+                                                    borderRadius="md"
+                                                />
+                                                <HStack spacing={2}>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        onClick={handleCancelReply}
+                                                        color="gray.500"
+                                                        _hover={{ bg: "gray.100" }}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        bg="black"
+                                                        color="white"
+                                                        _hover={{ bg: "gray.800" }}
+                                                        onClick={() => handleSubmitReply(commentItem.id)}
+                                                        isDisabled={!replyText.trim()}
+                                                    >
+                                                        Reply
+                                                    </Button>
+                                                </HStack>
+                                            </VStack>
+                                        </HStack>
+                                    </Box>
+                                )}
+
+                                {/* Display Replies */}
+                                {commentItem.replies && commentItem.replies.length > 0 && (
+                                    <Box mt={4} pl={0}>
+                                        <VStack spacing={4} align="stretch">
+                                            {commentItem.replies.map((reply) => (
+                                                <HStack key={reply.id} align="flex-start" spacing={3}>
+                                                    <Avatar
+                                                        name={reply.name}
+                                                        src={reply.avatar}
+                                                        size="sm"
+                                                    />
+                                                    <Box flex={1}>
+                                                        <Text fontSize="xs" fontWeight="semibold" color="gray.800">
+                                                            {reply.name}
+                                                        </Text>
+                                                        <Text fontSize="xs" lineHeight="1.5" color="gray.700">
+                                                            {reply.text}
+                                                        </Text>
+                                                        <Text fontSize="xs" color="gray.400" mt={1}>
+                                                            {reply.time}
+                                                        </Text>
+                                                    </Box>
+                                                </HStack>
+                                            ))}
+                                        </VStack>
+                                    </Box>
+                                )}
                             </Box>
 
                         </HStack>
