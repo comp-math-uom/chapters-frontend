@@ -49,7 +49,7 @@ const lowlight = createLowlight(all);
 const BlogEditor = () => {
     const [linkUrl, setLinkUrl] = useState('');
     const bgColor = useColorModeValue('white', 'gray.100');
-    const {blogTitle, setBlogTitle, blogContent, setContent, errors} = useBlog();
+    const {blogTitle, setBlogTitle, blogContent, setContent, blogImage, errors} = useBlog();
 
     const editor = useEditor({
         extensions: [
@@ -137,6 +137,23 @@ const BlogEditor = () => {
                     )}
                 </FormControl>
             </Box>
+
+            {/* Featured Image Display */}
+            {blogImage && (
+                <Box mb={5} borderRadius="md" overflow="hidden">
+                    <img 
+                        src={blogImage} 
+                        alt="Blog featured image" 
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '400px',
+                            objectFit: 'cover',
+                            borderRadius: '0.375rem'
+                        }}
+                    />
+                </Box>
+            )}
 
             <div className={styles.toolbar}>
                 <ButtonGroup size="sm" spacing={2} className="mb-2">

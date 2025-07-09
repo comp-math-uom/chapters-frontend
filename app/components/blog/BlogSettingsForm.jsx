@@ -105,18 +105,24 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
         }
 
         try {
-            // Convert image to base64 if it exists and is a File object
-            let imageBase64 = values.image;
+            // Handle image upload
+            let imageUrl = values.image;
+            
+            // Only upload if it's a new File object
             if (values.image && values.image instanceof File) {
-                imageBase64 = await convertToBase64(values.image);
+                imageUrl = await uploadCoverImage(values.image);
+                if (!imageUrl) {
+                    // Upload failed, stop the submission
+                    formikActions.setSubmitting(false);
+                    return;
+                }
             }
-
-            var imageUrl = await uploadCoverImage(values.image);
   
             // Combine blog data with form values
             const completeData = {
                 ...values,
                 post_image: imageUrl,
+                user_id: values.user_id,
                 title: blogTitle,
                 content: blogContent,
                 comment_constraint: true,

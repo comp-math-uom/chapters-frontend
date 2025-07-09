@@ -69,7 +69,7 @@ export default function Page({params}) {
 
     return (
         <div className="container flex flex-wrap justify-center m-auto gap-4 md:gap-10 lg:gap-20 px-4 md:px-8 lg:px-20 xl:px-40 2xl:px-60">
-            <BlogHeader blog={blog}/>
+            <BlogHeader blog={blog} blogId={params.id}/>
             <div className="w-full flex justify-center">
                 <Image
                     src={blog.post_image}
