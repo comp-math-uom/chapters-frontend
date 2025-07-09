@@ -8,7 +8,6 @@ import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import Image from "next/image";
 import { useNav } from '@/app/providers/NavigationProvider';
 import BlogComment from "@/app/components/blog/BlogComment";
-import Navbar from "@/app/components/common/Navbar";
 
 
 export default function Page({params}) {
