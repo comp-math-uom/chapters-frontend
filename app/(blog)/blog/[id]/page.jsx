@@ -7,6 +7,8 @@ import BlogContent from "@/app/components/blog/BlogContent";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import Image from "next/image";
 import { useNav } from '@/app/providers/NavigationProvider';
+import BlogComment from "@/app/components/blog/BlogComment";
+import Navbar from "@/app/components/common/Navbar";
 
 
 export default function Page({params}) {
@@ -14,6 +16,20 @@ export default function Page({params}) {
     const [isLoading, setIsLoading] = useState(true);
     const [notFoundError, setNotFoundError] = useState(false);
     const {setNavActionButton} = useNav();
+    const [comments, setComments] = useState([]);
+
+    useEffect(() => {
+        const fetchBlogComments = async () => {
+            try {
+                const apiResult = await blogService.getBlogComments();
+                setComments(apiResult || []);
+            } catch (error) {
+                console.error("Error fetching blog comments:", error);
+                setComments([]);
+            }
+        };
+        fetchBlogComments();
+    }, []);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -38,6 +54,7 @@ export default function Page({params}) {
 
         fetchBlog();
     }, [params.id]);
+
 
     if (isLoading) {
         return (
@@ -65,6 +82,7 @@ export default function Page({params}) {
                 />
             </div>
             <BlogContent blog={blog}/>
+            <BlogComment comments={comments} setComments={setComments}/>
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import { authors } from "@/app/data/authors";
+import { blogComments } from "@/app/data/blogComment";
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BLOG_API;
@@ -65,6 +66,9 @@ export const blogService = {
 
     async getAuthors() {
         return authors;
+    },
+    async getBlogComments() {
+        return blogComments;
     }
 }
 
