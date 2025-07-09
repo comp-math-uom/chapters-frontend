@@ -39,6 +39,12 @@ export function BlogProvider({children}) {
         setErrors({});
     };
 
+    const initializeBlogData = (blogData) => {
+        setBlogTitle(blogData.title || '');
+        setContent(blogData.content || '');
+        clearErrors();
+    };
+
     return (
         <BlogContext.Provider
             value={{
@@ -48,7 +54,8 @@ export function BlogProvider({children}) {
                 setContent,
                 errors,
                 validateBlog,
-                clearErrors
+                clearErrors,
+                initializeBlogData
             }}
         >
             {children}

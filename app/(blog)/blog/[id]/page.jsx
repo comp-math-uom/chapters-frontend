@@ -6,20 +6,23 @@ import blogService from "@/app/lib/services/blogService";
 import BlogContent from "@/app/components/blog/BlogContent";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import Image from "next/image";
+import { useNav } from '@/app/providers/NavigationProvider';
 
 
 export default function Page({params}) {
     const [blog, setBlog] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [notFoundError, setNotFoundError] = useState(false);
+    const {setNavActionButton} = useNav();
 
     useEffect(() => {
         const fetchBlog = async () => {
             try {
                 setIsLoading(true);
-                const blogId = Number(params.id);
-                const blogData = await blogService.getBlog(blogId);
+                const blogData = await blogService.getBlogByIdFromAPI(params.id);
+                console.log("Fetched blog data:", blogData);
                 
+
                 if (!blogData) {
                     setNotFoundError(true);
                 } else {
@@ -53,7 +56,7 @@ export default function Page({params}) {
             <BlogHeader blog={blog}/>
             <div className="w-full flex justify-center">
                 <Image
-                    src={blog.coverImage}
+                    src={blog.post_image}
                     alt={"Cover Image"}
                     width={750}
                     height={500}

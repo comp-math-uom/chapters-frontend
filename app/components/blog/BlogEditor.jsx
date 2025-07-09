@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -103,6 +103,13 @@ const BlogEditor = () => {
             setLinkUrl(linkUrl);
         }
     }, [editor, linkUrl]);
+
+    // Sync editor content with context when blogContent changes (for edit mode)
+    useEffect(() => {
+        if (editor && blogContent !== editor.getHTML()) {
+            editor.commands.setContent(blogContent);
+        }
+    }, [editor, blogContent]);
 
     if (!editor) {
         return null;

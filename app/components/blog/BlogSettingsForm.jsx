@@ -1,28 +1,62 @@
 "use client";
 
 import { Field, Form, Formik } from "formik";
-import { Button, FormControl, FormLabel, useToast } from "@chakra-ui/react";
+import { Button, FormControl, FormErrorMessage, FormLabel, Select, useToast } from "@chakra-ui/react";
 import { CreatableSelect } from "chakra-react-select";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import { useBlog } from "@/app/providers/BlogProvider";
+import blogService from "@/app/lib/services/blogService";
+import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 
-export default function BlogSettingsForm({initialValues, handleCancel}) {
+export default function BlogSettingsForm({initialValues, handleCancel, isEditMode = false, blogId}) {
     const toast = useToast();
+    const [authors, setAuthors] = useState([]);
     const {validateBlog, blogTitle, blogContent} = useBlog();
+    const router = useRouter();
+
+    useEffect(() => {
+        const fetchAuthors = async () => {
+            const authorsData = await blogService.getAuthors();
+            setAuthors(authorsData);
+        };
+
+        fetchAuthors();
+    }, []);
 
     const validate = (values) => {
+        debugger;
         const errors = {};
 
         if (!values.image) {
             errors.image = "Image is required";
         }
+        
+        if (!values.user_id) {
+            errors.author = "Author is required";
+        }
+        
         return errors;
     }
 
     const initialFormValues = {
-        topics: initialValues?.topics || [],
+        tags: initialValues?.tags || [],
         image: initialValues?.image || null,
+        user_id: initialValues?.user_id || "",
     }
+
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -30,8 +64,9 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
         }
     }
 
-    const handleFormSubmit = (values, formikActions) => {
+    const handleFormSubmit = async (values, formikActions) => {
         // First validate the blog content and title
+        debugger;
         const isValid = validateBlog();
 
         if (!isValid) {
@@ -46,14 +81,70 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
             return;
         }
 
-        // Combine blog data with form values
-        const completeData = {
-            ...values,
-            title: blogTitle,
-            content: blogContent,
-        };
-        //TODO:  Call the parent handleSubmit function
-        // handleSubmit(completeData, formikActions);
+        try {
+            // Convert image to base64 if it exists and is a File object
+            let imageBase64 = values.image;
+            if (values.image && values.image instanceof File) {
+                imageBase64 = await convertToBase64(values.image);
+            }
+
+            // Combine blog data with form values
+            const completeData = {
+                ...values,
+                image: imageBase64,
+                title: blogTitle,
+                content: blogContent,
+                comment_constraint: true,
+                number_of_views: 0
+            };
+
+            console.log(`${isEditMode ? 'Updating' : 'Creating'} blog data:`, completeData);
+            
+            let response;
+            if (isEditMode && blogId) {
+                response = await blogService.updateBlog(blogId, completeData);
+            } else {
+                response = await blogService.createBlog(completeData);
+            }
+            
+            if (response.error) {
+                toast({
+                    title: `Error ${isEditMode ? 'Updating' : 'Creating'} Blog`,
+                    description: response.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: `Blog ${isEditMode ? 'Updated' : 'Created'} Successfully`,
+                    description: `Your blog has been ${isEditMode ? 'updated' : 'published'} successfully.`,
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
+                
+                if (isEditMode) {
+                    // Close the drawer and possibly refresh the data
+                    handleCancel();
+                    // Navigate to the blog view page
+                    router.push(`/blog/${blogId}`);
+                } else {
+                    router.push(`/blog`);
+                }
+            }
+
+        } catch (error) {
+            toast({
+                title: "Error Processing Request",
+                description: `Failed to ${isEditMode ? 'update' : 'create'} the blog.`,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            console.error(`Error ${isEditMode ? 'updating' : 'creating'} blog:`, error);
+        }
+
         formikActions.setSubmitting(false);
 
     };
@@ -73,21 +164,37 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
                             )}
                         </Field>
 
-                        <Field name='topics'>
+                        <Field name='user_id'>
+                            {({field, form}) => (
+                                <FormControl isInvalid={form.errors.user_id && form.touched.user_id} className="mb-6">
+                                    <FormLabel>Author</FormLabel>
+                                    <Select {...field} placeholder='Select Author'>
+                                        {authors.map((author) => (
+                                            <option key={author.id} value={author.id}>
+                                                {author.name}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                    <FormErrorMessage>{form.errors.user_id}</FormErrorMessage>
+                                </FormControl>
+                            )}
+                        </Field>
+
+                        <Field name='tags'>
                             {({field, form}) => (
                                 <FormControl className="mb-6"
                                              isInvalid={form.errors.searchTags && form.touched.searchTags}>
-                                    <FormLabel>Topics</FormLabel>
+                                    <FormLabel>Tags</FormLabel>
                                     <CreatableSelect
                                         isMulti
                                         value={field.value.map(tag => ({value: tag, label: tag}))}
                                         name={field.name}
                                         onChange={(selectedOptions) => {
                                             const values = selectedOptions.map(option => option.value);
-                                            form.setFieldValue('topics', values);
+                                            form.setFieldValue('tags', values);
                                         }}
                                         onBlur={field.onBlur}
-                                        placeholder="Enter Topics (upto 5)"
+                                        placeholder="Enter Tags (upto 5)"
                                         components={{
                                             DropdownIndicator: null,  // Removes the dropdown arrow
                                             IndicatorSeparator: null, // Removes the separator
@@ -110,7 +217,7 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
                                                 return;
                                             }
                                             const newValue = [...field.value, inputValue];
-                                            form.setFieldValue('topics', newValue);
+                                            form.setFieldValue('tags', newValue);
                                         }}
                                     /></FormControl>
                             )}
@@ -134,7 +241,7 @@ export default function BlogSettingsForm({initialValues, handleCancel}) {
                                 className="w-full sm:w-1/2"
                                 isLoading={props.isSubmitting}
                                 type='submit'>
-                            Publish
+                            {isEditMode ? 'Update' : 'Publish'}
                         </Button>
                     </div>
                 </Form>

@@ -61,7 +61,7 @@ export default function Home() {
                     <LoadingSpinner text="Loading blog posts..." />
                 </div>
             ) : (
-                <div className="container flex flex-wrap justify-center m-auto px-4 sm:px-8 md:px-12 lg:px-20 gap-4 sm:gap-6 md:gap-10 lg:gap-20 mt-8 md:mt-12 lg:mt-20">
+                <div style={{ paddingBottom: '60px'}} className="container flex flex-wrap justify-center m-auto px-4 sm:px-8 md:px-12 lg:px-20 gap-4 sm:gap-6 md:gap-10 lg:gap-20 mt-8 md:mt-12 lg:mt-20">
                     {blogPreviews.map((blogPreview, index) => (
                         <BlogPreview key={index} blogPreview={blogPreview}/>
                     ))}
