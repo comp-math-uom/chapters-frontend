@@ -4,7 +4,8 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {hostname: "assets.react-photo-album.com"},
-            {hostname: "picsum.photos"}
+            {hostname: "picsum.photos"},
+            {hostname: "i.ibb.co"}
         ]
     },
     output: "standalone"

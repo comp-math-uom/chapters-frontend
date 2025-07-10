@@ -2,7 +2,7 @@
 
 import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
 import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
-import portfolioService from "@/app/services/portfolioService";
+import portfolioService from "@/app/lib/services/portfolioService";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Box, Center, FormControl, FormErrorMessage, FormLabel, Icon, Image, Text } from '@chakra-ui/react';
 import { useField, useFormikContext } from 'formik';
@@ -9,14 +9,28 @@ export default function ImageUploadField({name, label}) {
     const [field, meta, helpers] = useField(name);
     const {setFieldValue} = useFormikContext();
 
+    // Initialize preview if field value is already a URL string
+    useEffect(() => {
+        if (field.value && typeof field.value === 'string') {
+            setPreview(field.value);
+        } else if (field.value instanceof File) {
+            const previewUrl = URL.createObjectURL(field.value);
+            setPreview(previewUrl);
+            
+            // Cleanup function to revoke object URL
+            return () => {
+                URL.revokeObjectURL(previewUrl);
+            };
+        } else {
+            setPreview(null);
+        }
+    }, [field.value]);
+
     const onDrop = useCallback((acceptedFiles) => {
         const file = acceptedFiles[0];
         if (file) {
             setFieldValue(name, file);
-
-            // Create preview URL
-            const previewUrl = URL.createObjectURL(file);
-            setPreview(previewUrl);
+            // Preview will be set by the useEffect hook
         }
     }, [name, setFieldValue]);
 

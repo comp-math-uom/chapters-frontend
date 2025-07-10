@@ -47,37 +47,63 @@ export default function Page() {
 
     return (
         <Flex minH="100vh" bg="gray.50" alignItems="center" justifyContent="center" py={12} px={4}>
-            <Container maxW="md">
-                <VStack spacing={8}>
-                    <VStack spacing={2} textAlign="center">
-                        <Heading fontSize="3xl" color="gray.700">
+            <Container maxW="md" width="700px">
+                <VStack spacing={10}>
+                    <VStack spacing={3} textAlign="center">
+                        <Heading fontSize="4xl" fontWeight="bold" color="gray.700" letterSpacing="tight">
                             Welcome Back
                         </Heading>
-                        <Text color="gray.700" opacity={0.8}>
+                        <Text color="gray.700" opacity={0.8} fontSize="lg">
                             Sign in to manage your portfolio
                         </Text>
                     </VStack>
 
-                    <Box w="full" bg="white" rounded="lg" shadow="lg" p={8}>
+                    <Box 
+                        w="full" 
+                        bg="white" 
+                        rounded="xl" 
+                        shadow="2xl" 
+                        p={10}
+                        border="1px"
+                        borderColor="gray.100"
+                    >
                         <Formik initialValues={{email: '', password: ''}} onSubmit={handleSubmit}>
                             {(props) => (
                                 <Form>
-                                    <Stack spacing={5}>
+                                    <Stack spacing={6}>
                                         <Field name="email" validate={validateEmail}>
                                             {({field, form}) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
-                                                    <FormLabel color="gray.700">Email address</FormLabel>
+                                                    <FormLabel 
+                                                        color="gray.700" 
+                                                        fontSize="sm" 
+                                                        fontWeight="semibold"
+                                                        mb={2}
+                                                    >
+                                                        Email address
+                                                    </FormLabel>
                                                     <Input
                                                         {...field}
                                                         type="email"
                                                         placeholder="your@email.com"
                                                         bg='gray.50'
                                                         borderColor='gray.300'
+                                                        size="lg"
+                                                        borderRadius="lg"
+                                                        _placeholder={{
+                                                            color: 'gray.500'
+                                                        }}
                                                         _hover={{
-                                                            borderColor: 'gray.400'
+                                                            borderColor: 'gray.400',
+                                                            bg: 'gray.100'
+                                                        }}
+                                                        _focus={{
+                                                            borderColor: 'gray.600',
+                                                            boxShadow: '0 0 0 1px var(--chakra-colors-gray-600)',
+                                                            bg: 'white'
                                                         }}
                                                     />
-                                                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                                                    <FormErrorMessage fontSize="xs">{form.errors.email}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
@@ -85,26 +111,52 @@ export default function Page() {
                                         <Field name="password" validate={validatePassword}>
                                             {({field, form}) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                                    <FormLabel color="gray.700">Password</FormLabel>
+                                                    <FormLabel 
+                                                        color="gray.700" 
+                                                        fontSize="sm" 
+                                                        fontWeight="semibold"
+                                                        mb={2}
+                                                    >
+                                                        Password
+                                                    </FormLabel>
                                                     <Input
                                                         {...field}
                                                         type="password"
                                                         placeholder="Enter your password"
                                                         bg='gray.50'
                                                         borderColor='gray.300'
+                                                        size="lg"
+                                                        borderRadius="lg"
+                                                        _placeholder={{
+                                                            color: 'gray.500'
+                                                        }}
                                                         _hover={{
-                                                            borderColor: 'gray.400'
+                                                            borderColor: 'gray.400',
+                                                            bg: 'gray.100'
+                                                        }}
+                                                        _focus={{
+                                                            borderColor: 'gray.600',
+                                                            boxShadow: '0 0 0 1px var(--chakra-colors-gray-600)',
+                                                            bg: 'white'
                                                         }}
                                                     />
-                                                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                                                    <FormErrorMessage fontSize="xs">{form.errors.password}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
 
                                         {props.status && props.status.error && (
-                                            <Text color="red.500" fontSize="sm" textAlign="center">
-                                                {props.status.error}
-                                            </Text>
+                                            <Box 
+                                                bg="red.50" 
+                                                border="1px" 
+                                                borderColor="red.200" 
+                                                borderRadius="lg" 
+                                                p={3}
+                                            >
+                                                <Text color="red.500" fontSize="sm" textAlign="center" fontWeight="medium">
+                                                    {props.status.error}
+                                                </Text>
+                                            </Box>
                                         )}
 
                                         <Button
@@ -113,12 +165,21 @@ export default function Page() {
                                             color="white"
                                             size="lg"
                                             fontSize="md"
+                                            fontWeight="semibold"
+                                            borderRadius="lg"
+                                            h={12}
                                             isLoading={props.isSubmitting}
                                             _hover={{
-                                                bg: "gray.700"
+                                                bg: "gray.700",
+                                                transform: "translateY(-1px)",
+                                                boxShadow: "lg"
                                             }}
+                                            _active={{
+                                                transform: "translateY(0px)"
+                                            }}
+                                            transition="all 0.2s"
                                         >
-                                            Login
+                                            Sign In
                                         </Button>
                                     </Stack>
                                 </Form>
@@ -126,14 +187,25 @@ export default function Page() {
                         </Formik>
                     </Box>
 
-                    <Text color="gray.700" fontSize="sm">
-                        Don not have an account?{' '}
-                        <Button variant="link" color="gray.600" _hover={{color: "gray.700"}} fontSize="sm">
+                    <Box textAlign="center">
+                        <Text color="gray.700" fontSize="sm" mb={2}>
+                            Don't have an account?
+                        </Text>
+                        <Button 
+                            variant="link" 
+                            color="gray.600" 
+                            _hover={{
+                                color: "gray.700",
+                                textDecoration: "none"
+                            }} 
+                            fontSize="sm"
+                            fontWeight="semibold"
+                        >
                             <Link href={"/auth/signup"}>
-                                Sign up
+                                Create one here
                             </Link>
                         </Button>
-                    </Text>
+                    </Box>
                 </VStack>
             </Container>
         </Flex>
