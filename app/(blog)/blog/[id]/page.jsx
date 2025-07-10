@@ -6,7 +6,6 @@ import blogService from "@/app/lib/services/blogService";
 import BlogContent from "@/app/components/blog/BlogContent";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import Image from "next/image";
-import { useNav } from '@/app/providers/NavigationProvider';
 import BlogComment from "@/app/components/blog/BlogComment";
 
 
@@ -15,6 +14,7 @@ export default function Page({params}) {
     const [isLoading, setIsLoading] = useState(true);
     const [notFoundError, setNotFoundError] = useState(false);
     const [comments, setComments] = useState([]);
+    const [userId, setUserId] = useState("1");
 
     // Fetch the blog post when params.id changes
     useEffect(() => {
@@ -80,7 +80,7 @@ export default function Page({params}) {
                 />
             </div>
             <BlogContent blog={blog}/>
-            <BlogComment comments={comments} setComments={setComments}/>
+            <BlogComment comments={comments} setComments={setComments} blogId={params.id} user_id={userId}/>
         </div>
     );
 }
