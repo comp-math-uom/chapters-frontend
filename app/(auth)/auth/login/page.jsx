@@ -189,7 +189,7 @@ export default function Page() {
 
                     <Box textAlign="center">
                         <Text color="gray.700" fontSize="sm" mb={2}>
-                            Don't have an account?
+                            Don&apost; have an account?
                         </Text>
                         <Button 
                             variant="link" 
