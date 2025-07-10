@@ -9,14 +9,171 @@ import {
     useToast,
     Divider,
     Flex,
+    IconButton,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    ModalCloseButton
 } from '@chakra-ui/react';
-import { ChevronRightIcon, TimeIcon } from '@chakra-ui/icons';
+import { ChevronRightIcon, TimeIcon, EditIcon, DeleteIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { BiReply } from 'react-icons/bi';
 import { use, useEffect, useState } from 'react';
 import blogService from "@/app/lib/services/blogService";
 
 // Accepts a list of comments as a prop. setComments is optional (for controlled components)
 export default function BlogComment({ comments = [], setComments, blogId, user_id }) {
+    // For editing comments/replies
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingReplyId, setEditingReplyId] = useState(null);
+    const [editText, setEditText] = useState('');
+    // For delete confirmation
+    const [deleteTarget, setDeleteTarget] = useState(null); // { type: 'comment'|'reply', commentId, replyId? }
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    // Helper: check if current user is the author
+    const isAuthor = (itemUserId) => {
+        return String(itemUserId) === String(user_id);
+    };
+
+    // Delete comment
+    const handleDeleteComment = async (commentId) => {
+        try {
+            await blogService.deleteBlogComment(commentId);
+            setComments(comments.filter(c => c.comment_id !== commentId));
+            toast({
+                title: "Comment deleted!",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+        } catch (error) {
+            toast({
+                title: "Error deleting comment",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    // Delete reply
+    const handleDeleteReply = async (commentId, replyId) => {
+        try {
+            await blogService.deleteCommentReply(replyId);
+            const updatedComments = comments.map(comment => {
+                if (comment.comment_id === commentId) {
+                    return {
+                        ...comment,
+                        replies: (comment.replies || []).filter(r => r.id !== replyId)
+                    };
+                }
+                return comment;
+            });
+            setComments(updatedComments);
+            toast({
+                title: "Reply deleted!",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+        } catch (error) {
+            toast({
+                title: "Error deleting reply",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    // Edit comment
+    const handleEditComment = (comment) => {
+        setEditingCommentId(comment.comment_id);
+        setEditText(comment.text);
+    };
+    const handleEditReply = (reply, commentId) => {
+        setEditingReplyId(reply.id);
+        setEditText(reply.text);
+    };
+
+    const handleSaveEditComment = async (commentId) => {
+        try {
+            const updated = await blogService.editBlogComment(commentId, { text: editText });
+            const updatedComments = comments.map(comment =>
+                comment.comment_id === commentId ? { ...comment, text: editText } : comment
+            );
+            setComments(updatedComments);
+            setEditingCommentId(null);
+            setEditText('');
+            toast({
+                title: "Comment updated!",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+        } catch (error) {
+            toast({
+                title: "Error updating comment",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+    const handleSaveEditReply = async (commentId, replyId) => {
+        try {
+            const updated = await blogService.editCommentReply(replyId, { text: editText });
+            const updatedComments = comments.map(comment => {
+                if (comment.comment_id === commentId) {
+                    return {
+                        ...comment,
+                        replies: (comment.replies || []).map(r => r.id === replyId ? { ...r, text: editText } : r)
+                    };
+                }
+                return comment;
+            });
+            setComments(updatedComments);
+            setEditingReplyId(null);
+            setEditText('');
+            toast({
+                title: "Reply updated!",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+        } catch (error) {
+            toast({
+                title: "Error updating reply",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    // Delete confirmation modal
+    const openDeleteModal = (target) => {
+        setDeleteTarget(target);
+        onOpen();
+    };
+    const confirmDelete = () => {
+        if (deleteTarget) {
+            if (deleteTarget.type === 'comment') {
+                handleDeleteComment(deleteTarget.commentId);
+            } else if (deleteTarget.type === 'reply') {
+                handleDeleteReply(deleteTarget.commentId, deleteTarget.replyId);
+            }
+        }
+        onClose();
+        setDeleteTarget(null);
+    };
+    const cancelDelete = () => {
+        onClose();
+        setDeleteTarget(null);
+    };
     const [comment, setComment] = useState('');
     const [profilePic, setProfilePic] = useState();
     const [username, setUsername] = useState();
@@ -37,9 +194,14 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
     }, []);
 
     const formatTime = (timeString) => {
-        if (timeString === "now") return "Just now";
-        // Add more sophisticated time formatting here
-        return timeString;
+        const date = new Date(timeString);
+        const now = new Date();
+        const diff = now - date;    
+        if (diff < 60000) return "Just now"; // less than a minute
+        if (diff < 3600000) return `${Math.floor(diff / 60000)} minutes ago`;
+        if (diff < 86400000) return `${Math.floor(diff / 3600000)} hours ago`;
+        if (diff < 604800000) return `${Math.floor(diff / 86400000)} days ago`;
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
     };
 
     const handleAddComment = async () => {
@@ -301,18 +463,49 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                         >
                             <HStack align="flex-start" spacing={4}>
                                 <Avatar
-                                    name={commentItem.name}
+                                    name={commentItem.name || "Anonymous"}
                                     src={commentItem.avatar}
                                     size="md"
                                     ring="2px"
                                     ringColor="gray.100"
                                 />
                                 <Box flex={1}>                                    
-                                    <Text fontSize="sm" lineHeight="1.6" mb={3} color="gray.700">
-                                        {commentItem.text}
-                                    </Text>
 
-                                    <HStack spacing={4} align="center">
+                                    {editingCommentId === commentItem.comment_id ? (
+                                        <HStack align="flex-start" spacing={2} mb={3}>
+                                            <Textarea
+                                                value={editText}
+                                                onChange={e => setEditText(e.target.value)}
+                                                size="sm"
+                                                fontSize="sm"
+                                                borderRadius="md"
+                                                minH="60px"
+                                                maxLength={MAX_COMMENT_LENGTH}
+                                            />
+                                            <VStack spacing={1} align="stretch">
+                                                <IconButton
+                                                    icon={<CheckIcon />}
+                                                    size="sm"
+                                                    colorScheme="green"
+                                                    aria-label="Save"
+                                                    onClick={() => handleSaveEditComment(commentItem.comment_id)}
+                                                />
+                                                <IconButton
+                                                    icon={<CloseIcon />}
+                                                    size="sm"
+                                                    colorScheme="gray"
+                                                    aria-label="Cancel"
+                                                    onClick={() => { setEditingCommentId(null); setEditText(''); }}
+                                                />
+                                            </VStack>
+                                        </HStack>
+                                    ) : (
+                                        <Text fontSize="sm" lineHeight="1.6" mb={3} color="gray.700">
+                                            {commentItem.text}
+                                        </Text>
+                                    )}
+
+                                    <HStack spacing={2} align="center">
                                         <Button
                                             variant="ghost"
                                             size="sm"
@@ -325,6 +518,28 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                         >
                                             Reply
                                         </Button>
+                                        {isAuthor(commentItem.user_id) && (
+                                            <>
+                                                <IconButton
+                                                    icon={<EditIcon />}
+                                                    size="sm"
+                                                    aria-label="Edit comment"
+                                                    variant="ghost"
+                                                    color="gray.500"
+                                                    _hover={{ color: "blue.500", bg: "gray.100" }}
+                                                    onClick={() => handleEditComment(commentItem)}
+                                                />
+                                                <IconButton
+                                                    icon={<DeleteIcon />}
+                                                    size="sm"
+                                                    aria-label="Delete comment"
+                                                    variant="ghost"
+                                                    color="red.400"
+                                                    _hover={{ color: "red.600", bg: "gray.100" }}
+                                                    onClick={() => openDeleteModal({ type: 'comment', commentId: commentItem.comment_id })}
+                                                />
+                                            </>
+                                        )}
                                     </HStack>
 
                                     {/* Reply Input Section */}
@@ -345,7 +560,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                 />
                                                 <VStack spacing={3} flex={1} align="stretch">
                                                     <Textarea
-                                                        placeholder={`Reply to ${commentItem.name}...`}
+                                                        placeholder={`Reply to ${commentItem.name || "Anonymous"}...`}
                                                         value={replyText}
                                                         onChange={(e) => setReplyText(e.target.value)}
                                                         size="sm"
@@ -409,29 +624,98 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                     >
                                                         <HStack align="flex-start" spacing={3}>
                                                             <Avatar
-                                                                name={reply.name}
+                                                                name={reply.name || "Anonymous"}
                                                                 src={reply.avatar}
                                                                 size="sm"
                                                             />
                                                             <Box flex={1}>
                                                                 <Flex justify="space-between" align="flex-start" mb={1}>
                                                                     <Text fontSize="sm" fontWeight="semibold" color="gray.800">
-                                                                        {reply.name}
+                                                                        {reply.name || "Anonymous"}
                                                                     </Text>
                                                                     <HStack spacing={1} align="center">
                                                                         <TimeIcon w={2} h={2} color="gray.400" />
                                                                         <Text fontSize="xs" color="gray.500">
-                                                                            {formatTime(reply.time)}
+                                                                            {formatTime(reply.repliedAt)}
                                                                         </Text>
+                                                                        {isAuthor(reply.user_id) && (
+                                                                            <>
+                                                                                <IconButton
+                                                                                    icon={<EditIcon />}
+                                                                                    size="xs"
+                                                                                    aria-label="Edit reply"
+                                                                                    variant="ghost"
+                                                                                    color="gray.500"
+                                                                                    _hover={{ color: "blue.500", bg: "gray.100" }}
+                                                                                    onClick={() => handleEditReply(reply, commentItem.comment_id)}
+                                                                                />
+                                                                                <IconButton
+                                                                                    icon={<DeleteIcon />}
+                                                                                    size="xs"
+                                                                                    aria-label="Delete reply"
+                                                                                    variant="ghost"
+                                                                                    color="red.400"
+                                                                                    _hover={{ color: "red.600", bg: "gray.100" }}
+                                                                                    onClick={() => openDeleteModal({ type: 'reply', commentId: commentItem.comment_id, replyId: reply.id })}
+                                                                                />
+                                                                            </>
+                                                                        )}
                                                                     </HStack>
                                                                 </Flex>
-                                                                <Text fontSize="sm" lineHeight="1.5" color="gray.700">
-                                                                    {reply.text}
-                                                                </Text>
+                                                                {editingReplyId === reply.id ? (
+                                                                    <HStack align="flex-start" spacing={2}>
+                                                                        <Textarea
+                                                                            value={editText}
+                                                                            onChange={e => setEditText(e.target.value)}
+                                                                            size="sm"
+                                                                            fontSize="sm"
+                                                                            borderRadius="md"
+                                                                            minH="40px"
+                                                                            maxLength={MAX_REPLY_LENGTH}
+                                                                        />
+                                                                        <VStack spacing={1} align="stretch">
+                                                                            <IconButton
+                                                                                icon={<CheckIcon />}
+                                                                                size="sm"
+                                                                                colorScheme="green"
+                                                                                aria-label="Save"
+                                                                                onClick={() => handleSaveEditReply(commentItem.comment_id, reply.id)}
+                                                                            />
+                                                                            <IconButton
+                                                                                icon={<CloseIcon />}
+                                                                                size="sm"
+                                                                                colorScheme="gray"
+                                                                                aria-label="Cancel"
+                                                                                onClick={() => { setEditingReplyId(null); setEditText(''); }}
+                                                                            />
+                                                                        </VStack>
+                                                                    </HStack>
+                                                                ) : (
+                                                                    <Text fontSize="sm" lineHeight="1.5" color="gray.700">
+                                                                        {reply.text}
+                                                                    </Text>
+                                                                )}
                                                             </Box>
                                                         </HStack>
                                                     </Box>
                                                 ))}
+            {/* Delete Confirmation Modal */}
+            <Modal isOpen={isOpen} onClose={cancelDelete} isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Confirm Delete</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Are you sure you want to delete this {deleteTarget?.type === 'comment' ? 'comment' : 'reply'}? This action cannot be undone.
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button colorScheme="red" mr={3} onClick={confirmDelete}>
+                            Delete
+                        </Button>
+                        <Button variant="ghost" onClick={cancelDelete}>Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
                                             </VStack>
                                         </Box>
                                     )}
