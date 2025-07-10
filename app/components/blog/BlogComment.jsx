@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronRightIcon, TimeIcon } from '@chakra-ui/icons';
 import { BiReply } from 'react-icons/bi';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import blogService from "@/app/lib/services/blogService";
 
 // Accepts a list of comments as a prop. setComments is optional (for controlled components)
@@ -141,25 +141,27 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
         }
 
         setIsSubmittingReply(true);
-        
         try {
-            const newReply = {
-                id: Date.now(),
-                name: username,
-                username: username,
+            // Prepare reply data
+            const replyPayload = {
                 text: replyText,
-                time: new Date().toLocaleString(),
-                likes: 0,
-                avatar: profilePic || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-                parentId: parentCommentId
+                user_id: user_id,
+                parentContent_id: parentCommentId
             };
-
-            // Call blogService method to save the reply
-            await blogService.addCommentReply(parentCommentId, newReply);
-
-            // Update local state
+            // Save reply via API
+            const savedReply = await blogService.addCommentReply(replyPayload);
+            // Add any missing fields for local display
+            const newReply = {
+                ...savedReply,
+                id: savedReply.id || Date.now(),
+                time: savedReply.time || new Date().toLocaleString(),
+                name: username,
+                avatar: profilePic
+            };
+            // Update local state: add reply to the correct comment
             const updatedComments = comments.map(comment => {
-                if (comment.id === parentCommentId) {
+                // Support both id and comment_id for matching
+                if (comment.comment_id === parentCommentId) {
                     return {
                         ...comment,
                         replies: [...(comment.replies || []), newReply]
@@ -167,11 +169,9 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                 }
                 return comment;
             });
-            
             setComments(updatedComments);
             setReplyingTo(null);
             setReplyText('');
-            
             toast({
                 title: "Reply posted!",
                 description: "Your reply has been added successfully.",
@@ -289,7 +289,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                 <VStack spacing={6} align="stretch">
                     {comments.map((commentItem, index) => (
                         <Box 
-                            key={commentItem.id || index} 
+                            key={commentItem.comment_id || index} 
                             position="relative"
                             p={4}
                             borderRadius="lg"
@@ -356,7 +356,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                         maxLength={MAX_REPLY_LENGTH}
                                                         onKeyDown={(e) => {
                                                             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                                                                handleSubmitReply(commentItem.id);
+                                                                handleSubmitReply(commentItem.comment_id);
                                                             }
                                                         }}
                                                     />
@@ -380,7 +380,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                                 color="white"
                                                                 _hover={{ bg: "gray.800" }}
                                                                 _disabled={{bg: "gray.300"}}
-                                                                onClick={() => handleSubmitReply(commentItem.id)}
+                                                                onClick={() => handleSubmitReply(commentItem.comment_id)}
                                                                 isLoading={isSubmittingReply}
                                                                 loadingText="Replying..."
                                                                 isDisabled={!replyText.trim() || replyText.length > MAX_REPLY_LENGTH}

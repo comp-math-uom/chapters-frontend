@@ -126,15 +126,15 @@ export const blogService = {
         }
     },
 
-    async addCommentReply(parentCommentId, replyData) {
+    async addCommentReply(replyData) {
         try {
             const headers = {
-                'x-user-id': '1',
+                'x-user-id': replyData.user_id,
             };
-            const response = await axios.post(`${API_BASE_URL}/blogs/comment/${parentCommentId}/reply`, replyData, { headers });
+            const response = await axios.post(`${API_BASE_URL}/blogs/reply-comment`, replyData, { headers });
             return response.data;
         } catch (error) {
-            console.error(`Error adding reply to comment ${parentCommentId}:`, error);
+            console.error(`Error adding reply to comment ${replyData.parentId}:`, error);
             throw error;
         }
     }
