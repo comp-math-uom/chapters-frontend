@@ -137,6 +137,32 @@ export const blogService = {
             console.error(`Error adding reply to comment ${replyData.parentId}:`, error);
             throw error;
         }
+    },
+
+    async deleteBlogComment(commentId, blogId) {
+        try {
+            const headers = {
+                'x-user-id': '1',
+            };
+            const response = await axios.delete(`${API_BASE_URL}/blogs/blog/${blogId}/comments/${commentId}`, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error deleting comment ${commentId} from blog ${blogId}:`, error);
+            throw error;
+        }
+    },
+
+    async deleteCommentReply(replyId, userId) {
+        try {
+            const headers = {
+                'x-user-id': userId,
+            };
+            const response = await axios.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${replyId}`, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error deleting reply ${replyId}:`, error);
+            throw error;
+        }
     }
 }
 
