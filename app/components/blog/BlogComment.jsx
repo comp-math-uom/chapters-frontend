@@ -10,19 +10,13 @@ import {
     Divider,
     Flex,
     IconButton,
-    useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    ModalCloseButton
+    useDisclosure
 } from '@chakra-ui/react';
 import { ChevronRightIcon, TimeIcon, EditIcon, DeleteIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { BiReply } from 'react-icons/bi';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import blogService from "@/app/lib/services/blogService";
+import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
 // Accepts a list of comments as a prop. setComments is optional (for controlled components)
 export default function BlogComment({ comments = [], setComments, blogId, user_id }) {
@@ -60,14 +54,16 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
     };
 
     // Delete reply
-    const handleDeleteReply = async (commentId, replyId) => {
+    const handleDeleteReply = async (replyId, commentId) => {
         try {
-            await blogService.deleteCommentReply(replyId);
+            console.log(`Deleting reply with ID: ${replyId} for user ${user_id}`);
+            
+            await blogService.deleteCommentReply(replyId, user_id);
             const updatedComments = comments.map(comment => {
                 if (comment.comment_id === commentId) {
                     return {
                         ...comment,
-                        replies: (comment.replies || []).filter(r => r.id !== replyId)
+                        replies: (comment.replies || []).filter(r => r.reply_id !== replyId)
                     };
                 }
                 return comment;
@@ -156,7 +152,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
 
     // Delete confirmation modal
     const openDeleteModal = (target) => {
-        setDeleteTarget(target);
+        setDeleteTarget(target);        
         onOpen();
     };
     const confirmDelete = () => {
@@ -164,7 +160,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
             if (deleteTarget.type === 'comment') {
                 handleDeleteComment(deleteTarget.commentId);
             } else if (deleteTarget.type === 'reply') {
-                handleDeleteReply(deleteTarget.commentId, deleteTarget.replyId);
+                handleDeleteReply(deleteTarget.replyId, deleteTarget.commentId);
             }
         }
         onClose();
@@ -656,7 +652,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                                                     variant="ghost"
                                                                                     color="red.400"
                                                                                     _hover={{ color: "red.600", bg: "gray.100" }}
-                                                                                    onClick={() => openDeleteModal({ type: 'reply', commentId: commentItem.comment_id, replyId: reply.id })}
+                                                                                    onClick={() => openDeleteModal({ type: 'reply', commentId: commentItem.comment_id, replyId: reply.reply_id })}
                                                                                 />
                                                                             </>
                                                                         )}
@@ -700,22 +696,12 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                     </Box>
                                                 ))}
             {/* Delete Confirmation Modal */}
-            <Modal isOpen={isOpen} onClose={cancelDelete} isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Confirm Delete</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        Are you sure you want to delete this {deleteTarget?.type === 'comment' ? 'comment' : 'reply'}? This action cannot be undone.
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme="red" mr={3} onClick={confirmDelete}>
-                            Delete
-                        </Button>
-                        <Button variant="ghost" onClick={cancelDelete}>Cancel</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+            <DeleteConfirmModal
+                isOpen={isOpen}
+                onClose={cancelDelete}
+                onDelete={confirmDelete}
+                message={deleteTarget?.type === 'comment' ? "Are you sure you want to delete this comment?" : "Are you sure you want to delete this reply?"}
+            />
                                             </VStack>
                                         </Box>
                                     )}
