@@ -99,9 +99,29 @@ export const blogService = {
     async getBlogComments(blogId) {
         try {
             const response = await axios.get(`${API_BASE_URL}/blogs/blog/${blogId}/comments`);
-            return response.data;
+            var orderedComments = response.data.sort((a, b) => new Date(b.commentedAt) - new Date(a.commentedAt));
+
+            orderedComments.forEach(comment => {
+                if (comment.replies && comment.replies.length > 0) {
+                    comment.replies.sort((a, b) => new Date(b.repliedAt) - new Date(a.repliedAt));
+                }
+            });
+            return orderedComments;
         } catch (error) {
             console.error(`Error fetching comments for blog ${blogId}:`, error);
+            throw error;
+        }
+    },
+
+    async addBlogComment(commentData) {
+        try {
+            const headers = {
+                'x-user-id': commentData.user_id,
+            };
+            const response = await axios.post(`${API_BASE_URL}/blogs/write-comment`, commentData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error adding comment to blog ${blogId}:`, error);
             throw error;
         }
     },

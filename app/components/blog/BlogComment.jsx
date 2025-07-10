@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import blogService from "@/app/lib/services/blogService";
 
 // Accepts a list of comments as a prop. setComments is optional (for controlled components)
-export default function BlogComment({ comments = [], setComments }) {
+export default function BlogComment({ comments = [], setComments, blogId, user_id }) {
     const [comment, setComment] = useState('');
     const [profilePic, setProfilePic] = useState();
     const [username, setUsername] = useState();
@@ -53,7 +53,6 @@ export default function BlogComment({ comments = [], setComments }) {
             });
             return;
         }
-        
         if (comment.length > MAX_COMMENT_LENGTH) {
             toast({
                 title: "Comment too long",
@@ -66,22 +65,25 @@ export default function BlogComment({ comments = [], setComments }) {
         }
 
         setIsSubmitting(true);
-        
         try {
-            const newComment = {
-                id: Date.now(),
-                name: username,
-                username: username,
+            // Prepare comment data for API
+            const commentData = {
                 text: comment,
-                time: new Date().toLocaleString(),
-                likes: 0,
-                avatar: profilePic || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-                replies: []
+                blogPost_id: blogId,
+                user_id: user_id
             };
             
+            // Call API to add comment
+            const savedComment = await blogService.addBlogComment(commentData);
+            // Add any missing fields for local display
+            const newComment = {
+                ...savedComment,
+                replies: [],
+                id: savedComment.id || Date.now(),
+                time: savedComment.time || new Date().toLocaleString(),
+            };
             setComments([newComment, ...comments]);
             setComment("");
-            
             toast({
                 title: "Comment posted!",
                 description: "Your comment has been added successfully.",
@@ -103,6 +105,9 @@ export default function BlogComment({ comments = [], setComments }) {
     };
 
     const handleReplyClick = (commentId) => {
+        // Only allow one reply box at a time
+        console.log(`Replying to comment ID: ${commentId}`);
+        
         setReplyingTo(commentId);
         setReplyText('');
     };
@@ -316,14 +321,14 @@ export default function BlogComment({ comments = [], setComments }) {
                                             fontWeight="normal"
                                             leftIcon={<BiReply />}
                                             _hover={{ bg: "gray.100", color: "gray.600" }}
-                                            onClick={() => handleReplyClick(commentItem.id)}
+                                            onClick={() => handleReplyClick(commentItem.comment_id)}
                                         >
                                             Reply
                                         </Button>
                                     </HStack>
 
                                     {/* Reply Input Section */}
-                                    {replyingTo === commentItem.id && (
+                                    {replyingTo === commentItem.comment_id && (
                                         <Box 
                                             mt={4} 
                                             p={3} 
