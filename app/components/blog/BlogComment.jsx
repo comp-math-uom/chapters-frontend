@@ -12,7 +12,7 @@ import {
     IconButton,
     useDisclosure
 } from '@chakra-ui/react';
-import { ChevronRightIcon, TimeIcon, EditIcon, DeleteIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { ChevronRightIcon, TimeIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { BiReply } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
 import blogService from "@/app/lib/services/blogService";
@@ -316,8 +316,8 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                 ...savedReply,
                 id: savedReply.id || Date.now(),
                 time: savedReply.time || new Date().toLocaleString(),
-                name: username,
-                avatar: profilePic
+                user_display_name: username,
+                user_profile_image: profilePic
             };
             // Update local state: add reply to the correct comment
             const updatedComments = comments.map(comment => {
@@ -462,8 +462,8 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                         >
                             <HStack align="flex-start" spacing={4}>
                                 <Avatar
-                                    name={commentItem.name || "Anonymous"}
-                                    src={commentItem.avatar}
+                                    name={commentItem.user_display_name || "Anonymous"}
+                                    src={commentItem.user_profile_image}
                                     size="md"
                                     ring="2px"
                                     ringColor="gray.100"
@@ -503,9 +503,14 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                             </Flex>
                                         </Box>
                                     ) : (
+                                        <>
+                                        <Text fontSize="sm" fontWeight="semibold" color="gray.800">
+                                                                        {commentItem.user_display_name || "Anonymous"}
+                                                                    </Text>
                                         <Text fontSize="sm" lineHeight="1.6" mb={3} color="gray.700">
                                             {commentItem.text}
                                         </Text>
+                                        </>
                                     )}
 
                                     <HStack spacing={2} align="center">
@@ -563,7 +568,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                 />
                                                 <VStack spacing={3} flex={1} align="stretch">
                                                     <Textarea
-                                                        placeholder={`Reply to ${commentItem.name || "Anonymous"}...`}
+                                                        placeholder={`Reply to ${commentItem.user_display_name || "Anonymous"}...`}
                                                         value={replyText}
                                                         onChange={(e) => setReplyText(e.target.value)}
                                                         size="sm"
@@ -627,14 +632,14 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                     >
                                                         <HStack align="flex-start" spacing={3}>
                                                             <Avatar
-                                                                name={reply.name || "Anonymous"}
-                                                                src={reply.avatar}
+                                                                name={reply.user_display_name || "Anonymous"}
+                                                                src={reply.user_profile_image}
                                                                 size="sm"
                                                             />
                                                             <Box flex={1}>
                                                                 <Flex justify="space-between" align="flex-start" mb={1}>
                                                                     <Text fontSize="sm" fontWeight="semibold" color="gray.800">
-                                                                        {reply.name || "Anonymous"}
+                                                                        {reply.user_display_name || "Anonymous"}
                                                                     </Text>
                                                                     <HStack spacing={1} align="center">
                                                                         <TimeIcon w={2} h={2} color="gray.400" />
