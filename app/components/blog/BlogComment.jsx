@@ -109,7 +109,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
 
     const handleSaveEditComment = async (commentId) => {
         try {
-            const updated = await blogService.updateComment(commentId, { text: editText });
+            const updated = await blogService.updateComment(commentId, { text: editText }, user_id);
             const updatedComments = comments.map(comment =>
                 comment.comment_id === commentId ? { ...comment, text: editText } : comment
             );
@@ -471,7 +471,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                 <Box flex={1}>                                    
 
                                     {editingCommentId === commentItem.comment_id ? (
-                                        <HStack align="flex-start" spacing={2} mb={3}>
+                                        <Box mb={3}>
                                             <Textarea
                                                 value={editText}
                                                 onChange={e => setEditText(e.target.value)}
@@ -481,23 +481,27 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                 minH="60px"
                                                 maxLength={MAX_COMMENT_LENGTH}
                                             />
-                                            <VStack spacing={1} align="stretch">
-                                                <IconButton
-                                                    icon={<CheckIcon />}
+                                            <Flex justify="flex-end" align="center" mt={2} gap={2}>
+                                                <Button
                                                     size="sm"
-                                                    colorScheme="green"
-                                                    aria-label="Save"
+                                                    bg="black"
+                                                    color="white"
+                                                    _hover={{ bg: "gray.800" }}
                                                     onClick={() => handleSaveEditComment(commentItem.comment_id)}
-                                                />
-                                                <IconButton
-                                                    icon={<CloseIcon />}
+                                                >
+                                                    Save
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    color="gray.500"
+                                                    _hover={{ bg: "gray.100" }}
                                                     size="sm"
-                                                    colorScheme="gray"
-                                                    aria-label="Cancel"
                                                     onClick={() => { setEditingCommentId(null); setEditText(''); }}
-                                                />
-                                            </VStack>
-                                        </HStack>
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </Flex>
+                                        </Box>
                                     ) : (
                                         <Text fontSize="sm" lineHeight="1.6" mb={3} color="gray.700">
                                             {commentItem.text}
@@ -673,7 +677,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                                             maxLength={MAX_REPLY_LENGTH}
                                                                             flex={1}
                                                                         />
-                                                                        <HStack spacing={2} mt={2}>
+                                                                        <Flex justify="flex-end" align="center" mt={2} gap={2}>                                                                        
                                                                             <Button
                                                                                 size="sm"
                                                                                 bg="black"
@@ -692,7 +696,7 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                                             >
                                                                                 Cancel
                                                                             </Button>
-                                                                        </HStack>
+                                                                        </Flex>
                                                                     </Box>
                                                                 ) : (
                                                                     <Text fontSize="sm" lineHeight="1.5" color="gray.700">
