@@ -24,9 +24,21 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingReplyId, setEditingReplyId] = useState(null);
     const [editText, setEditText] = useState('');
+    const [editReplyText, setEditReplyText] = useState('');
     // For delete confirmation
     const [deleteTarget, setDeleteTarget] = useState(null); // { type: 'comment'|'reply', commentId, replyId? }
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [comment, setComment] = useState('');
+    const [profilePic, setProfilePic] = useState();
+    const [username, setUsername] = useState();
+    const [replyingTo, setReplyingTo] = useState(null);
+    const [replyText, setReplyText] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmittingReply, setIsSubmittingReply] = useState(false);
+    const toast = useToast();
+
+    const MAX_COMMENT_LENGTH = 500;
+    const MAX_REPLY_LENGTH = 300;
     // Helper: check if current user is the author
     const isAuthor = (itemUserId) => {
         return String(itemUserId) === String(user_id);
@@ -90,14 +102,14 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
         setEditingCommentId(comment.comment_id);
         setEditText(comment.text);
     };
-    const handleEditReply = (reply, commentId) => {
+    const handleEditReply = (reply) => {
         setEditingReplyId(reply.id);
-        setEditText(reply.text);
+        setEditReplyText(reply.text);
     };
 
     const handleSaveEditComment = async (commentId) => {
         try {
-            const updated = await blogService.editBlogComment(commentId, { text: editText });
+            const updated = await blogService.updateComment(commentId, { text: editText });
             const updatedComments = comments.map(comment =>
                 comment.comment_id === commentId ? { ...comment, text: editText } : comment
             );
@@ -121,19 +133,21 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
     };
     const handleSaveEditReply = async (commentId, replyId) => {
         try {
-            const updated = await blogService.editCommentReply(replyId, { text: editText });
+            await blogService.updateCommentReply(replyId, {text: editReplyText}, user_id);
             const updatedComments = comments.map(comment => {
                 if (comment.comment_id === commentId) {
                     return {
                         ...comment,
-                        replies: (comment.replies || []).map(r => r.id === replyId ? { ...r, text: editText } : r)
+                        replies: (comment.replies || []).map(r =>
+                             r.reply_id === replyId ? { ...r, text: editReplyText } : r
+                        )
                     };
                 }
                 return comment;
             });
             setComments(updatedComments);
             setEditingReplyId(null);
-            setEditText('');
+            setEditReplyText('');
             toast({
                 title: "Reply updated!",
                 status: "success",
@@ -170,17 +184,6 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
         onClose();
         setDeleteTarget(null);
     };
-    const [comment, setComment] = useState('');
-    const [profilePic, setProfilePic] = useState();
-    const [username, setUsername] = useState();
-    const [replyingTo, setReplyingTo] = useState(null);
-    const [replyText, setReplyText] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmittingReply, setIsSubmittingReply] = useState(false);
-    const toast = useToast();
-
-    const MAX_COMMENT_LENGTH = 500;
-    const MAX_REPLY_LENGTH = 300;
 
     useEffect(() => {
         let un = localStorage.getItem("username") || "Anonymous User";
@@ -659,33 +662,38 @@ export default function BlogComment({ comments = [], setComments, blogId, user_i
                                                                     </HStack>
                                                                 </Flex>
                                                                 {editingReplyId === reply.id ? (
-                                                                    <HStack align="flex-start" spacing={2}>
+                                                                    <Box mb={2}>
                                                                         <Textarea
-                                                                            value={editText}
-                                                                            onChange={e => setEditText(e.target.value)}
+                                                                            value={editReplyText}
+                                                                            onChange={e => setEditReplyText(e.target.value)}
                                                                             size="sm"
                                                                             fontSize="sm"
                                                                             borderRadius="md"
                                                                             minH="40px"
                                                                             maxLength={MAX_REPLY_LENGTH}
+                                                                            flex={1}
                                                                         />
-                                                                        <VStack spacing={1} align="stretch">
-                                                                            <IconButton
-                                                                                icon={<CheckIcon />}
+                                                                        <HStack spacing={2} mt={2}>
+                                                                            <Button
                                                                                 size="sm"
-                                                                                colorScheme="green"
-                                                                                aria-label="Save"
-                                                                                onClick={() => handleSaveEditReply(commentItem.comment_id, reply.id)}
-                                                                            />
-                                                                            <IconButton
-                                                                                icon={<CloseIcon />}
+                                                                                bg="black"
+                                                                                color="white"
+                                                                                _hover={{ bg: "gray.800" }}
+                                                                                onClick={() => handleSaveEditReply(commentItem.comment_id, reply.reply_id)}
+                                                                            >
+                                                                                Save
+                                                                            </Button>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                color="gray.500"
+                                                                                _hover={{ bg: "gray.100" }}
                                                                                 size="sm"
-                                                                                colorScheme="gray"
-                                                                                aria-label="Cancel"
-                                                                                onClick={() => { setEditingReplyId(null); setEditText(''); }}
-                                                                            />
-                                                                        </VStack>
-                                                                    </HStack>
+                                                                                onClick={() => { setEditingReplyId(null); setEditReplyText(''); }}
+                                                                            >
+                                                                                Cancel
+                                                                            </Button>
+                                                                        </HStack>
+                                                                    </Box>
                                                                 ) : (
                                                                     <Text fontSize="sm" lineHeight="1.5" color="gray.700">
                                                                         {reply.text}
