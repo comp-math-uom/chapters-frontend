@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import PortfolioForm from '@/app/components/portfolio/PortfolioForm';
-import portfolioService from '@/app/services/portfolioService';
+import portfolioService from '@/app/lib/services/portfolioService';
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 

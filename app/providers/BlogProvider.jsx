@@ -9,6 +9,7 @@ const BlogContext = createContext();
 export function BlogProvider({children}) {
     const [blogTitle, setBlogTitle] = useState('');
     const [blogContent, setContent] = useState('');
+    const [blogImage, setBlogImage] = useState('');
     const [errors, setErrors] = useState({});
 
     const validateBlog = () => {
@@ -39,6 +40,13 @@ export function BlogProvider({children}) {
         setErrors({});
     };
 
+    const initializeBlogData = (blogData) => {
+        setBlogTitle(blogData.title || '');
+        setContent(blogData.content || '');
+        setBlogImage(blogData.post_image || '');
+        clearErrors();
+    };
+
     return (
         <BlogContext.Provider
             value={{
@@ -48,7 +56,8 @@ export function BlogProvider({children}) {
                 setContent,
                 errors,
                 validateBlog,
-                clearErrors
+                clearErrors,
+                initializeBlogData
             }}
         >
             {children}

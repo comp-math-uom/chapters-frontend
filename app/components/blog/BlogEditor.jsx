@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -49,7 +49,7 @@ const lowlight = createLowlight(all);
 const BlogEditor = () => {
     const [linkUrl, setLinkUrl] = useState('');
     const bgColor = useColorModeValue('white', 'gray.100');
-    const {blogTitle, setBlogTitle, blogContent, setContent, errors} = useBlog();
+    const {blogTitle, setBlogTitle, blogContent, setContent, blogImage, errors} = useBlog();
 
     const editor = useEditor({
         extensions: [
@@ -104,6 +104,13 @@ const BlogEditor = () => {
         }
     }, [editor, linkUrl]);
 
+    // Sync editor content with context when blogContent changes (for edit mode)
+    useEffect(() => {
+        if (editor && blogContent !== editor.getHTML()) {
+            editor.commands.setContent(blogContent);
+        }
+    }, [editor, blogContent]);
+
     if (!editor) {
         return null;
     }
@@ -130,6 +137,23 @@ const BlogEditor = () => {
                     )}
                 </FormControl>
             </Box>
+
+            {/* Featured Image Display */}
+            {blogImage && (
+                <Box mb={5} borderRadius="md" overflow="hidden">
+                    <img 
+                        src={blogImage} 
+                        alt="Blog featured image" 
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '400px',
+                            objectFit: 'cover',
+                            borderRadius: '0.375rem'
+                        }}
+                    />
+                </Box>
+            )}
 
             <div className={styles.toolbar}>
                 <ButtonGroup size="sm" spacing={2} className="mb-2">
