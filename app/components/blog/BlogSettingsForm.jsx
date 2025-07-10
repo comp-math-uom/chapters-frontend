@@ -195,21 +195,24 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
                             )}
                         </Field>
 
-                        <Field name='user_id'>
-                            {({field, form}) => (
-                                <FormControl isInvalid={form.errors.user_id && form.touched.user_id} className="mb-6">
-                                    <FormLabel>Author</FormLabel>
-                                    <Select {...field} placeholder='Select Author'>
-                                        {authors.map((author) => (
-                                            <option key={author.id} value={author.id}>
-                                                {author.name}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                    <FormErrorMessage>{form.errors.user_id}</FormErrorMessage>
-                                </FormControl>
-                            )}
-                        </Field>
+                        {/* Hide author selection when editing */}
+                        {!isEditMode && (
+                            <Field name='user_id'>
+                                {({field, form}) => (
+                                    <FormControl isInvalid={form.errors.user_id && form.touched.user_id} className="mb-6">
+                                        <FormLabel>Author</FormLabel>
+                                        <Select {...field} placeholder='Select Author'>
+                                            {authors.map((author) => (
+                                                <option key={author.id} value={author.id}>
+                                                    {author.name}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        <FormErrorMessage>{form.errors.user_id}</FormErrorMessage>
+                                    </FormControl>
+                                )}
+                            </Field>
+                        )}
 
                         <Field name='tags'>
                             {({field, form}) => (
@@ -276,8 +279,7 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
                         </Button>
                     </div>
                 </Form>
-            )
-            }
+            )}
         </Formik>
     );
 }

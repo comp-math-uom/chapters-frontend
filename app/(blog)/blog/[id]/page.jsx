@@ -14,30 +14,15 @@ export default function Page({params}) {
     const [blog, setBlog] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [notFoundError, setNotFoundError] = useState(false);
-    const {setNavActionButton} = useNav();
     const [comments, setComments] = useState([]);
 
-    useEffect(() => {
-        const fetchBlogComments = async () => {
-            try {
-                const apiResult = await blogService.getBlogComments();
-                setComments(apiResult || []);
-            } catch (error) {
-                console.error("Error fetching blog comments:", error);
-                setComments([]);
-            }
-        };
-        fetchBlogComments();
-    }, []);
-
+    // Fetch the blog post when params.id changes
     useEffect(() => {
         const fetchBlog = async () => {
             try {
                 setIsLoading(true);
                 const blogData = await blogService.getBlogByIdFromAPI(params.id);
                 console.log("Fetched blog data:", blogData);
-                
-
                 if (!blogData) {
                     setNotFoundError(true);
                 } else {
@@ -50,9 +35,23 @@ export default function Page({params}) {
                 setIsLoading(false);
             }
         };
-
         fetchBlog();
     }, [params.id]);
+
+    // Fetch comments when blog is loaded
+    useEffect(() => {
+        const fetchBlogComments = async () => {
+            if (!blog || !blog.blog_id) return;
+            try {
+                const apiResult = await blogService.getBlogComments(blog.blog_id);
+                setComments(apiResult || []);
+            } catch (error) {
+                console.error("Error fetching blog comments:", error);
+                setComments([]);
+            }
+        };
+        fetchBlogComments();
+    }, [blog]);
 
 
     if (isLoading) {

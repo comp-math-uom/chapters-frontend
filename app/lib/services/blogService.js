@@ -56,7 +56,7 @@ export const blogService = {
     async createBlog(blogData) {
         try {
             const headers = {
-                'x-user-id': '1',
+                'x-user-id': blogData.user_id || '1'
             };
             const response = await axios.post(`${API_BASE_URL}/blogs/createblog`, blogData, { headers });
             return response.data;
@@ -69,7 +69,7 @@ export const blogService = {
     async updateBlog(id, blogData) {
         try {
             const headers = {
-                'x-user-id': '1',
+                'x-user-id': blogData.user_id || '1',
             };
             const response = await axios.put(`${API_BASE_URL}/blogs/updateblog/${id}`, blogData, { headers });
             return response.data;
@@ -95,8 +95,15 @@ export const blogService = {
     async getAuthors() {
         return authors;
     },
-    async getBlogComments() {
-        return blogComments;
+    
+    async getBlogComments(blogId) {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/blogs/blog/${blogId}/comments`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching comments for blog ${blogId}:`, error);
+            throw error;
+        }
     },
 
     async addCommentReply(parentCommentId, replyData) {

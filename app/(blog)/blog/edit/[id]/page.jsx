@@ -29,7 +29,6 @@ function EditBlogContent({ params }) {
                     setNotFoundError(true);
                 } else {
                     setBlog(blogData);
-                    // Initialize the blog context with existing data
                     initializeBlogData(blogData);
                 }
             } catch (error) {
@@ -41,7 +40,7 @@ function EditBlogContent({ params }) {
         };
 
         fetchBlog();
-    }, [params.id]); // Removed initializeBlogData from dependencies
+    }, [params.id]);
 
     useEffect(() => {
         setNavActionButton({
