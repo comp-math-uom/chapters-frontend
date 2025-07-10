@@ -163,6 +163,32 @@ export const blogService = {
             console.error(`Error deleting reply ${replyId}:`, error);
             throw error;
         }
+    },
+
+    async updateComment(commentId, commentData, userId) {
+        try {
+            const headers = {
+                'x-user-id': userId,
+            };
+            const response = await axios.put(`${API_BASE_URL}/blogs/edit-comment-reply/${commentId}`, commentData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error updating comment ${commentId}:`, error);
+            throw error;
+        }
+    },
+
+    async updateCommentReply(replyId, replyData, userId) {
+        try {
+            const headers = {
+                'x-user-id': userId,
+            };
+            const response = await axios.put(`${API_BASE_URL}/blogs/edit-comment-reply/${replyId}`, replyData, { headers });
+            return response.data;
+        } catch (error) {
+            console.error(`Error updating reply ${replyId}:`, error);
+            throw error;
+        }
     }
 }
 
