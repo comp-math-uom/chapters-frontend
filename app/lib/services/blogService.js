@@ -144,7 +144,7 @@ export const blogService = {
             const headers = {
                 'x-user-id': '1',
             };
-            const response = await axios.delete(`${API_BASE_URL}/blogs/blog/${blogId}/comments/${commentId}`, { headers });
+            const response = await axios.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${commentId}`, { headers });
             return response.data;
         } catch (error) {
             console.error(`Error deleting comment ${commentId} from blog ${blogId}:`, error);
