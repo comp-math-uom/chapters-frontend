@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: check-todos
         name: Check for TODO comments
-        entry: grep -rn 'TODO' .
+        entry: powershell -Command "foreach($file in $args) { if(Test-Path $file -PathType Leaf) { Select-String -Path $file -Pattern 'TODO:' -CaseSensitive:$false | ForEach-Object { Write-Host \"$($_.Filename):$($_.LineNumber):$($_.Line.Trim())\" } } }"
         language: system
-        pass_filenames: false
+        pass_filenames: true
