@@ -24,7 +24,7 @@ export default function Page() {
 
     const handleKeycloakLogin = () => {
         if (keycloak) {
-            keycloak.login({ redirectUri: 'http://localhost:3000/' });
+            keycloak.login({ redirectUri: process.env.NEXT_PUBLIC_KEYCLOAK_REDIRECT_URI });
         }
         console.log(keycloak.token);
     };

@@ -5,10 +5,9 @@ let keycloak;
 export function getKeycloakInstance() {
     if (!keycloak) {
         keycloak = new Keycloak({
-            url: process.env.NEXT_PUBLIC_KEYCLOAK_URL || 'http://localhost:8080', // Change to your Keycloak server URL
-            realm: 'uni',
-            clientId: 'frontend-client-local', // Change to your client ID
-
+            url: process.env.NEXT_PUBLIC_KEYCLOAK_URL,
+            realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM,
+            clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
         });
     }
     return keycloak;
