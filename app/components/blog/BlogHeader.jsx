@@ -2,7 +2,6 @@ import { Avatar, Box, Flex, Heading, HStack, Text, VStack, Menu, MenuButton, Men
 import { BiComment, BiLike, BiSolidLike } from 'react-icons/bi';
 import { BsShare, BsThreeDots } from 'react-icons/bs';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import DeleteConfirmModal from '@/app/components/common/DeleteConfirmModal';
 import blogService from '@/app/lib/services/blogService';
