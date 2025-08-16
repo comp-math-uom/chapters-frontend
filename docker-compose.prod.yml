@@ -6,7 +6,7 @@ services:
     container_name: chapters-frontend
     build:
       context: ./
-      target: prod
+      target: production
       dockerfile: Dockerfile
     volumes:
       - .:/app
@@ -14,3 +14,5 @@ services:
       - /app/.next
     ports:
       - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_KEYCLOAK_URL=http://localhost:8080why
