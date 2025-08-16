@@ -6,13 +6,21 @@ import { Avatar, Button, Menu, MenuButton, MenuItem, MenuList, IconButton, Drawe
     VStack, HStack } from "@chakra-ui/react";
 import { FiLogOut, FiUser, FiMenu } from "react-icons/fi";
 import { useNav } from "@/app/providers/NavigationProvider";
+import { useKeycloak } from '@/app/providers/Providers';
 
 function Navbar() {
-    const [username, setUsername] = useState();
+    const { keycloak, initialized } = useKeycloak();
     const [profilePic, setProfilePic] = useState();
     const { navActionButton } = useNav();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isMobile, setIsMobile] = useState(false);
+
+    // Debug logs
+    useEffect(() => {
+        console.log('Keycloak:', keycloak);
+        console.log('Token parsed:', keycloak?.tokenParsed);
+        console.log('Authenticated:', keycloak?.authenticated);
+    }, [keycloak]);
 
     const scrollToContact = (e) => {
         e.preventDefault();
@@ -44,11 +52,8 @@ function Navbar() {
     }, []);
 
     useEffect(() => {
-        let un = localStorage.getItem("username");
-        let pp = "https://bit.ly/broken-link";
-        setUsername("John Doe");
-        setProfilePic(pp);
-    }, []);
+        setProfilePic(keycloak?.tokenParsed?.picture);
+    }, [keycloak]);
 
     const NavLinks = () => (
         <>
@@ -81,37 +86,44 @@ function Navbar() {
                         </Button>
                     )}
 
-                    {username ? (
+                    {initialized && keycloak && keycloak.authenticated ? (
                         <div className="flex items-center gap-2">
-                            <p className="text-base text-black text-decoration-none hidden sm:block">{username}</p>
-                            {profilePic && (
-                                <Menu placement="bottom-end">
-                                    <MenuButton>
-                                        <Avatar
-                                            src={profilePic}
-                                            alt={username}
-                                            name={username}
-                                            size={{ base: "sm", md: "md" }}
-                                            cursor="pointer"
-                                            _hover={{opacity: 0.8}}
-                                        />
-                                    </MenuButton>
-                                    <MenuList minW="200px">
-                                        <MenuItem icon={<FiUser/>}>
-                                            Profile
-                                        </MenuItem>
-                                        <MenuItem icon={<FiLogOut/>}>
-                                            Sign out
-                                        </MenuItem>
-                                    </MenuList>
-                                </Menu>
-                            )}
+                            <p className="text-base text-black text-decoration-none hidden sm:block">
+                                {keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email || JSON.stringify(keycloak.tokenParsed) || 'User' }
+                            </p>
+                            <Menu placement="bottom-end">
+                                <MenuButton>
+                                    <Avatar
+                                        src={profilePic}
+                                        alt={keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
+                                        name={keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
+                                        size={{ base: "sm", md: "md" }}
+                                        cursor="pointer"
+                                        _hover={{opacity: 0.8}}
+                                    />
+                                </MenuButton>
+                                <MenuList minW="200px">
+                                    <MenuItem icon={<FiUser/>}>
+                                        Profile
+                                    </MenuItem>
+                                    <MenuItem icon={<FiLogOut/>} onClick={() => keycloak.logout()}>
+                                        Sign out
+                                    </MenuItem>
+                                </MenuList>
+                            </Menu>
                         </div>
                     ) : (
-                        <div className="hidden sm:flex space-x-4 mr-4 md:mr-14">
-                            <Link href="auth/login" className="hover:underline">Sign In</Link> &nbsp; &nbsp; |
-                            <Link href="auth/signup" className="hover:underline">Sign Up</Link>
-                        </div>
+                        <Button
+                            bg="black"
+                            color="white"
+                            size="md"
+                            fontWeight="semibold"
+                            borderRadius="lg"
+                            onClick={() => keycloak && keycloak.login()}
+                            _hover={{ bg: "gray.700" }}
+                        >
+                            Sign In
+                        </Button>
                     )}
 
                     {isMobile && (
@@ -144,11 +156,47 @@ function Navbar() {
                                 </Button>
                             )}
 
-                            {!username && (
+                            {!initialized || !keycloak || !keycloak.authenticated ? (
                                 <HStack spacing={4} pt={4} w="full">
-                                    <Link href="auth/login" className="hover:underline">Sign In</Link>
+                                    <Button
+                                        bg="black"
+                                        color="white"
+                                        size="md"
+                                        fontWeight="semibold"
+                                        borderRadius="lg"
+                                        onClick={() => keycloak && keycloak.login()}
+                                        _hover={{ bg: "gray.700" }}
+                                    >
+                                        Sign In
+                                    </Button>
                                     <span>|</span>
                                     <Link href="auth/signup" className="hover:underline">Sign Up</Link>
+                                </HStack>
+                            ) : (
+                                <HStack spacing={4} pt={4} w="full">
+                                    <p className="text-base text-black text-decoration-none hidden sm:block">
+                                        {keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
+                                    </p>
+                                    <Menu placement="bottom-end">
+                                        <MenuButton>
+                                            <Avatar
+                                                src={profilePic}
+                                                alt={keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
+                                                name={keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
+                                                size={{ base: "sm", md: "md" }}
+                                                cursor="pointer"
+                                                _hover={{opacity: 0.8}}
+                                            />
+                                        </MenuButton>
+                                        <MenuList minW="200px">
+                                            <MenuItem icon={<FiUser/>}>
+                                                Profile
+                                            </MenuItem>
+                                            <MenuItem icon={<FiLogOut/>} onClick={() => keycloak.logout()}>
+                                                Sign out
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Menu>
                                 </HStack>
                             )}
                         </VStack>
