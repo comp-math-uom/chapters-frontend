@@ -7,3 +7,4 @@ repos:
         entry: powershell -Command "foreach($file in $args) { if(Test-Path $file -PathType Leaf -and $file -ne 'package-lock.json') { Select-String -Path $file -Pattern 'TODO:' -CaseSensitive:$false | ForEach-Object { Write-Host \"$($_.Filename):$($_.LineNumber):$($_.Line.Trim())\" } } }"
         language: system
         pass_filenames: true
+        exclude: package-lock.json
