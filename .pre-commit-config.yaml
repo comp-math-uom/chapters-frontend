@@ -1,8 +1,9 @@
+
 repos:
   - repo: local
     hooks:
       - id: check-todos
         name: Check for TODO comments
-        entry: powershell -Command "foreach($file in $args) { if(Test-Path $file -PathType Leaf) { Select-String -Path $file -Pattern 'TODO:' -CaseSensitive:$false | ForEach-Object { Write-Host \"$($_.Filename):$($_.LineNumber):$($_.Line.Trim())\" } } }"
+        entry: powershell -Command "foreach($file in $args) { if(Test-Path $file -PathType Leaf -and $file -ne 'package-lock.json') { Select-String -Path $file -Pattern 'TODO:' -CaseSensitive:$false | ForEach-Object { Write-Host \"$($_.Filename):$($_.LineNumber):$($_.Line.Trim())\" } } }"
         language: system
         pass_filenames: true
