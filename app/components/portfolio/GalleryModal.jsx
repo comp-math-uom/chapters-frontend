@@ -30,12 +30,12 @@ import portfolioService from "@/app/lib/services/portfolioService";
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 
-export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = false}) {
+export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = false }) {
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [imageHeight, setImageHeight] = useState(null);
     const imageRef = useRef(null);
-    const {isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete} = useDisclosure();
+    const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
     const [itemToDelete, setItemToDelete] = useState(null);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -49,14 +49,15 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
     };
 
     const onClickDelete = (itemId) => {
-        setItemToDelete(itemId)
+        console.log(`Opening delete modal for ID: ${itemId}`);
+        setItemToDelete(itemId);
         onOpenDelete();
-    }
+    };
 
     const handleDelete = async () => {
         try {
-            let response = await portfolioService.deleteGalleryItem(itemToDelete);
-            if (response.status === 200) {
+            const response = await portfolioService.deleteGalleryItem(itemToDelete);
+            if (response.status === 200 || response.status === 204) {
                 setModalMessage("Post deleted successfully!");
                 setIsSuccessModalOpen(true);
             } else {
@@ -64,15 +65,15 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                 setIsErrorModalOpen(true);
             }
         } catch (error) {
-            setModalMessage("Post added successfully!");
-            setIsSuccessModalOpen(true);
+            setModalMessage("Failed to delete the post. Please try again.");
+            setIsErrorModalOpen(true);
         }
-    }
+    };
 
     const handleSuccessModalClose = () => {
         setIsSuccessModalOpen(false);
         onClose();
-    }
+    };
 
     useEffect(() => {
         if (imageRef.current) {
@@ -83,8 +84,8 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "5xl" }} closeOnOverlayClick={true} isCentered>
-                <ModalOverlay/>
-                <ModalContent style={{ maxWidth: { base: "100%", md: "70vw" }, width: { base: "100%", md: "70vw" }, maxHeight: { base: "100vh", md: "80vh" }}}>
+                <ModalOverlay />
+                <ModalContent style={{ maxWidth: { base: "100%", md: "70vw" }, width: { base: "100%", md: "70vw" }, maxHeight: { base: "100vh", md: "80vh" } }}>
                     <ModalBody display="flex" flexDirection={{ base: "column", md: "row" }} padding={0} maxHeight={{ base: "100vh", md: "80vh" }}>
                         <Box
                             flex={{ base: "none", md: 1 }}
@@ -102,55 +103,42 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                                 onLoad={() => setImageHeight(imageRef.current.clientHeight)}
                             />
                         </Box>
-                        <Box
-                            flex={1}
-                            px={2}
-                            height={{ base: "60vh", md: "80vh" }}
-                        >
-                            <HStack className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"}
-                                    paddingLeft={4}>
+                        <Box flex={1} px={2} height={{ base: "60vh", md: "80vh" }}>
+                            <HStack className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"} paddingLeft={4}>
                                 {isAdmin &&
                                     <Flex gap={2}>
-                                        <IconButton variant='ghost' colorScheme='gray' aria-label='Delete'
-                                                    onClick={onClickDelete}
-                                                    icon={<DeleteIcon/>}/>
-                                        <Link href={`/portfolio/edit-item/${4}`}>
-                                            <IconButton variant='ghost' colorScheme='gray' aria-label='Edit'
-                                                        icon={<EditIcon/>}/>
+                                        <IconButton
+                                            variant='ghost'
+                                            colorScheme='gray'
+                                            aria-label='Delete'
+                                            onClick={() => onClickDelete(galleryItem.id)}
+                                            icon={<DeleteIcon />}
+                                        />
+                                        <Link href={`/portfolio/edit-item/${galleryItem.id}`}>
+                                            <IconButton
+                                                variant='ghost'
+                                                colorScheme='gray'
+                                                aria-label='Edit'
+                                                icon={<EditIcon />}
+                                            />
                                         </Link>
                                     </Flex>
                                 }
-                                <IconButton variant='ghost' colorScheme='gray' aria-label='Close' onClick={onClose}
-                                            icon={<CloseIcon/>}/>
+                                <IconButton
+                                    variant='ghost'
+                                    colorScheme='gray'
+                                    aria-label='Close'
+                                    onClick={onClose}
+                                    icon={<CloseIcon />}
+                                />
                             </HStack>
                             <Box flex={1} px={7} overflowY="auto" maxHeight="calc(80vh - 60px)" overflowX="clip">
                                 <ModalHeader pl={0}>{galleryItem.topic}</ModalHeader>
                                 <Text mb={4} textAlign="justify">
-                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-                                    praesentium
-                                    voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                    occaecati
-                                    cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia
-                                    animi,
-                                    id
-                                    est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
-                                    distinctio.
-                                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
-                                    minus
-                                    id
-                                    quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
-                                    repellendus.
-                                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe
-                                    eveniet
-                                    ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum
-                                    hic
-                                    tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
-                                    consequatur
-                                    aut
-                                    perferendis doloribus asperiores repellat.
+                                    {galleryItem.description || "No description available."}
                                 </Text>
 
-                                <ContributorsList contributors={contributors}/>
+                                <ContributorsList contributors={contributors} />
 
                                 <Flex gap={3} className="my-10" alignItems="center">
                                     <Avatar name="John Doe"></Avatar>
@@ -160,16 +148,27 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                                                 bg: "#e2e8f0",
                                                 borderColor: "transparent"
                                             }}
-                                            borderRadius="full" variant='filled' placeholder='Leave a comment'/>
+                                            borderRadius="full"
+                                            variant='filled'
+                                            placeholder='Leave a comment'
+                                            value={comment}
+                                            onChange={(e) => setComment(e.target.value)}
+                                        />
                                         <InputRightElement>
-                                            <IconButton borderRadius="full" bg="black" color="white" size='xs'
-                                                        icon={<ChevronRightIcon/>} onClick={handleAddComment}
-                                                        aria-label="send"/>
+                                            <IconButton
+                                                borderRadius="full"
+                                                bg="black"
+                                                color="white"
+                                                size='xs'
+                                                icon={<ChevronRightIcon />}
+                                                onClick={handleAddComment}
+                                                aria-label="send"
+                                            />
                                         </InputRightElement>
                                     </InputGroup>
                                 </Flex>
 
-                                <FeedbackSection as="h6" size="xs"/>
+                                <FeedbackSection as="h6" size="xs" />
 
                                 <VStack align="start" mt={6}>
                                     {comments.map((cmt, idx) => (
@@ -193,7 +192,7 @@ export default function GalleryModal({isOpen, onClose, galleryItem, isAdmin = fa
                     </ModalBody>
                 </ModalContent>
             </Modal>
-            <DeleteConfirmModal isOpen={isOpenDelete} onClose={onCloseDelete} onDelete={handleDelete}/>
+            <DeleteConfirmModal isOpen={isOpenDelete} onClose={onCloseDelete} onDelete={handleDelete} />
         </>
     );
 };

@@ -5,7 +5,7 @@ function assetLink(asset, width) {
 const photos = [
     {
         asset: "image01.018d1d35.jpg",
-        id: 0,
+        id: '68752e73e8053b47722534f5',
         width: 1080,
         height: 780,
         topic: "NATURE",

@@ -65,8 +65,30 @@ const portfolioService = {
         return await axios.put(`${API_URL}/${data.id}`, data)
     },
 
+    // async deleteGalleryItem(id) {
+    //     return await axios.delete(`${API_URL}/${id}`);
+    // },
+
     async deleteGalleryItem(id) {
-        return await axios.delete(`${API_URL}/${id}`);
+        try {
+            // Step 1: Login to get access token
+            const loginResponse = await axios.post('http://localhost:8080/admin/login', {
+                username: 'admin1',
+                password: 'securepass123'
+            });
+            const accessToken = loginResponse.data.access_token;
+
+            // Step 2: Use access token to authenticate delete request
+            const headers = {
+                'Authorization': `Bearer ${accessToken}`,
+            };
+            const response = await axios.delete(`http://localhost:8080/projects/${id}`, { headers });
+            return response;
+        } catch (error) {
+            console.error(`Error deleting project with ID ${id}:`, error);
+            throw error;
+        }
     }
+
 };
 export default portfolioService;
