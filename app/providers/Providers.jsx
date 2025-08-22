@@ -4,6 +4,7 @@ import { NavigationProvider } from "@/app/providers/NavigationProvider";
 import { ChakraProvider } from "@chakra-ui/react";
 import { useEffect, useState, createContext, useContext } from 'react';
 import { getKeycloakInstance } from "@/app/lib/services/keycloak";
+import api from "@/app/lib/services/axios";
 
 const KeycloakContext = createContext();
 
@@ -38,16 +39,20 @@ function KeycloakProvider({ children }) {
         if (keycloak) {
             keycloak.onAuthSuccess = () => {
                 localStorage.setItem('kc_access_token', keycloak.token);
-                localStorage.setItem('kc_refresh_token', keycloak.refreshToken);
+                api.defaults.headers.common['Authorization'] = `Bearer ${keycloak.token}`;
             };
             keycloak.onTokenRefresh = () => {
                 localStorage.setItem('kc_access_token', keycloak.token);
-                localStorage.setItem('kc_refresh_token', keycloak.refreshToken);
+                api.defaults.headers.common['Authorization'] = `Bearer ${keycloak.token}`;
             };
             keycloak.onAuthLogout = () => {
                 localStorage.removeItem('kc_access_token');
-                localStorage.removeItem('kc_refresh_token');
+                delete api.defaults.headers.common['Authorization'];
             };
+            // Set header if already authenticated
+            if (keycloak.authenticated && keycloak.token) {
+                api.defaults.headers.common['Authorization'] = `Bearer ${keycloak.token}`;
+            }
         }
     }, [keycloak]);
 

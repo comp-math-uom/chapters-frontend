@@ -1,7 +1,7 @@
 const contributors = [
     {
         name: 'John Doe',
-        email: 'johndoe@email.com',
+        email: 'johndoe@email.com', // TODO: email should be the user id fetched from the janith's api
         image: "https://bit.ly/kent-c-dodds"
     },
     {
@@ -24,6 +24,6 @@ const contributors = [
         image: "https://bit.ly/code-beast",
         email: "heshanhfernando@gmail.com"
     }
-].map(({name, email, image}) => ({label: name, value: email, image: image}));
+].map(({name, email, image}) => ({label: name, value: email, image: image})); //TODO: value is the selected userid
 
 export default contributors;
