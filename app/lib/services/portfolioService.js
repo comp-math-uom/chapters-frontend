@@ -2,13 +2,40 @@ import photos from "@/app/data/photos";
 import contributors from "@/app/data/contributors";
 import axios from "axios";
 import batches from "@/app/data/batches";
+import portfolioApi from "@/app/lib/services/portfolioApi";
 
 const API_URL = "http://localhost:3000/portfolio";
 
 const portfolioService = {
 
     async fetchGalleryItems() {
-        return photos;
+        try {
+            const response = await portfolioApi.get('projects/all?featured=true');
+            const projects = response.data.projects;
+
+            // Add this filter to protect against bad data
+            const validProjects = projects.filter(project =>
+                project.image && typeof project.image === 'string' && project.image.startsWith('http')
+            );
+
+            // Now, only map the projects that passed the filter
+            return validProjects.map(project => ({
+                id: project.id,
+                src: project.image,
+                width: project.width,
+                height: project.height,
+                topic: project.topic,
+                description: project.description,
+                date: project.date,
+                batch: project.batch,
+                featured: project.featured,
+                searchTags: project.search_tags,
+                visible: project.visibility,
+            }));
+        } catch (error) {
+            console.error("Failed to fetch gallery items:", error);
+            return [];
+        }
     },
 
     async fetContributors() {
@@ -72,7 +99,7 @@ const portfolioService = {
     async deleteGalleryItem(id) {
         try {
             // Step 1: Login to get access token
-            const loginResponse = await axios.post('http://localhost:8080/admin/login', {
+            const loginResponse = await axios.post('http://127.0.0.1:8000/admin/login', {
                 username: 'admin1',
                 password: 'securepass123'
             });
@@ -82,7 +109,7 @@ const portfolioService = {
             const headers = {
                 'Authorization': `Bearer ${accessToken}`,
             };
-            const response = await axios.delete(`http://localhost:8080/projects/${id}`, { headers });
+            const response = await axios.delete(`http://127.0.0.1:8000/projects/${id}`, { headers });
             return response;
         } catch (error) {
             console.error(`Error deleting project with ID ${id}:`, error);
