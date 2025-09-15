@@ -84,8 +84,29 @@ const portfolioService = {
         return filteredItems;
     },
 
-    async addGalleryItem(data) {
-        return await axios.post(API_URL, data)
+    async addGalleryItem(formData) {
+        const payload = {
+            topic: formData.title,
+            description: formData.description,
+            batch: formData.batch,
+            contributors: formData.contributors,
+            search_tags: formData.searchTags,
+            date: formData.date,
+            visibility: formData.visible,
+            featured: formData.featured,
+
+            // Add the hardcoded image data as requested         //TODO: integrate image upload later
+            image: "https://i.ibb.co/12345/my-portfolio-image.jpg",
+            width: 1080,
+            height: 720,
+        };
+        try {
+            const response = await portfolioApi.post('/projects/create', payload);
+            return response;
+        } catch (error) {
+            console.error("Error adding gallery item:", error.response || error.message);
+            throw error;
+        }
     },
 
     async updateGalleryItem(data) {
