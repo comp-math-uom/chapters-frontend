@@ -98,18 +98,7 @@ const portfolioService = {
 
     async deleteGalleryItem(id) {
         try {
-            // Step 1: Login to get access token
-            const loginResponse = await axios.post('http://127.0.0.1:8000/admin/login', {
-                username: 'admin1',
-                password: 'securepass123'
-            });
-            const accessToken = loginResponse.data.access_token;
-
-            // Step 2: Use access token to authenticate delete request
-            const headers = {
-                'Authorization': `Bearer ${accessToken}`,
-            };
-            const response = await axios.delete(`http://127.0.0.1:8000/projects/${id}`, { headers });
+            const response = await portfolioApi.delete(`projects/${id}`);
             return response;
         } catch (error) {
             console.error(`Error deleting project with ID ${id}:`, error);
