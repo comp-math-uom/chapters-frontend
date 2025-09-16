@@ -8,10 +8,12 @@ import Image from 'next/image'
 import { useNav } from "@/app/providers/NavigationProvider";
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
+import ErrorBlock from "@/app/components/common/ErrorBlock";
 
 export default function Home() {
     const [blogPreviews, setBlogPreviews] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
     const {setNavActionButton} = useNav();
     const router = useRouter();
 
@@ -23,6 +25,7 @@ export default function Home() {
                 console.log("API Result:", apiResult);
                 setBlogPreviews(apiResult);
             } catch (error) {
+                setIsError(true);
                 console.error("Error fetching blog previews:", error);
             } finally {
                 setIsLoading(false);
@@ -67,6 +70,7 @@ export default function Home() {
                     ))}
                 </div>
             )}
+            {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later."/>}
         </>
     );
 }
