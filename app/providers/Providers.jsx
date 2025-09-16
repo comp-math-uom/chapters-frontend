@@ -5,6 +5,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { useEffect, useState, createContext, useContext } from 'react';
 import { getKeycloakInstance } from "@/app/lib/services/keycloak";
 import api from "@/app/lib/services/axios";
+import portfolioApi from "@/app/lib/services/portfolioApi";
+import blogApi from "@/app/lib/services/blogApi";
 
 const KeycloakContext = createContext();
 
@@ -37,21 +39,35 @@ function KeycloakProvider({ children }) {
 
     useEffect(() => {
         if (keycloak) {
+            const setAuthHeader = (token) => {
+                const authHeader = `Bearer ${token}`;
+                api.defaults.headers.common['Authorization'] = authHeader; // For your other service if needed
+                portfolioApi.defaults.headers.common['Authorization'] = authHeader; // For the portfolio service
+                blogApi.defaults.headers.common['Authorization'] = authHeader; // For the portfolio service
+            };
+
+            const removeAuthHeader = () => {
+                delete api.defaults.headers.common['Authorization'];
+                delete portfolioApi.defaults.headers.common['Authorization'];
+                delete blogApi.defaults.headers.common['Authorization'];
+            };
+
             keycloak.onAuthSuccess = () => {
                 localStorage.setItem('kc_access_token', keycloak.token);
-                api.defaults.headers.common['Authorization'] = `Bearer ${keycloak.token}`;
+                setAuthHeader(keycloak.token);
             };
             keycloak.onTokenRefresh = () => {
                 localStorage.setItem('kc_access_token', keycloak.token);
-                api.defaults.headers.common['Authorization'] = `Bearer ${keycloak.token}`;
+                setAuthHeader(keycloak.token);
             };
             keycloak.onAuthLogout = () => {
                 localStorage.removeItem('kc_access_token');
-                delete api.defaults.headers.common['Authorization'];
+                removeAuthHeader();
             };
+
             // Set header if already authenticated
             if (keycloak.authenticated && keycloak.token) {
-                api.defaults.headers.common['Authorization'] = `Bearer ${keycloak.token}`;
+                setAuthHeader(keycloak.token);
             }
         }
     }, [keycloak]);
