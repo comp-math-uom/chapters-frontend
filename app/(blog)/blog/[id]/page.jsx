@@ -20,6 +20,7 @@ export default function Page({params}) {
     useEffect(() => {
         const fetchBlog = async () => {
             try {
+                debugger;
                 setIsLoading(true);
                 const blogData = await blogService.getBlogByIdFromAPI(params.id);
                 console.log("Fetched blog data:", blogData);

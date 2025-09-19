@@ -3,6 +3,8 @@ import blogApi from "@/app/lib/services/blogApi";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BLOG_API;
 
+const accessToken = window.localStorage.getItem("kc_access_token");
+
 export const blogService = {
     async likeBlog(blogId, userId, status = 1) {
         try {
@@ -20,9 +22,10 @@ export const blogService = {
 
     async isLikedByUser(blogId, userId) {
         try {
+            debugger;
             const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${blogId}/like-status`, {
                 headers: {
-                    'x-user-id': userId
+                    'Authorization': `Bearer ${accessToken}` // Assuming userId is used as a token for simplicity
                 }
             });
             return response.data;
@@ -34,7 +37,7 @@ export const blogService = {
 
     async getBlogPreviewsFromAPI() {
         try {
-            const response = await blogApi.get(`${API_BASE_URL}/blogs/blogs`);
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blogs`);
             return response.data;
         } catch (error) {
             console.error("Error fetching blog previews:", error);
@@ -44,7 +47,7 @@ export const blogService = {
 
     async getBlogByIdFromAPI(id) {
         try {
-            const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${id}`);
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blog/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching blog with ID ${id}:`, error);
@@ -97,7 +100,7 @@ export const blogService = {
     
     async getBlogComments(blogId) {
         try {
-            const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${blogId}/comments`);
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blog/${blogId}/comments`);
             var orderedComments = response.data.sort((a, b) => new Date(b.commentedAt) - new Date(a.commentedAt));
 
             orderedComments.forEach(comment => {
