@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
+    reactStrictMode: false,
     images: {
         remotePatterns: [
             {hostname: "assets.react-photo-album.com"},
