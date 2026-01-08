@@ -84,7 +84,30 @@ const portfolioService = {
         return filteredItems;
     },
 
+    async uploadImage(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('key', process.env.NEXT_PUBLIC_IMAGEBB_API_KEY);
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`, formData);
+            return response.data.data.url;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    },
+
     async addGalleryItem(formData) {
+        let imageUrl = "";
+
+        if (formData.image) {
+            if (formData.image instanceof File) {
+                imageUrl = await this.uploadImage(formData.image);
+            } else {
+                imageUrl = formData.image;
+            }
+        }
+
         const payload = {
             topic: formData.title,
             description: formData.description,
@@ -95,8 +118,7 @@ const portfolioService = {
             visibility: formData.visible,
             featured: formData.featured,
 
-            // Add the hardcoded image data as requested         //TODO: integrate image upload later
-            image: "https://i.ibb.co/12345/my-portfolio-image.jpg",
+            image: imageUrl,
             width: 1080,
             height: 720,
         };
@@ -112,10 +134,6 @@ const portfolioService = {
     async updateGalleryItem(data) {
         return await axios.put(`${API_URL}/${data.id}`, data)
     },
-
-    // async deleteGalleryItem(id) {
-    //     return await axios.delete(`${API_URL}/${id}`);
-    // },
 
     async deleteGalleryItem(id) {
         try {
