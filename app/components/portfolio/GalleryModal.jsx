@@ -85,7 +85,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
         <>
             <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "5xl" }} closeOnOverlayClick={true} isCentered>
                 <ModalOverlay />
-                <ModalContent style={{ maxWidth: { base: "100%", md: "70vw" }, width: { base: "100%", md: "70vw" }, maxHeight: { base: "100vh", md: "80vh" } }}>
+                <ModalContent maxW={{ base: "100%", md: "83vw" }} w={{ base: "100%", md: "83vw" }} maxH={{ base: "100vh", md: "80vh" }}>
                     <ModalBody display="flex" flexDirection={{ base: "column", md: "row" }} padding={0} maxHeight={{ base: "100vh", md: "80vh" }}>
                         <Box
                             flex={{ base: "none", md: 1 }}
@@ -97,7 +97,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                 src={galleryItem.src}
                                 alt={galleryItem.topic}
                                 roundedTopStart={"md"}
-                                objectFit="cover"
+                                objectFit="contain"
                                 w="100%"
                                 h="100%"
                                 onLoad={() => setImageHeight(imageRef.current.clientHeight)}
