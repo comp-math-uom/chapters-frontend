@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useKeycloak } from '@/app/providers/Providers';
 import {
     Avatar,
     Box,
@@ -31,6 +32,8 @@ import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 
 export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = false }) {
+    const { keycloak } = useKeycloak();
+    const [profilePic, setProfilePic] = useState();
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [imageHeight, setImageHeight] = useState(null);
@@ -80,6 +83,10 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
             setImageHeight(imageRef.current.clientHeight);
         }
     }, [galleryItem]);
+
+    useEffect(() => {
+        setProfilePic(keycloak?.tokenParsed?.picture);
+    }, [keycloak]);
 
     return (
         <>
@@ -141,7 +148,10 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                 <ContributorsList contributors={contributors} />
 
                                 <Flex gap={3} className="my-10" alignItems="center">
-                                    <Avatar name="John Doe"></Avatar>
+                                    <Avatar
+                                        src={profilePic}
+                                        name={keycloak?.tokenParsed?.preferred_username || keycloak?.tokenParsed?.email || "John Doe"}
+                                    />
                                     <InputGroup size='md' borderRadius="lg">
                                         <Input
                                             _focus={{
