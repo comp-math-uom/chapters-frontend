@@ -40,7 +40,7 @@ function KeycloakProvider({ children }) {
     useEffect(() => {
         if (keycloak) {
             const setAuthHeader = (token) => {
-                debugger;
+
                 const authHeader = `Bearer ${token}`;
                 api.defaults.headers.common['Authorization'] = authHeader; // For your other service if needed
                 portfolioApi.defaults.headers.common['Authorization'] = authHeader; // For the portfolio service
@@ -80,7 +80,7 @@ function KeycloakProvider({ children }) {
     );
 }
 
-export function Providers({children}) {
+export function Providers({ children }) {
     return (
         <KeycloakProvider>
             <NavigationProvider>
