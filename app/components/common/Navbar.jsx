@@ -9,6 +9,7 @@ import {
 import { FiLogOut, FiUser, FiMenu } from "react-icons/fi";
 import { useNav } from "@/app/providers/NavigationProvider";
 import { useKeycloak } from '@/app/providers/Providers';
+import { useRouter } from "next/navigation";
 
 function Navbar() {
     const { keycloak, initialized } = useKeycloak();
@@ -16,6 +17,7 @@ function Navbar() {
     const { navActionButton } = useNav();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isMobile, setIsMobile] = useState(false);
+    const router = useRouter();
 
     // Debug logs
     useEffect(() => {
@@ -57,17 +59,20 @@ function Navbar() {
         setProfilePic(keycloak?.tokenParsed?.picture);
     }, [keycloak]);
 
+    const onLogout = () => {
+        keycloak.logout().then(() => {
+            console.log('Logged out successfully');
+            router.push('/');
+        }).catch((error) => {
+            console.error('Logout failed:', error);
+        });
+    };
+
     const NavLinks = () => (
         <>
             <Link passHref href="/portfolio" className="font-impact hover:text-gray-700">PORTFOLIO</Link>
             <Link passHref href="/blog" className="font-impact hover:text-gray-700">BLOG</Link>
             <Link passHref href="/forum" className="font-impact hover:text-gray-700">FORUM</Link>
-            {initialized && keycloak?.authenticated && (
-                <>
-                    <Link passHref href="/portfolio/add-item" className="font-impact hover:text-gray-700">ADD PORTFOLIO</Link>
-                    <Link passHref href="/blog/new" className="font-impact hover:text-gray-700">ADD BLOG</Link>
-                </>
-            )}
             <Link passHref href="/#contactUs" className="font-impact hover:text-gray-700" onClick={scrollToContact}>CONTACT US</Link>
         </>
     );
@@ -114,7 +119,7 @@ function Navbar() {
                                     <MenuItem icon={<FiUser />}>
                                         Profile
                                     </MenuItem>
-                                    <MenuItem icon={<FiLogOut />} onClick={() => keycloak.logout()}>
+                                    <MenuItem icon={<FiLogOut />} onClick={onLogout}>
                                         Sign out
                                     </MenuItem>
                                 </MenuList>
