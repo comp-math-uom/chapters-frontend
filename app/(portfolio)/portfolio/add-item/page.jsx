@@ -7,8 +7,18 @@ import portfolioService from '@/app/lib/services/portfolioService';
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 
+import { useKeycloak } from "@/app/providers/Providers";
+import { useEffect } from "react";
+
 export default function Page() {
     const router = useRouter();
+    const { keycloak, initialized } = useKeycloak();
+
+    useEffect(() => {
+        if (initialized && !keycloak.authenticated) {
+            router.push('/');
+        }
+    }, [initialized, keycloak, router]);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
@@ -40,7 +50,7 @@ export default function Page() {
             <h1 className="text-3xl md:text-4xl font-bold my-6 md:my-10">
                 Add New Post
             </h1>
-            <PortfolioForm handleSubmit={handleSubmit}/>
+            <PortfolioForm handleSubmit={handleSubmit} />
             <ErrorModal
                 isOpen={isErrorModalOpen}
                 onClose={() => setIsErrorModalOpen(false)}

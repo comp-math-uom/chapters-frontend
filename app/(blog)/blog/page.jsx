@@ -9,12 +9,13 @@ import { useNav } from "@/app/providers/NavigationProvider";
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import ErrorBlock from "@/app/components/common/ErrorBlock";
+import { useKeycloak } from '@/app/providers/Providers';
 
 export default function Home() {
     const [blogPreviews, setBlogPreviews] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const {setNavActionButton} = useNav();
+    const { setNavActionButton } = useNav();
     const router = useRouter();
 
     useEffect(() => {
@@ -36,17 +37,26 @@ export default function Home() {
     }, []);
 
 
+    const { keycloak, initialized } = useKeycloak();
+
     useEffect(() => {
-        setNavActionButton({
-            label: 'Write',
-            action: () => router.push('/blog/new')
-        });
+        if (initialized && keycloak?.authenticated) {
+            setNavActionButton({
+                label: 'Write',
+                action: () => router.push('/blog/new')
+            });
+        } else {
+            setNavActionButton({
+                label: '',
+                action: () => { }
+            });
+        }
 
         return () => setNavActionButton({
             label: '', action: () => {
             }
         });
-    }, [router, setNavActionButton]);
+    }, [router, setNavActionButton, initialized, keycloak?.authenticated]);
 
     return (
         <>
@@ -64,13 +74,13 @@ export default function Home() {
                     <LoadingSpinner text="Loading blog posts..." />
                 </div>
             ) : (
-                <div style={{ paddingBottom: '60px'}} className="container flex flex-wrap justify-center m-auto px-4 sm:px-8 md:px-12 lg:px-20 gap-4 sm:gap-6 md:gap-10 lg:gap-20 mt-8 md:mt-12 lg:mt-20">
+                <div style={{ paddingBottom: '60px' }} className="container flex flex-wrap justify-center m-auto px-4 sm:px-8 md:px-12 lg:px-20 gap-4 sm:gap-6 md:gap-10 lg:gap-20 mt-8 md:mt-12 lg:mt-20">
                     {blogPreviews.map((blogPreview, index) => (
-                        <BlogPreview key={index} blogPreview={blogPreview}/>
+                        <BlogPreview key={index} blogPreview={blogPreview} />
                     ))}
                 </div>
             )}
-            {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later."/>}
+            {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later." />}
         </>
     );
 }
