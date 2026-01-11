@@ -71,12 +71,9 @@ export default function Page() {
             <Container maxW="md">
                 <VStack spacing={8}>
                     <VStack spacing={2} textAlign="center">
-                        <Heading fontSize="3xl" color="gray.700">
-                            Create an Account
+                        <Heading fontFamily="impact" fontSize="6xl" color="gray.700">
+                            C H A P T E R S
                         </Heading>
-                        <Text color="gray.700" opacity={0.8}>
-                            Join to share your amazing portfolio
-                        </Text>
                     </VStack>
 
                     <Box
@@ -99,6 +96,9 @@ export default function Page() {
                             {(props) => (
                                 <Form>
                                     <Stack spacing={5}>
+                                        <Heading className='text-center mb-4' fontSize="2xl" color="gray.700">
+                                            Create an Account
+                                        </Heading>
                                         <HStack spacing={4}>
                                             <Field name="firstName"
                                                 validate={(value) => validateField(value, 'First name')}>
