@@ -17,10 +17,20 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
-import Link from "next/link";
 import { authService } from "@/app/lib/services/authService";
+import { useKeycloak } from '@/app/providers/Providers';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
+    const { keycloak, initialized } = useKeycloak();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (initialized && keycloak.authenticated) {
+            router.push('/');
+        }
+    }, [initialized, keycloak, router]);
 
     const validateField = (value, field) => {
         if (!value) {
@@ -61,21 +71,18 @@ export default function Page() {
             actions.setSubmitting(false);
         } catch (error) {
             actions.setSubmitting(false);
-            actions.setStatus({error: 'Signup failed. Please try again.'});
+            actions.setStatus({ error: 'Signup failed. Please try again.' });
         }
     };
 
     return (
-        <Flex minH="100vh" bg="gray.50" alignItems="center" justifyContent="center" py={12} px={4}>
+        <Flex bg="gray.50" alignItems="center" justifyContent="center">
             <Container maxW="md">
                 <VStack spacing={8}>
-                    <VStack spacing={2} textAlign="center">
-                        <Heading fontSize="3xl" color="gray.700">
-                            Create an Account
+                    <VStack textAlign="center">
+                        <Heading fontFamily="impact" fontSize="6xl" color="gray.700">
+                            C H A P T E R S
                         </Heading>
-                        <Text color="gray.700" opacity={0.8}>
-                            Join to share your amazing portfolio
-                        </Text>
                     </VStack>
 
                     <Box
@@ -98,10 +105,13 @@ export default function Page() {
                             {(props) => (
                                 <Form>
                                     <Stack spacing={5}>
+                                        <Heading className='text-center mb-4' fontSize="2xl" color="gray.700">
+                                            Create an Account
+                                        </Heading>
                                         <HStack spacing={4}>
                                             <Field name="firstName"
-                                                   validate={(value) => validateField(value, 'First name')}>
-                                                {({field, form}) => (
+                                                validate={(value) => validateField(value, 'First name')}>
+                                                {({ field, form }) => (
                                                     <FormControl
                                                         isInvalid={form.errors.firstName && form.touched.firstName}>
                                                         <FormLabel color="gray.700">First Name</FormLabel>
@@ -120,8 +130,8 @@ export default function Page() {
                                             </Field>
 
                                             <Field name="lastName"
-                                                   validate={(value) => validateField(value, 'Last name')}>
-                                                {({field, form}) => (
+                                                validate={(value) => validateField(value, 'Last name')}>
+                                                {({ field, form }) => (
                                                     <FormControl
                                                         isInvalid={form.errors.lastName && form.touched.lastName}>
                                                         <FormLabel color="gray.700">Last Name</FormLabel>
@@ -141,7 +151,7 @@ export default function Page() {
                                         </HStack>
 
                                         <Field name="email" validate={validateEmail}>
-                                            {({field, form}) => (
+                                            {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
                                                     <FormLabel color="gray.700">Email address</FormLabel>
                                                     <Input
@@ -160,7 +170,7 @@ export default function Page() {
                                         </Field>
 
                                         <Field name="password" validate={validatePassword}>
-                                            {({field, form}) => (
+                                            {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
                                                     <FormLabel color="gray.700">Password</FormLabel>
                                                     <Input
@@ -179,8 +189,8 @@ export default function Page() {
                                         </Field>
 
                                         <Field name="confirmPassword"
-                                               validate={(value) => validateConfirmPassword(props.values.password, value)}>
-                                            {({field, form}) => (
+                                            validate={(value) => validateConfirmPassword(props.values.password, value)}>
+                                            {({ field, form }) => (
                                                 <FormControl
                                                     isInvalid={form.errors.confirmPassword && form.touched.confirmPassword}>
                                                     <FormLabel color="gray.700">Confirm Password</FormLabel>
@@ -226,10 +236,8 @@ export default function Page() {
 
                     <Text color="gray.700" fontSize="sm">
                         Already have an account?{' '}
-                        <Button variant="link" color="gray.600" _hover={{color: "gray.700"}} fontSize="sm">
-                            <Link href={"/auth/login"}>
-                                Sign in
-                            </Link>
+                        <Button variant="link" color="gray.600" _hover={{ color: "gray.700" }} fontSize="sm" onClick={() => keycloak && keycloak.login()}>
+                            Sign in
                         </Button>
                     </Text>
                 </VStack>
