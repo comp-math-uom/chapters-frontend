@@ -1,12 +1,17 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useKeycloak } from '@/app/providers/Providers';
 import { Button } from "@chakra-ui/react";
+import { useRouter } from 'next/navigation';
 
 function HeroSection() {
     const { keycloak, initialized } = useKeycloak();
+    const router = useRouter();
+
+    const handleRegister = () => {
+        router.push('/auth/register');
+    };
 
     return (
         <section className="py-8 sm:py-12 md:py-16 px-4 border-b border-gray-200">
@@ -55,14 +60,21 @@ function HeroSection() {
                         transition={{ duration: 0.5, delay: 0.8 }}
                     >
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                            <button className="px-3 sm:px-6 py-1.5 sm:py-2 border border-black rounded-full transition hover:bg-gray-100 text-sm sm:text-base">
+                            <Button size="md"
+                                fontSize="sm"
+                                px="4"
+                                borderRadius="lg" onClick={handleRegister}>
                                 REGISTER
-                            </button>
+                            </Button>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                            <button onClick={() => keycloak && keycloak.login()} className="px-3 sm:px-6 py-1.5 border border-border sm:py-2 bg-black text-white rounded-full transition hover:bg-gray-800 text-sm sm:text-base">
+                            <Button onClick={() => keycloak && keycloak.login()} _hover={{ bg: "gray.800" }}
+                                size="md"
+                                fontSize="sm"
+                                borderRadius="lg"
+                                px="4" bg="black" color="white">
                                 SIGN IN
-                            </button>
+                            </Button>
                         </motion.div>
                     </motion.div>
                 </motion.div>

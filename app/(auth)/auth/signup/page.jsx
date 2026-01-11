@@ -19,8 +19,10 @@ import {
 import { Field, Form, Formik } from 'formik';
 import Link from "next/link";
 import { authService } from "@/app/lib/services/authService";
+import { useKeycloak } from '@/app/providers/Providers';
 
 export default function Page() {
+    const { keycloak, initialized } = useKeycloak();
 
     const validateField = (value, field) => {
         if (!value) {
@@ -61,7 +63,7 @@ export default function Page() {
             actions.setSubmitting(false);
         } catch (error) {
             actions.setSubmitting(false);
-            actions.setStatus({error: 'Signup failed. Please try again.'});
+            actions.setStatus({ error: 'Signup failed. Please try again.' });
         }
     };
 
@@ -100,8 +102,8 @@ export default function Page() {
                                     <Stack spacing={5}>
                                         <HStack spacing={4}>
                                             <Field name="firstName"
-                                                   validate={(value) => validateField(value, 'First name')}>
-                                                {({field, form}) => (
+                                                validate={(value) => validateField(value, 'First name')}>
+                                                {({ field, form }) => (
                                                     <FormControl
                                                         isInvalid={form.errors.firstName && form.touched.firstName}>
                                                         <FormLabel color="gray.700">First Name</FormLabel>
@@ -120,8 +122,8 @@ export default function Page() {
                                             </Field>
 
                                             <Field name="lastName"
-                                                   validate={(value) => validateField(value, 'Last name')}>
-                                                {({field, form}) => (
+                                                validate={(value) => validateField(value, 'Last name')}>
+                                                {({ field, form }) => (
                                                     <FormControl
                                                         isInvalid={form.errors.lastName && form.touched.lastName}>
                                                         <FormLabel color="gray.700">Last Name</FormLabel>
@@ -141,7 +143,7 @@ export default function Page() {
                                         </HStack>
 
                                         <Field name="email" validate={validateEmail}>
-                                            {({field, form}) => (
+                                            {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
                                                     <FormLabel color="gray.700">Email address</FormLabel>
                                                     <Input
@@ -160,7 +162,7 @@ export default function Page() {
                                         </Field>
 
                                         <Field name="password" validate={validatePassword}>
-                                            {({field, form}) => (
+                                            {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
                                                     <FormLabel color="gray.700">Password</FormLabel>
                                                     <Input
@@ -179,8 +181,8 @@ export default function Page() {
                                         </Field>
 
                                         <Field name="confirmPassword"
-                                               validate={(value) => validateConfirmPassword(props.values.password, value)}>
-                                            {({field, form}) => (
+                                            validate={(value) => validateConfirmPassword(props.values.password, value)}>
+                                            {({ field, form }) => (
                                                 <FormControl
                                                     isInvalid={form.errors.confirmPassword && form.touched.confirmPassword}>
                                                     <FormLabel color="gray.700">Confirm Password</FormLabel>
@@ -226,10 +228,8 @@ export default function Page() {
 
                     <Text color="gray.700" fontSize="sm">
                         Already have an account?{' '}
-                        <Button variant="link" color="gray.600" _hover={{color: "gray.700"}} fontSize="sm">
-                            <Link href={"/auth/login"}>
-                                Sign in
-                            </Link>
+                        <Button variant="link" color="gray.600" _hover={{ color: "gray.700" }} fontSize="sm" onClick={() => keycloak && keycloak.login()}>
+                            Sign in
                         </Button>
                     </Text>
                 </VStack>
