@@ -1,12 +1,15 @@
 "use client";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Menu, MenuButton, MenuItem, MenuList, IconButton, Drawer,
+import {
+    Avatar, Button, Menu, MenuButton, MenuItem, MenuList, IconButton, Drawer,
     DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure,
-    VStack, HStack } from "@chakra-ui/react";
+    VStack, HStack
+} from "@chakra-ui/react";
 import { FiLogOut, FiUser, FiMenu } from "react-icons/fi";
 import { useNav } from "@/app/providers/NavigationProvider";
 import { useKeycloak } from '@/app/providers/Providers';
+import { useRouter } from "next/navigation";
 
 function Navbar() {
     const { keycloak, initialized } = useKeycloak();
@@ -14,6 +17,7 @@ function Navbar() {
     const { navActionButton } = useNav();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isMobile, setIsMobile] = useState(false);
+    const router = useRouter();
 
     // Debug logs
     useEffect(() => {
@@ -55,6 +59,15 @@ function Navbar() {
         setProfilePic(keycloak?.tokenParsed?.picture);
     }, [keycloak]);
 
+    const onLogout = () => {
+        keycloak.logout().then(() => {
+            console.log('Logged out successfully');
+            router.push('/');
+        }).catch((error) => {
+            console.error('Logout failed:', error);
+        });
+    };
+
     const NavLinks = () => (
         <>
             <Link passHref href="/portfolio" className="font-impact hover:text-gray-700">PORTFOLIO</Link>
@@ -89,7 +102,7 @@ function Navbar() {
                     {initialized && keycloak && keycloak.authenticated ? (
                         <div className="flex items-center gap-2">
                             <p className="text-base text-black text-decoration-none hidden sm:block">
-                                {keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email || JSON.stringify(keycloak.tokenParsed) || 'User' }
+                                {keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email || JSON.stringify(keycloak.tokenParsed) || 'User'}
                             </p>
                             <Menu placement="bottom-end">
                                 <MenuButton>
@@ -99,14 +112,14 @@ function Navbar() {
                                         name={keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
                                         size={{ base: "sm", md: "md" }}
                                         cursor="pointer"
-                                        _hover={{opacity: 0.8}}
+                                        _hover={{ opacity: 0.8 }}
                                     />
                                 </MenuButton>
                                 <MenuList minW="200px">
-                                    <MenuItem icon={<FiUser/>}>
+                                    <MenuItem icon={<FiUser />}>
                                         Profile
                                     </MenuItem>
-                                    <MenuItem icon={<FiLogOut/>} onClick={() => keycloak.logout()}>
+                                    <MenuItem icon={<FiLogOut />} onClick={onLogout}>
                                         Sign out
                                     </MenuItem>
                                 </MenuList>
@@ -185,14 +198,14 @@ function Navbar() {
                                                 name={keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.email}
                                                 size={{ base: "sm", md: "md" }}
                                                 cursor="pointer"
-                                                _hover={{opacity: 0.8}}
+                                                _hover={{ opacity: 0.8 }}
                                             />
                                         </MenuButton>
                                         <MenuList minW="200px">
-                                            <MenuItem icon={<FiUser/>}>
+                                            <MenuItem icon={<FiUser />}>
                                                 Profile
                                             </MenuItem>
-                                            <MenuItem icon={<FiLogOut/>} onClick={() => keycloak.logout()}>
+                                            <MenuItem icon={<FiLogOut />} onClick={() => keycloak.logout()}>
                                                 Sign out
                                             </MenuItem>
                                         </MenuList>
@@ -204,7 +217,7 @@ function Navbar() {
                 </DrawerContent>
             </Drawer>
 
-            <hr/>
+            <hr />
         </div>
     );
 }

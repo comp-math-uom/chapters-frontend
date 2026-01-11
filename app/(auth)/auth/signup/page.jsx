@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import Link from "next/link";
+import { authService } from "@/app/lib/services/authService";
 
 export default function Page() {
 
@@ -55,8 +56,8 @@ export default function Page() {
 
     const handleSubmit = async (values, actions) => {
         try {
-            // Handle signup logic here
-            console.log('Signup values:', values);
+            console.log('Signup values:', values.email, values.password, values.email, values.firstName, values.lastName);
+            await authService.signup(values.email, values.password, values.email, values.firstName, values.lastName);
             actions.setSubmitting(false);
         } catch (error) {
             actions.setSubmitting(false);
