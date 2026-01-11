@@ -17,7 +17,6 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
-import Link from "next/link";
 import { authService } from "@/app/lib/services/authService";
 import { useKeycloak } from '@/app/providers/Providers';
 

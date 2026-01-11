@@ -10,7 +10,7 @@ function HeroSection() {
     const router = useRouter();
 
     const handleRegister = () => {
-        router.push('/auth/register');
+        router.push('/auth/signup');
     };
 
     return (
