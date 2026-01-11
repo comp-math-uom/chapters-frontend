@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const authService = {
     async signup(username, password, email, firstname, lastname) {
-        const url = 'https://aistudentchapter.lk/auth/signup';
+        const url = 'https://aistudentchapter.lk/auth/register';
         const data = {
             username: username,
             password: password,
