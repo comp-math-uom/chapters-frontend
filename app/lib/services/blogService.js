@@ -54,11 +54,11 @@ export const blogService = {
             throw error;
         }
     },
-    
+
     async createBlog(blogData) {
         try {
             const headers = {
-                'x-user-id': blogData.user_id || '1'
+                'Authorization': `Bearer ${accessToken}`
             };
             const response = await blogApi.post(`${API_BASE_URL}/blogs/createblog`, blogData, { headers });
             return response.data;
@@ -97,7 +97,7 @@ export const blogService = {
     async getAuthors() {
         return authors;
     },
-    
+
     async getBlogComments(blogId) {
         try {
             const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blog/${blogId}/comments`);
