@@ -52,31 +52,33 @@ function HeroSection() {
                     >
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. We are a student chapter at the University of Edinburgh. We focus on AI, robotics and computer science events with a focus on providing opportunities to students. Join our community if you are interested in the world of technology and science.
                     </motion.p>
-                    <motion.div
-                        className="flex gap-3 sm:gap-4"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.8 }}
-                    >
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                            <Button size="md"
-                                fontSize="sm"
-                                px="4"
-                                borderRadius="lg" onClick={handleRegister}>
-                                REGISTER
-                            </Button>
+                    {!(initialized && keycloak && keycloak.authenticated) &&
+                        <motion.div
+                            className="flex gap-3 sm:gap-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.8 }}
+                        >
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                <Button size="md"
+                                    fontSize="sm"
+                                    px="4"
+                                    borderRadius="lg" onClick={handleRegister}>
+                                    REGISTER
+                                </Button>
+                            </motion.div>
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                <Button onClick={() => keycloak && keycloak.login()} _hover={{ bg: "gray.800" }}
+                                    size="md"
+                                    fontSize="sm"
+                                    borderRadius="lg"
+                                    px="4" bg="black" color="white">
+                                    SIGN IN
+                                </Button>
+                            </motion.div>
                         </motion.div>
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                            <Button onClick={() => keycloak && keycloak.login()} _hover={{ bg: "gray.800" }}
-                                size="md"
-                                fontSize="sm"
-                                borderRadius="lg"
-                                px="4" bg="black" color="white">
-                                SIGN IN
-                            </Button>
-                        </motion.div>
-                    </motion.div>
+                    }
                 </motion.div>
                 <motion.div
                     className="w-full lg:w-1/2 mt-6 lg:mt-0"

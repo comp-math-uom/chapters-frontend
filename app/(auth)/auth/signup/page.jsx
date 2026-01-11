@@ -19,9 +19,18 @@ import {
 import { Field, Form, Formik } from 'formik';
 import { authService } from "@/app/lib/services/authService";
 import { useKeycloak } from '@/app/providers/Providers';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
     const { keycloak, initialized } = useKeycloak();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (initialized && keycloak.authenticated) {
+            router.push('/');
+        }
+    }, [initialized, keycloak, router]);
 
     const validateField = (value, field) => {
         if (!value) {
@@ -67,10 +76,10 @@ export default function Page() {
     };
 
     return (
-        <Flex minH="100vh" bg="gray.50" alignItems="center" justifyContent="center" py={12} px={4}>
+        <Flex bg="gray.50" alignItems="center" justifyContent="center">
             <Container maxW="md">
                 <VStack spacing={8}>
-                    <VStack spacing={2} textAlign="center">
+                    <VStack textAlign="center">
                         <Heading fontFamily="impact" fontSize="6xl" color="gray.700">
                             C H A P T E R S
                         </Heading>
