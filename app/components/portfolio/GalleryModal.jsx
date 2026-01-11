@@ -30,6 +30,7 @@ import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 import portfolioService from "@/app/lib/services/portfolioService";
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
+import { feedbackService } from "@/app/lib/services/feedbackService";
 
 export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = false }) {
     const { keycloak } = useKeycloak();
@@ -44,10 +45,32 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
-    const handleAddComment = () => {
+    const handleAddComment = async () => {
         if (comment.trim()) {
-            setComments([...comments, comment]);
-            setComment("");
+            const username = keycloak?.tokenParsed?.preferred_username || keycloak?.tokenParsed?.email || "Anonymous";
+            const feedbackData = {
+                content: comment,
+                username: username
+            };
+
+            try {
+                const response = await feedbackService.createFeedback(galleryItem.id, feedbackData);
+
+                const newComment = {
+                    id: response?.id || Date.now(),
+                    userName: username,
+                    userAvatar: profilePic,
+                    timeAgo: "Just now",
+                    content: comment
+                };
+
+                setComments([...comments, newComment]);
+                setComment("");
+            } catch (error) {
+                console.error("Failed to submit feedback", error);
+                setModalMessage("Failed to submit feedback. Please try again.");
+                setIsErrorModalOpen(true);
+            }
         }
     };
 
@@ -178,15 +201,9 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                     </InputGroup>
                                 </Flex>
 
-                                <FeedbackSection as="h6" size="xs" />
+                                <FeedbackSection as="h6" size="xs" additionalFeedbacks={comments} />
 
-                                <VStack align="start" mt={6}>
-                                    {comments.map((cmt, idx) => (
-                                        <Box key={idx} bg="gray.100" p={4} borderRadius="md" w="full">
-                                            {cmt}
-                                        </Box>
-                                    ))}
-                                </VStack>
+
                             </Box>
                         </Box>
                         <ErrorModal

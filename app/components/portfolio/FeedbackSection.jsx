@@ -5,9 +5,9 @@ import { Avatar, Box, Button, Heading, HStack, Text, useDisclosure, VStack } fro
 import { feedbackService } from "@/app/lib/services/feedbackService";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
-export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"}) {
+export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl", additionalFeedbacks = [] }) {
     const [feedbacks, setFeedbacks] = useState([]);
-    const {isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal} = useDisclosure();
+    const { isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure();
     const [feedbackToDelete, setFeedbackToDelete] = useState(null);
 
     useEffect(() => {
@@ -21,6 +21,8 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
         };
         loadFeedBacks();
     }, []);
+
+    const allFeedbacks = [...feedbacks, ...additionalFeedbacks];
 
     const handleDeleteConfirm = () => {
         if (feedbackToDelete) {
@@ -39,9 +41,9 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
     return (
         <div>
             <Heading as={as} size={size} mb={6}>Feedbacks</Heading>
-            <hr/>
+            <hr />
             <VStack spacing={0} align="stretch">
-                {feedbacks.map((feedback, index) => (
+                {allFeedbacks.map((feedback, index) => (
                     <Box
                         key={feedback.id}
                         p={4}
@@ -74,7 +76,7 @@ export default function FeedbackSection({isAdmin = false, as = "h2", size = "xl"
                             </Button>}
                         </HStack>
                         <Text pl={{ base: 0, md: 10 }} mb={5}>{feedback.content}</Text>
-                        {index !== feedbacks.length - 1 && <hr/>}
+                        {index !== allFeedbacks.length - 1 && <hr />}
                     </Box>
                 ))}
             </VStack>
