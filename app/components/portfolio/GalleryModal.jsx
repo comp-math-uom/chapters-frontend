@@ -201,7 +201,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                     </InputGroup>
                                 </Flex>
 
-                                <FeedbackSection as="h6" size="xs" additionalFeedbacks={comments} />
+                                <FeedbackSection as="h6" size="xs" additionalFeedbacks={comments} projectId={galleryItem.id} />
 
 
                             </Box>
