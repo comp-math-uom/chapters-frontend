@@ -5,22 +5,24 @@ import { Avatar, Box, Button, Heading, HStack, Text, useDisclosure, VStack } fro
 import { feedbackService } from "@/app/lib/services/feedbackService";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 
-export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl", additionalFeedbacks = [] }) {
+export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl", additionalFeedbacks = [], projectId }) {
     const [feedbacks, setFeedbacks] = useState([]);
     const { isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure();
     const [feedbackToDelete, setFeedbackToDelete] = useState(null);
 
     useEffect(() => {
         const loadFeedBacks = async () => {
-            try {
-                const data = await feedbackService.fetchFeedbacks();
-                setFeedbacks(data);
-            } catch (error) {
-                console.error("Error loading feedbacks:", error);
+            if (projectId) {
+                try {
+                    const data = await feedbackService.fetchFeedbacks(projectId);
+                    setFeedbacks(data);
+                } catch (error) {
+                    console.error("Error loading feedbacks:", error);
+                }
             }
         };
         loadFeedBacks();
-    }, []);
+    }, [projectId]);
 
     const allFeedbacks = [...feedbacks, ...additionalFeedbacks];
 
@@ -58,7 +60,7 @@ export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl
                                 <Avatar
                                     size="sm"
                                     name={feedback.userName}
-                                    src={feedback.userAvatar}
+                                // src={feedback.userAvatar}
                                 />
                                 <VStack align="start" spacing={0}>
                                     <Text fontWeight="bold">{feedback.userName}</Text>
