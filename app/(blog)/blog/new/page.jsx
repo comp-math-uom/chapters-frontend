@@ -43,7 +43,7 @@ export default function Page() {
 
     return (
         <BlogProvider>
-            <Drawer isOpen={isOpen} size="md" onClose={onClose}>
+            <Drawer isOpen={isOpen} size="md" onClose={onClose} closeOnOverlayClick={false}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader>Blog Settings</DrawerHeader>
