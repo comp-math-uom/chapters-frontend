@@ -9,7 +9,11 @@ export const feedbackService = {
                 id: item.id,
                 userName: item.username,
                 content: item.content,
-                timeAgo: formatDistanceToNow(new Date(item.created_at), { addSuffix: true }),
+                timeAgo: formatDistanceToNow(new Date(
+                    (item.created_at.includes("Z") || item.created_at.includes("+"))
+                        ? item.created_at
+                        : `${item.created_at}Z`
+                ), { addSuffix: true }),
                 userAvatar: null
             }));
         } catch (error) {

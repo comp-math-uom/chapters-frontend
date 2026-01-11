@@ -111,6 +111,13 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
         setProfilePic(keycloak?.tokenParsed?.picture);
     }, [keycloak]);
 
+    useEffect(() => {
+        if (!isOpen) {
+            setComments([]);
+            setComment("");
+        }
+    }, [isOpen]);
+
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "5xl" }} closeOnOverlayClick={true} isCentered>

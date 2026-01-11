@@ -45,42 +45,49 @@ export default function FeedbackSection({ isAdmin = false, as = "h2", size = "xl
             <Heading as={as} size={size} mb={6}>Feedbacks</Heading>
             <hr />
             <VStack spacing={0} align="stretch">
-                {allFeedbacks.map((feedback, index) => (
-                    <Box
-                        key={feedback.id}
-                        p={4}
-                    >
-                        <HStack
-                            justify={{ base: "flex-start", md: "space-between" }}
-                            alignItems={{ base: "flex-start", md: "center" }}
-                            flexDirection={{ base: "column", md: "row" }}
-                            mb={2}
+                {allFeedbacks.length === 0 ? (
+                    <center>   <Text color="gray.500" fontSize={"sm"} mt={8}>
+                        No feedbacks yet.
+                    </Text></center>
+
+                ) : (
+                    allFeedbacks.map((feedback, index) => (
+                        <Box
+                            key={feedback.id}
+                            p={4}
                         >
-                            <HStack spacing={3}>
-                                <Avatar
-                                    size="sm"
-                                    name={feedback.userName}
-                                // src={feedback.userAvatar}
-                                />
-                                <VStack align="start" spacing={0}>
-                                    <Text fontWeight="bold">{feedback.userName}</Text>
-                                    <Text fontSize="sm" color="gray.500">{feedback.timeAgo}</Text>
-                                </VStack>
-                            </HStack>
-                            {isAdmin && <Button
-                                size="sm"
-                                variant="ghost"
-                                colorScheme="red"
-                                onClick={() => handleDeleteClick(feedback)}
-                                mt={{ base: 2, md: 0 }}
+                            <HStack
+                                justify={{ base: "flex-start", md: "space-between" }}
+                                alignItems={{ base: "flex-start", md: "center" }}
+                                flexDirection={{ base: "column", md: "row" }}
+                                mb={2}
                             >
-                                Delete Feedback
-                            </Button>}
-                        </HStack>
-                        <Text pl={{ base: 0, md: 10 }} mb={5}>{feedback.content}</Text>
-                        {index !== allFeedbacks.length - 1 && <hr />}
-                    </Box>
-                ))}
+                                <HStack spacing={3}>
+                                    <Avatar
+                                        size="sm"
+                                        name={feedback.userName}
+                                    // src={feedback.userAvatar}
+                                    />
+                                    <VStack align="start" spacing={0}>
+                                        <Text fontWeight="bold">{feedback.userName}</Text>
+                                        <Text fontSize="sm" color="gray.500">{feedback.timeAgo}</Text>
+                                    </VStack>
+                                </HStack>
+                                {isAdmin && <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    colorScheme="red"
+                                    onClick={() => handleDeleteClick(feedback)}
+                                    mt={{ base: 2, md: 0 }}
+                                >
+                                    Delete Feedback
+                                </Button>}
+                            </HStack>
+                            <Text pl={{ base: 0, md: 10 }} mb={5}>{feedback.content}</Text>
+                            {index !== allFeedbacks.length - 1 && <hr />}
+                        </Box>
+                    ))
+                )}
             </VStack>
             <DeleteConfirmModal
                 isOpen={isOpenDeleteModal}
