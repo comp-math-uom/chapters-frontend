@@ -72,7 +72,7 @@ export default function Page() {
     };
 
     if (isLoading) {
-        return <LoadingSpinner/>
+        return <LoadingSpinner />
     }
 
     return (
@@ -80,8 +80,8 @@ export default function Page() {
             <h1 className="text-3xl md:text-4xl font-bold my-6 md:my-10">
                 Edit Post
             </h1>
-            <PortfolioForm initialValues={portfolioItem} handleSubmit={handleSubmit}/>
-            <FeedbackSection isAdmin={true}/>
+            <PortfolioForm initialValues={portfolioItem} handleSubmit={handleSubmit} />
+            <FeedbackSection isAdmin={true} />
             <ErrorModal
                 isOpen={isErrorModalOpen}
                 onClose={() => setIsErrorModalOpen(false)}
