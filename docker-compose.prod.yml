@@ -12,7 +12,6 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.next
-    # TODO: add the environment variables for the production environment
     ports:
       - "3000:3000"
     environment:
