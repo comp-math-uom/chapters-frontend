@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useKeycloak } from '@/app/providers/Providers';
+import { useAuth } from '@/app/providers/Providers';
 import { Button } from "@chakra-ui/react";
 import { useRouter } from 'next/navigation';
 
 function HeroSection() {
-    const { keycloak, initialized } = useKeycloak();
+    const { auth, initialized } = useAuth();
     const router = useRouter();
 
     const handleRegister = () => {
@@ -52,7 +52,7 @@ function HeroSection() {
                     >
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. We are a student chapter at the University of Edinburgh. We focus on AI, robotics and computer science events with a focus on providing opportunities to students. Join our community if you are interested in the world of technology and science.
                     </motion.p>
-                    {!(initialized && keycloak && keycloak.authenticated) &&
+                    {!(initialized && auth && auth.authenticated) &&
                         <motion.div
                             className="flex gap-3 sm:gap-4"
                             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ function HeroSection() {
                                 </Button>
                             </motion.div>
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button onClick={() => keycloak && keycloak.login()} _hover={{ bg: "gray.800" }}
+                                <Button onClick={() => auth && auth.login()} _hover={{ bg: "gray.800" }}
                                     size="md"
                                     fontSize="sm"
                                     borderRadius="lg"

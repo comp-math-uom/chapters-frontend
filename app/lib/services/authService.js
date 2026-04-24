@@ -1,16 +1,29 @@
-import axios from "axios";
+import { supabase } from "@/app/lib/services/supabase";
 
 
 export const authService = {
     async signup(username, password, email, firstname, lastname) {
-        const url = 'https://aistudentchapter.lk/auth/register';
-        const data = {
-            username: username,
-            password: password,
-            email: email,
-            firstName: firstname,
-            lastName: lastname
-        };
-        return await axios.post(url, data);
+        return await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    username,
+                    first_name: firstname,
+                    last_name: lastname,
+                }
+            }
+        });
+    },
+
+    async signin(email, password) {
+        return await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+    },
+
+    async signout() {
+        return await supabase.auth.signOut();
     }
 }

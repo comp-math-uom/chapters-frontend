@@ -7,18 +7,18 @@ import portfolioService from '@/app/lib/services/portfolioService';
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 
-import { useKeycloak } from "@/app/providers/Providers";
+import { useAuth } from "@/app/providers/Providers";
 import { useEffect } from "react";
 
 export default function Page() {
     const router = useRouter();
-    const { keycloak, initialized } = useKeycloak();
+    const { auth, initialized } = useAuth();
 
     useEffect(() => {
-        if (initialized && !keycloak.authenticated) {
+        if (initialized && !auth.authenticated) {
             router.push('/');
         }
-    }, [initialized, keycloak, router]);
+    }, [initialized, auth, router]);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");

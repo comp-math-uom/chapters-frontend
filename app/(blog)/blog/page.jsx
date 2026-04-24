@@ -9,7 +9,7 @@ import { useNav } from "@/app/providers/NavigationProvider";
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import ErrorBlock from "@/app/components/common/ErrorBlock";
-import { useKeycloak } from '@/app/providers/Providers';
+import { useAuth } from '@/app/providers/Providers';
 
 export default function Home() {
     const [blogPreviews, setBlogPreviews] = useState([]);
@@ -37,10 +37,10 @@ export default function Home() {
     }, []);
 
 
-    const { keycloak, initialized } = useKeycloak();
+    const { auth, initialized } = useAuth();
 
     useEffect(() => {
-        if (initialized && keycloak?.authenticated) {
+        if (initialized && auth?.authenticated) {
             setNavActionButton({
                 label: 'Write',
                 action: () => router.push('/blog/new')
@@ -56,7 +56,7 @@ export default function Home() {
             label: '', action: () => {
             }
         });
-    }, [router, setNavActionButton, initialized, keycloak?.authenticated]);
+    }, [router, setNavActionButton, initialized, auth?.authenticated]);
 
     return (
         <>

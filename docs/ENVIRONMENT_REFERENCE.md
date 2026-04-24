@@ -25,27 +25,27 @@ Never store confidential server secrets in `NEXT_PUBLIC_*` variables.
   - Purpose: generic API base variable
   - Note: currently not the primary source for service wrappers
 
-### Auth / Keycloak
+### Auth / Supabase
 
-- `NEXT_PUBLIC_KEYCLOAK_URL` (required)
-  - Used by: `app/lib/services/keycloak.js`
-  - Purpose: Keycloak server URL
+- `NEXT_PUBLIC_SUPABASE_URL` (required)
+  - Used by: `app/lib/services/supabase.js`
+  - Purpose: Supabase project URL (for auth and session APIs)
 
-- `NEXT_PUBLIC_KEYCLOAK_REALM` (required)
-  - Used by: `app/lib/services/keycloak.js`
-  - Purpose: Keycloak realm
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` (required)
+  - Used by: `app/lib/services/supabase.js`
+  - Purpose: Public client key for browser auth flows (safe to expose as intended by Supabase)
 
-- `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID` (required)
-  - Used by: `app/lib/services/keycloak.js`
-  - Purpose: Keycloak client id for browser auth flow
+- `NEXT_PUBLIC_KEYCLOAK_URL` (legacy/deprecated)
+  - Status: no longer used in active frontend auth flow
 
-- `NEXT_PUBLIC_KEYCLOAK_REDIRECT_URI` (required in most environments)
-  - Purpose: redirect destination after auth flows
-  - Example: `http://localhost:3000`
+- `NEXT_PUBLIC_KEYCLOAK_REALM` (legacy/deprecated)
+  - Status: no longer used in active frontend auth flow
 
-- `NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET` (not safe for frontend; should be removed)
-  - Risk: browser-visible secret exposure
-  - Action: remove from frontend env contract and move to backend-only secret handling
+- `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID` (legacy/deprecated)
+  - Status: no longer used in active frontend auth flow
+
+- `NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET` (unsafe/deprecated)
+  - Status: must not be used in frontend runtime
 
 ### Media Upload
 
@@ -68,19 +68,19 @@ Never store confidential server secrets in `NEXT_PUBLIC_*` variables.
 ### Local Development
 
 - Point API URLs to local/dev instances.
-- Keep auth redirect URI aligned with local host/port.
+- Ensure Supabase redirect URL configuration includes your local host/port.
 - Avoid using production credentials.
 
 ### Staging/Production
 
-- Validate all URLs before release (including Keycloak URL correctness).
+- Validate Supabase URL/key and auth redirect settings before release.
 - Inject env values through deployment platform/CI secrets, not committed `.env` files.
 - Re-check that no secret-like value exists in `NEXT_PUBLIC_*`.
 
 ## Validation Checklist
 
 - `npm run dev` starts without env-related crashes.
-- Login flow initializes without Keycloak configuration errors.
+- Login flow initializes and creates/restores Supabase session correctly.
 - Blog and portfolio pages can fetch data.
 - Image upload path works only with approved endpoint/key configuration.
 

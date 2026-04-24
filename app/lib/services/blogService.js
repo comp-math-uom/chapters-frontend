@@ -3,16 +3,10 @@ import blogApi from "@/app/lib/services/blogApi";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BLOG_API;
 
-const accessToken = window.localStorage.getItem("kc_access_token");
-
 export const blogService = {
     async likeBlog(blogId, userId, status = 1) {
         try {
-            const response = await blogApi.post(`${API_BASE_URL}/blogs/blog/${blogId}/like`, { "like_value": status }, {
-                headers: {
-                    'x-user-id': userId
-                }
-            });
+            const response = await blogApi.post(`${API_BASE_URL}/blogs/blog/${blogId}/like`, { "like_value": status });
             return response.data;
         } catch (error) {
             console.error(`Error liking blog ${blogId} by user ${userId}:`, error);
@@ -22,12 +16,7 @@ export const blogService = {
 
     async isLikedByUser(blogId, userId) {
         try {
-            debugger;
-            const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${blogId}/like-status`, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}` // Assuming userId is used as a token for simplicity
-                }
-            });
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${blogId}/like-status`);
             return response.data;
         } catch (error) {
             console.error(`Error checking if blog ${blogId} is liked by user ${userId}:`, error);
@@ -57,10 +46,7 @@ export const blogService = {
 
     async createBlog(blogData) {
         try {
-            const headers = {
-                'Authorization': `Bearer ${accessToken}`
-            };
-            const response = await blogApi.post(`${API_BASE_URL}/blogs/createblog`, blogData, { headers });
+            const response = await blogApi.post(`${API_BASE_URL}/blogs/createblog`, blogData);
             return response.data;
         } catch (error) {
             console.error("Error creating blog:", error);
@@ -70,10 +56,7 @@ export const blogService = {
 
     async updateBlog(id, blogData) {
         try {
-            const headers = {
-                'x-user-id': blogData.user_id || '1',
-            };
-            const response = await blogApi.put(`${API_BASE_URL}/blogs/updateblog/${id}`, blogData, { headers });
+            const response = await blogApi.put(`${API_BASE_URL}/blogs/updateblog/${id}`, blogData);
             return response.data;
         } catch (error) {
             console.error(`Error updating blog with ID ${id}:`, error);
@@ -83,10 +66,7 @@ export const blogService = {
 
     async deleteBlog(id) {
         try {
-            const headers = {
-                'x-user-id': '1',
-            };
-            const response = await blogApi.delete(`${API_BASE_URL}/blogs/blogs/${id}`, { headers });
+            const response = await blogApi.delete(`${API_BASE_URL}/blogs/blogs/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting blog with ID ${id}:`, error);
@@ -117,10 +97,7 @@ export const blogService = {
 
     async addBlogComment(commentData) {
         try {
-            const headers = {
-                'x-user-id': commentData.user_id,
-            };
-            const response = await blogApi.post(`${API_BASE_URL}/blogs/write-comment`, commentData, { headers });
+            const response = await blogApi.post(`${API_BASE_URL}/blogs/write-comment`, commentData);
             return response.data;
         } catch (error) {
             console.error(`Error adding comment to blog ${blogId}:`, error);
@@ -130,10 +107,7 @@ export const blogService = {
 
     async addCommentReply(replyData) {
         try {
-            const headers = {
-                'x-user-id': replyData.user_id,
-            };
-            const response = await blogApi.post(`${API_BASE_URL}/blogs/reply-comment`, replyData, { headers });
+            const response = await blogApi.post(`${API_BASE_URL}/blogs/reply-comment`, replyData);
             return response.data;
         } catch (error) {
             console.error(`Error adding reply to comment ${replyData.parentId}:`, error);
@@ -143,10 +117,7 @@ export const blogService = {
 
     async deleteBlogComment(commentId, blogId) {
         try {
-            const headers = {
-                'x-user-id': '1',
-            };
-            const response = await blogApi.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${commentId}`, { headers });
+            const response = await blogApi.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${commentId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting comment ${commentId} from blog ${blogId}:`, error);
@@ -156,10 +127,7 @@ export const blogService = {
 
     async deleteCommentReply(replyId, userId) {
         try {
-            const headers = {
-                'x-user-id': userId,
-            };
-            const response = await blogApi.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${replyId}`, { headers });
+            const response = await blogApi.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${replyId}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting reply ${replyId}:`, error);
@@ -169,10 +137,7 @@ export const blogService = {
 
     async updateComment(commentId, commentData, userId) {
         try {
-            const headers = {
-                'x-user-id': userId,
-            };
-            const response = await blogApi.put(`${API_BASE_URL}/blogs/edit-comment-reply/${commentId}`, commentData, { headers });
+            const response = await blogApi.put(`${API_BASE_URL}/blogs/edit-comment-reply/${commentId}`, commentData);
             return response.data;
         } catch (error) {
             console.error(`Error updating comment ${commentId}:`, error);
@@ -182,10 +147,7 @@ export const blogService = {
 
     async updateCommentReply(replyId, replyData, userId) {
         try {
-            const headers = {
-                'x-user-id': userId,
-            };
-            const response = await blogApi.put(`${API_BASE_URL}/blogs/edit-comment-reply/${replyId}`, replyData, { headers });
+            const response = await blogApi.put(`${API_BASE_URL}/blogs/edit-comment-reply/${replyId}`, replyData);
             return response.data;
         } catch (error) {
             console.error(`Error updating reply ${replyId}:`, error);
