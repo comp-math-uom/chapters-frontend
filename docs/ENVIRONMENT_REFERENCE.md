@@ -14,7 +14,7 @@ Never store confidential server secrets in `NEXT_PUBLIC_*` variables.
 - `NEXT_PUBLIC_BLOG_API` (required)
   - Used by: `app/lib/services/blogApi.js`, `app/lib/services/blogService.js`
   - Purpose: base URL for blog API calls
-  - Example: `https://aistudentchapter.lk/api/v1`
+  - Example: `https://chapters-blogs-backend.vercel.app/api/v1`
 
 - `NEXT_PUBLIC_PORTFOLIO_API_URL` (required)
   - Used by: `app/lib/services/portfolioApi.js`, `app/lib/services/portfolioService.js`
@@ -76,6 +76,8 @@ Never store confidential server secrets in `NEXT_PUBLIC_*` variables.
 - Validate Supabase URL/key and auth redirect settings before release.
 - Inject env values through deployment platform/CI secrets, not committed `.env` files.
 - Re-check that no secret-like value exists in `NEXT_PUBLIC_*`.
+- Ensure `NEXT_PUBLIC_BLOG_API` points to the active backend production alias.
+- If frontend gets a new Vercel alias/domain, add that domain into backend `BACKEND_CORS_ORIGINS`.
 
 ## Validation Checklist
 

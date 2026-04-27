@@ -36,23 +36,36 @@ Use this guide to debug common local and deployment issues in `chapters-frontend
 
 ### Symptoms
 - Repeated redirects
-- Keycloak init errors
+- Supabase session/init errors
 - Missing token behavior
 
 ### Checks
 - Validate:
-  - `NEXT_PUBLIC_KEYCLOAK_URL`
-  - `NEXT_PUBLIC_KEYCLOAK_REALM`
-  - `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID`
-  - `NEXT_PUBLIC_KEYCLOAK_REDIRECT_URI`
-- Ensure Keycloak URL is valid (watch for malformed values in runtime config).
-- Inspect browser console and network calls to Keycloak endpoints.
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Ensure Supabase URL is valid and matches your project.
+- Inspect browser console and network calls to Supabase auth endpoints.
 
 ### Fix
-- Correct Keycloak env values and restart app.
-- Ensure redirect URI is allowed by Keycloak client settings.
+- Correct Supabase env values and restart app.
+- Ensure redirect URL/callback settings are allowed in Supabase.
 
-## 4) Authenticated actions fail (create/edit/delete)
+## 4) Blog page works locally but fails on Vercel (CORS)
+
+### Symptoms
+- Browser console shows CORS errors against `/api/v1/blogs/public/blogs`
+- Preflight returns `Disallowed CORS origin`
+
+### Checks
+- Confirm frontend production domain (or new Vercel alias) is included in backend `BACKEND_CORS_ORIGINS`
+- Verify backend preflight manually:
+  - `OPTIONS https://chapters-blogs-backend.vercel.app/api/v1/blogs/public/blogs`
+  - `Origin: https://<your-frontend-domain>`
+
+### Fix
+- Add missing frontend domain to backend `BACKEND_CORS_ORIGINS` JSON array
+- Redeploy backend (`vercel --prod --yes`)
+## 5) Authenticated actions fail (create/edit/delete)
 
 ### Symptoms
 - Mutations return unauthorized/forbidden
@@ -67,7 +80,7 @@ Use this guide to debug common local and deployment issues in `chapters-frontend
 - Ensure provider token lifecycle sets Axios defaults correctly.
 - Remove/replace hardcoded identity values with authenticated user context.
 
-## 5) Image upload fails
+## 6) Image upload fails
 
 ### Symptoms
 - Upload spinner fails
@@ -83,7 +96,7 @@ Use this guide to debug common local and deployment issues in `chapters-frontend
 - Update/rotate API key.
 - Prefer backend-proxied upload architecture for stronger control.
 
-## 6) Docker container runs but app is broken
+## 7) Docker container runs but app is broken
 
 ### Symptoms
 - Container starts but auth/API features fail
@@ -98,7 +111,7 @@ Use this guide to debug common local and deployment issues in `chapters-frontend
 - Correct compose env variables and rebuild container.
 - Use deployment env injection instead of static committed values.
 
-## 7) Build succeeds, runtime behavior is inconsistent
+## 8) Build succeeds, runtime behavior is inconsistent
 
 ### Symptoms
 - Works in one route but not another

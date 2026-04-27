@@ -27,7 +27,7 @@ docker compose -f docker-compose.dev.yml up --build
 
 ## Required Runtime Env
 - API base URLs for blog and portfolio backends.
-- Keycloak URL/realm/client settings.
+- Supabase URL and anon key settings.
 - Image upload endpoint and key values.
 - Full variable reference: `docs/ENVIRONMENT_REFERENCE.md`
 
@@ -44,12 +44,23 @@ docker compose -f docker-compose.dev.yml up --build
 4. Run post-deploy smoke checks.
 5. Roll back if critical auth/API flows fail.
 
+## Vercel local-files deployment order (recommended)
+
+Use this order to avoid broken production rollouts:
+
+1. `vercel remove chapters-frontend --yes` (only when you need a full reset)
+2. `vercel link --yes` (recreate/link project)
+3. Add production env vars first (`vercel env add ... production`)
+4. Deploy from local files: `vercel --prod --yes`
+5. Verify `/blog` and `/portfolio` on the new deployment URL
+6. If blog API calls fail with CORS, update backend `BACKEND_CORS_ORIGINS` with the new frontend domain and redeploy backend
+
 ## Post-Deploy Smoke Checklist
 
 - `/` renders successfully.
 - `/blog` list request succeeds.
 - `/portfolio` list/search request succeeds.
-- Keycloak login flow initializes and returns correctly.
+- Supabase login flow initializes and returns correctly.
 - Authenticated mutation path can be exercised in a safe environment.
 
 ## Rollback Guidance
