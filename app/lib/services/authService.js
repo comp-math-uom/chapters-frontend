@@ -1,16 +1,46 @@
-import axios from "axios";
+import { supabase } from "@/app/lib/services/supabase";
 
+
+const getEmailRedirectUrl = () => {
+    const configuredRedirect =
+        process.env.NEXT_PUBLIC_SUPABASE_EMAIL_REDIRECT_URL ||
+        process.env.NEXT_PUBLIC_SITE_URL;
+
+    if (configuredRedirect) {
+        return configuredRedirect;
+    }
+
+    if (typeof window !== "undefined" && window.location?.origin) {
+        return `${window.location.origin}/auth/login`;
+    }
+
+    return "http://localhost:3000/auth/login";
+};
 
 export const authService = {
     async signup(username, password, email, firstname, lastname) {
-        const url = 'https://aistudentchapter.lk/auth/register';
-        const data = {
-            username: username,
-            password: password,
-            email: email,
-            firstName: firstname,
-            lastName: lastname
-        };
-        return await axios.post(url, data);
+        return await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: getEmailRedirectUrl(),
+                data: {
+                    username,
+                    first_name: firstname,
+                    last_name: lastname,
+                }
+            }
+        });
+    },
+
+    async signin(email, password) {
+        return await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+    },
+
+    async signout() {
+        return await supabase.auth.signOut();
     }
 }

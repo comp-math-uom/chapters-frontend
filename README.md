@@ -1,59 +1,94 @@
 # Chapters Frontend
 
-This is a Next.js frontend application for the Chapters project. It includes configurations for both development and production environments using Docker and Docker Compose.
+`chapters-frontend` is a Next.js (App Router) client for the UOM AI Chapter portal. It contains:
 
-## Prerequisites
+- Blog experiences (list, read, create, edit)
+- Portfolio experiences (gallery, create, update, search)
+- Keycloak-based browser authentication and role-aware UI actions
 
-- Docker (for run the application in a container)
-- Node.js (for local development)
+## Quickstart
 
-## Getting Started
+### Prerequisites
 
-### Development
+- Node.js 18+ and npm
+- Docker and Docker Compose (optional, for containerized runs)
 
-To run the application in development mode:
+### Local Run (npm)
 
-1. Clone the repository:
+1. Install dependencies:
 
-    ```sh
-    git clone https://github.com/HRS0986/chapters-frontend.git
-    cd chapters-frontend
-    ```
-2. Install the dependencies:
+```sh
+npm install
+```
 
-    ```sh
-    npm install
-    ```
-
+2. Create/update your `.env` file (see `docs/ENVIRONMENT_REFERENCE.md`).
 3. Start the development server:
-   + Using npm: 
-    
-       ```sh
-       npm run dev
-       ```
-   + Using Docker Compose:
-     
-        ```sh
-        docker-compose -f docker-compose.dev.yml up
-        ```
-      
 
-4. Open your browser and navigate to `http://localhost:3000`.
+```sh
+npm run dev
+```
 
-### Running in a Container
+4. Open `http://localhost:3000`.
 
-To run the application in a container:
+### Local Run (Docker Compose)
 
-1. Pull the image from Docker Hub:
+```sh
+docker compose -f docker-compose.dev.yml up --build
+```
 
-    ```sh
-    docker pull hirushafernando/chapters-frontend
-    ```
-   
-2. Run the container:
+Open `http://localhost:3000`.
 
-    ```sh
-    docker run -d -p 3000:3000 hirushafernando/chapters-frontend
-    ```
+## Build and Start (Production Mode)
 
-3. Open your browser and navigate to `http://localhost:3000`.
+```sh
+npm run build
+npm run start
+```
+
+For container deployment details, see `docs/RUN_AND_DEPLOY.md`.
+
+## Project Structure
+
+- `app/(blog)/*`: blog routes and feature UI
+- `app/(portfolio)/*`: portfolio routes and feature UI
+- `app/(auth)/*`: signup/auth-related routes
+- `app/components/*`: shared and feature components
+- `app/lib/services/*`: API wrappers and service-layer logic
+- `app/providers/*`: app-wide providers (auth, navigation, UI)
+- `docs/*`: operational and architecture documentation
+
+## Documentation Map
+
+- `docs/ONBOARDING.md`: setup path for new contributors
+- `docs/ARCHITECTURE.md`: route, provider, data flow, and auth architecture
+- `docs/API_AND_CONTRACTS.md`: external API contracts and integration assumptions
+- `docs/DATA_MODELS_AND_STORAGE.md`: data sources, mappings, and storage model
+- `docs/ENVIRONMENT_REFERENCE.md`: environment variable catalog and safety guidance
+- `docs/RUN_AND_DEPLOY.md`: local runtime and deployment runbook
+- `docs/TROUBLESHOOTING.md`: symptom-based debugging guide
+- `CONTRIBUTING.md`: branch, PR, and quality workflow
+- `docs/RISK_REGISTER.md`: prioritized current risks and mitigations
+- `docs/AI_AGENT_NOTES.md`: safety notes for AI-assisted edits
+
+## First-Run Validation Checklist
+
+- Home page loads without runtime errors
+- Blog listing page renders and can fetch data
+- Portfolio listing page renders and can fetch data
+- Sign in/out action appears in navbar as expected
+- No obvious console/network failures for base API/auth configuration
+
+## Current Known Risks
+
+The active issue inventory is tracked in `docs/RISK_REGISTER.md`. High priority items currently include:
+
+- Sensitive value exposure via client-public environment variables
+- Production auth URL misconfiguration risk in compose config
+- Hardcoded identity and token-handling fragility in service-layer calls
+
+## Scripts
+
+- `npm run dev`: start development server
+- `npm run build`: create production build
+- `npm run start`: run production server
+- `npm run lint`: run Next.js lint checks

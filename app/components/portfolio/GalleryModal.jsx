@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useKeycloak } from '@/app/providers/Providers';
+import { useAuth } from '@/app/providers/Providers';
 import {
     Avatar,
     Box,
@@ -33,7 +33,7 @@ import SuccessModal from "@/app/components/common/SuccessModal";
 import { feedbackService } from "@/app/lib/services/feedbackService";
 
 export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = false }) {
-    const { keycloak } = useKeycloak();
+    const { auth } = useAuth();
     const [profilePic, setProfilePic] = useState();
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
@@ -47,7 +47,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
 
     const handleAddComment = async () => {
         if (comment.trim()) {
-            const username = keycloak?.tokenParsed?.preferred_username || keycloak?.tokenParsed?.email || "Anonymous";
+            const username = auth?.tokenParsed?.preferred_username || auth?.tokenParsed?.email || "Anonymous";
             const feedbackData = {
                 content: comment,
                 username: username
@@ -108,8 +108,8 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
     }, [galleryItem]);
 
     useEffect(() => {
-        setProfilePic(keycloak?.tokenParsed?.picture);
-    }, [keycloak]);
+        setProfilePic(auth?.tokenParsed?.picture);
+    }, [auth]);
 
     useEffect(() => {
         if (!isOpen) {
@@ -180,7 +180,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                 <Flex gap={3} className="my-10" alignItems="center">
                                     <Avatar
                                         src={profilePic}
-                                        name={keycloak?.tokenParsed?.preferred_username || keycloak?.tokenParsed?.email || "John Doe"}
+                                        name={auth?.tokenParsed?.preferred_username || auth?.tokenParsed?.email || "John Doe"}
                                     />
                                     <InputGroup size='md' borderRadius="lg">
                                         <Input

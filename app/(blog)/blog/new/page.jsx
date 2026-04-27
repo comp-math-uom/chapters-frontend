@@ -6,24 +6,24 @@ import { useEffect } from "react";
 import BlogSettingsForm from "@/app/components/blog/BlogSettingsForm";
 import { useNav } from "@/app/providers/NavigationProvider";
 import { BlogProvider } from "@/app/providers/BlogProvider";
-import { useKeycloak } from "@/app/providers/Providers";
+import { useAuth } from "@/app/providers/Providers";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setNavActionButton } = useNav();
 
-    const { keycloak, initialized } = useKeycloak();
+    const { auth, initialized } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (initialized && !keycloak.authenticated) {
+        if (initialized && !auth.authenticated) {
             router.push('/');
         }
-    }, [initialized, keycloak, router]);
+    }, [initialized, auth, router]);
 
     useEffect(() => {
-        if (initialized && keycloak?.authenticated) {
+        if (initialized && auth?.authenticated) {
             setNavActionButton({
                 label: 'Publish',
                 action: onOpen
@@ -39,7 +39,7 @@ export default function Page() {
             label: '', action: () => {
             }
         });
-    }, [router, setNavActionButton, initialized, keycloak?.authenticated]);
+    }, [router, setNavActionButton, initialized, auth?.authenticated]);
 
     return (
         <BlogProvider>
