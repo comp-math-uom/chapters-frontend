@@ -4,7 +4,6 @@ import axios from "axios";
 import batches from "@/app/data/batches";
 import portfolioApi from "@/app/lib/services/portfolioApi";
 
-const API_URL = "http://localhost:3000/portfolio";
 
 const portfolioService = {
 
@@ -132,7 +131,7 @@ const portfolioService = {
     },
 
     async updateGalleryItem(data) {
-        return await axios.put(`${API_URL}/${data.id}`, data)
+        return await portfolioApi.put(`projects/${data.id}`, data)
     },
 
     async deleteGalleryItem(id) {
