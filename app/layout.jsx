@@ -27,8 +27,8 @@ export const metadata = {
         images: [
             {
                 url: "/img/preview-img.png",
-                width: 734,
-                height: 380,
+                width: 1264,
+                height: 626,
                 alt: "Chapters - University of Moratuwa AI Portal Preview",
             },
         ],
