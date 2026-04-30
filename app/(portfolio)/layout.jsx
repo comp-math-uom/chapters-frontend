@@ -4,8 +4,12 @@ import Footer from "@/app/components/common/Footer";
 import Loading from "@/app/loading";
 
 export const metadata = {
-    title: "CHAPTERS | Portfolio",
-    description: "Chapters - AI/ML Portal",
+    title: "Student Portfolios",
+    description: "Explore the innovative projects and technical journeys of BSc Hons in Artificial Intelligence students from the University of Moratuwa.",
+    openGraph: {
+        title: "AI Student Portfolios | University of Moratuwa",
+        description: "Showcasing the work of AI degree students at UoM.",
+    }
 };
 
 export default function PortfolioLayout({children}) {
