@@ -15,7 +15,7 @@ export default function Footer() {
 
     return (
         <Box as="footer" bg="white" color="gray.700" borderTop="1px" borderColor="gray.200" mt="20">
-            <Container maxW="7xl" px="4" py="12">
+            <Container maxW="7xl" px="4" pt="12" pb="6">
                 <Grid templateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }} gap="8">
                     {/* Brand */}
                     <GridItem colSpan={{ base: 1, md: 2 }}>
@@ -74,9 +74,6 @@ export default function Footer() {
                                 <Text>Faculty of IT,</Text>
                                 <Text>University of Moratuwa,</Text>
                                 <Text>Sri Lanka</Text>
-                                <Link href="/about#contactUS" className="hover:underline mt-1">
-                                    Contact form →
-                                </Link>
                             </Stack>
                         </Stack>
                     </GridItem>
@@ -86,22 +83,13 @@ export default function Footer() {
                 <Flex
                     mt="6"
                     direction={{ base: "column", sm: "row" }}
-                    justify="space-between"
+                    justify="center"
                     align="center"
                     gap={2}
                 >
                     <Text fontSize="xs" color="gray.500">
                         &copy; {year} CHAPTERS — AI Student Chapter, University of Moratuwa. All rights reserved.
                     </Text>
-                    <ChakraLink
-                        href={UOM_AI_PROGRAMME_URL}
-                        isExternal
-                        fontSize="xs"
-                        color="gray.500"
-                        _hover={{ color: "gray.800" }}
-                    >
-                        uom.lk/itfac/bachelor-science-honours-artificial-intelligence
-                    </ChakraLink>
                 </Flex>
             </Container>
         </Box>
