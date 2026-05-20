@@ -73,11 +73,10 @@ function EditBlogContent({ params }) {
                 <DrawerContent>
                     <DrawerHeader>Update Blog Settings</DrawerHeader>
                     <DrawerBody>
-                        <BlogSettingsForm 
+                        <BlogSettingsForm
                             initialValues={{
                                 tags: blog.tags || [],
                                 image: blog.post_image || null,
-                                user_id: blog.user_id || "",
                             }}
                             handleCancel={onClose}
                             isEditMode={true}

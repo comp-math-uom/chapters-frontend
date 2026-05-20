@@ -6,7 +6,7 @@ import {
     DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure,
     VStack, HStack
 } from "@chakra-ui/react";
-import { FiLogOut, FiUser, FiMenu } from "react-icons/fi";
+import { FiLogOut, FiUser, FiMenu, FiShield } from "react-icons/fi";
 import { useNav } from "@/app/providers/NavigationProvider";
 import { useAuth } from '@/app/providers/Providers';
 import { useRouter } from "next/navigation";
@@ -19,40 +19,12 @@ function Navbar() {
     const [isMobile, setIsMobile] = useState(false);
     const router = useRouter();
 
-    // Debug logs
     useEffect(() => {
-        console.log('Auth:', auth);
-        console.log('Token parsed:', auth?.tokenParsed);
-        console.log('Authenticated:', auth?.authenticated);
-    }, [auth]);
-
-    const scrollToContact = (e) => {
-        e.preventDefault();
-        const contactSection = document.getElementById('contactUS');
-        if (contactSection) {
-            contactSection.scrollIntoView({ behavior: 'smooth' });
-            onClose(); // Close mobile menu if open
-        }
-    };
-
-    useEffect(() => {
-        // Check if window exists (client-side)
-        if (typeof window !== 'undefined') {
-            // Set initial state based on viewport width
-            setIsMobile(window.innerWidth < 1024);
-
-            // Add resize listener
-            const handleResize = () => {
-                setIsMobile(window.innerWidth < 1024);
-            };
-
-            window.addEventListener('resize', handleResize);
-
-            // Clean up
-            return () => {
-                window.removeEventListener('resize', handleResize);
-            };
-        }
+        if (typeof window === 'undefined') return;
+        setIsMobile(window.innerWidth < 1024);
+        const handleResize = () => setIsMobile(window.innerWidth < 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     useEffect(() => {
@@ -60,20 +32,24 @@ function Navbar() {
     }, [auth]);
 
     const onLogout = () => {
-        auth.logout().then(() => {
-            console.log('Logged out successfully');
-            router.push('/');
-        }).catch((error) => {
-            console.error('Logout failed:', error);
-        });
+        auth.logout()
+            .then(() => router.push('/'))
+            .catch((error) => console.error('Logout failed:', error));
     };
 
-    const NavLinks = () => (
+    const displayName = auth?.tokenParsed?.displayName
+        || `${auth?.tokenParsed?.firstName || ""} ${auth?.tokenParsed?.lastName || ""}`.trim()
+        || auth?.tokenParsed?.email?.split("@")[0]
+        || "User";
+
+    const isAdmin = auth?.role === 'admin';
+
+    const NavLinks = ({ onLinkClick }) => (
         <>
-            <Link passHref href="/portfolio" className="font-impact hover:text-gray-700">PORTFOLIO</Link>
-            <Link passHref href="/blog" className="font-impact hover:text-gray-700">BLOG</Link>
-            <Link passHref href="/forum" className="font-impact hover:text-gray-700">FORUM</Link>
-            <Link passHref href="/#contactUs" className="font-impact hover:text-gray-700" onClick={scrollToContact}>CONTACT US</Link>
+            <Link passHref href="/portfolio/projects" className="font-impact hover:text-gray-700" onClick={onLinkClick}>PROJECTS</Link>
+            <Link passHref href="/portfolio/achievements" className="font-impact hover:text-gray-700" onClick={onLinkClick}>ACHIEVEMENTS</Link>
+            <Link passHref href="/blog" className="font-impact hover:text-gray-700" onClick={onLinkClick}>BLOG</Link>
+            <Link passHref href="/about" className="font-impact hover:text-gray-700" onClick={onLinkClick}>ABOUT US</Link>
         </>
     );
 
@@ -94,7 +70,13 @@ function Navbar() {
 
                 <div className="flex items-center gap-2 sm:gap-5">
                     {!isMobile && navActionButton.label !== "" && (
-                        <Button variant="ghost" onClick={navActionButton.action}>
+                        <Button
+                            bg="black"
+                            color="white"
+                            size="sm"
+                            _hover={{ bg: "gray.700" }}
+                            onClick={navActionButton.action}
+                        >
                             {navActionButton.label}
                         </Button>
                     )}
@@ -102,23 +84,28 @@ function Navbar() {
                     {initialized && auth && auth.authenticated ? (
                         <div className="flex items-center gap-2">
                             <p className="text-base text-black text-decoration-none hidden sm:block">
-                                {auth.tokenParsed?.preferred_username || auth.tokenParsed?.email || JSON.stringify(auth.tokenParsed) || 'User'}
+                                {displayName}
                             </p>
                             <Menu placement="bottom-end">
                                 <MenuButton>
                                     <Avatar
                                         src={profilePic}
-                                        alt={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
-                                        name={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
+                                        alt={displayName}
+                                        name={displayName}
                                         size={{ base: "sm", md: "md" }}
                                         cursor="pointer"
                                         _hover={{ opacity: 0.8 }}
                                     />
                                 </MenuButton>
                                 <MenuList minW="200px">
-                                    <MenuItem icon={<FiUser />}>
+                                    <MenuItem icon={<FiUser />} onClick={() => router.push('/profile')}>
                                         Profile
                                     </MenuItem>
+                                    {isAdmin && (
+                                        <MenuItem icon={<FiShield />} onClick={() => router.push('/admin/blogs')}>
+                                            Admin Panel
+                                        </MenuItem>
+                                    )}
                                     <MenuItem icon={<FiLogOut />} onClick={onLogout}>
                                         Sign out
                                     </MenuItem>
@@ -126,17 +113,15 @@ function Navbar() {
                             </Menu>
                         </div>
                     ) : (
-                        <Button
-                            bg="black"
-                            color="white"
-                            size="md"
-                            fontWeight="semibold"
-                            borderRadius="lg"
-                            onClick={() => auth && auth.login()}
-                            _hover={{ bg: "gray.700" }}
-                        >
-                            Sign In
-                        </Button>
+                        // Demoted sign-in: small text link, not a prominent CTA.
+                        !isMobile && initialized && (
+                            <Link
+                                href="/auth/login"
+                                className="text-sm text-gray-600 hover:text-gray-900 hover:underline px-2"
+                            >
+                                Sign in
+                            </Link>
+                        )
                     )}
 
                     {isMobile && (
@@ -150,67 +135,62 @@ function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu Drawer */}
+            {/* Mobile Drawer */}
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-
                     <DrawerBody mt={10}>
                         <VStack spacing={6} align="flex-start">
-                            <NavLinks />
+                            <NavLinks onLinkClick={onClose} />
 
                             {navActionButton.label !== "" && (
-                                <Button variant="ghost" onClick={() => {
-                                    onClose();
-                                    navActionButton.action();
-                                }}>
+                                <Button
+                                    bg="black"
+                                    color="white"
+                                    _hover={{ bg: "gray.700" }}
+                                    onClick={() => {
+                                        onClose();
+                                        navActionButton.action();
+                                    }}
+                                >
                                     {navActionButton.label}
                                 </Button>
                             )}
 
                             {!initialized || !auth || !auth.authenticated ? (
                                 <HStack spacing={4} pt={4} w="full">
-                                    <Button
-                                        bg="black"
-                                        color="white"
-                                        size="md"
-                                        fontWeight="semibold"
-                                        borderRadius="lg"
-                                        onClick={() => auth && auth.login()}
-                                        _hover={{ bg: "gray.700" }}
-                                    >
-                                        Sign In
-                                    </Button>
+                                    <Link href="/auth/login" className="text-sm hover:underline" onClick={onClose}>
+                                        Sign in
+                                    </Link>
                                     <span>|</span>
-                                    <Link href="auth/signup" className="hover:underline">Sign Up</Link>
+                                    <Link href="/auth/signup" className="text-sm hover:underline" onClick={onClose}>
+                                        Sign up
+                                    </Link>
                                 </HStack>
                             ) : (
-                                <HStack spacing={4} pt={4} w="full">
-                                    <p className="text-base text-black text-decoration-none hidden sm:block">
-                                        {auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
-                                    </p>
-                                    <Menu placement="bottom-end">
-                                        <MenuButton>
-                                            <Avatar
-                                                src={profilePic}
-                                                alt={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
-                                                name={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
-                                                size={{ base: "sm", md: "md" }}
-                                                cursor="pointer"
-                                                _hover={{ opacity: 0.8 }}
-                                            />
-                                        </MenuButton>
-                                        <MenuList minW="200px">
-                                            <MenuItem icon={<FiUser />}>
-                                                Profile
-                                            </MenuItem>
-                                            <MenuItem icon={<FiLogOut />} onClick={() => auth.logout()}>
-                                                Sign out
-                                            </MenuItem>
-                                        </MenuList>
-                                    </Menu>
-                                </HStack>
+                                <VStack spacing={3} pt={4} w="full" align="flex-start">
+                                    <p className="text-base text-black">{displayName}</p>
+                                    <Button
+                                        variant="ghost"
+                                        leftIcon={<FiUser />}
+                                        onClick={() => { onClose(); router.push('/profile'); }}
+                                    >
+                                        Profile
+                                    </Button>
+                                    {isAdmin && (
+                                        <Button
+                                            variant="ghost"
+                                            leftIcon={<FiShield />}
+                                            onClick={() => { onClose(); router.push('/admin/blogs'); }}
+                                        >
+                                            Admin Panel
+                                        </Button>
+                                    )}
+                                    <Button variant="ghost" leftIcon={<FiLogOut />} onClick={() => { onClose(); onLogout(); }}>
+                                        Sign out
+                                    </Button>
+                                </VStack>
                             )}
                         </VStack>
                     </DrawerBody>

@@ -1,29 +1,33 @@
-import { Avatar, Flex, Heading, Tooltip, VStack } from "@chakra-ui/react";
+import { Heading, Tag, TagLabel, Wrap, WrapItem } from "@chakra-ui/react";
 import React from "react";
 
-export default function ContributorsList({contributors}) {
+/**
+ * Render the contributors of a project / achievement as styled chips.
+ * Accepts an array of plain strings (free-text names).
+ */
+export default function ContributorsList({ contributors, label = "Contributors" }) {
+    if (!contributors || contributors.length === 0) return null;
     return (
-        <VStack align="left" className="my-10">
-            <Heading as="h6" size="xs">
-                Contributors:
+        <div className="my-8">
+            <Heading as="h6" size="xs" mb={3}>
+                {label}:
             </Heading>
-            <Flex
-                gap={{ base: 3, md: 7 }}
-                width={{ base: "100%", md: "calc(70vw / 2)" }}
-                overflowX="auto"
-                className="scrollable-container"
-                py={1}
-            >
-                {contributors && contributors.map((c, index) => (
-                    <Tooltip key={index} borderRadius="md" label={c.label}>
-                        <Avatar
-                            name={c.label}
-                            src={c.image}
-                            size={{ base: "sm", md: "md" }}
-                        />
-                    </Tooltip>
+            <Wrap spacing={2}>
+                {contributors.map((name, idx) => (
+                    <WrapItem key={`${name}-${idx}`}>
+                        <Tag
+                            size="md"
+                            borderRadius="full"
+                            variant="subtle"
+                            colorScheme="gray"
+                            px={3}
+                            py={1}
+                        >
+                            <TagLabel>{name}</TagLabel>
+                        </Tag>
+                    </WrapItem>
                 ))}
-            </Flex>
-        </VStack>
+            </Wrap>
+        </div>
     );
-};
+}

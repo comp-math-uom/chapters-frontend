@@ -22,14 +22,13 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
-export default function PortfolioHeader({filterFn, resetFn}) {
+export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", subtitle = "Browse student-built AI projects across batches."}) {
     const [filterIcon, setFilterIcon] = useState(LineFilter);
     const [showText, setShowText] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedBatch, setSelectedBatch] = useState('');
-    const [selectedField, setSelectedField] = useState('');
 
     const monthList = [
         {name: "January", number: 1},
@@ -64,7 +63,6 @@ export default function PortfolioHeader({filterFn, resetFn}) {
             year: selectedYear,
             month: selectedMonth,
             batch: selectedBatch,
-            field: selectedField,
             advanced: isAdvanced
         };
         filterFn(filterData);
@@ -84,7 +82,6 @@ export default function PortfolioHeader({filterFn, resetFn}) {
         setSelectedYear('');
         setSelectedMonth('');
         setSelectedBatch('');
-        setSelectedField('');
         resetFn();
     }
 
@@ -93,11 +90,10 @@ export default function PortfolioHeader({filterFn, resetFn}) {
             <VStack spacing={8} align="center">
                 <Box maxW="2xl" textAlign="center">
                     <Heading as="h1" size="4xl" fontWeight="bold" className={'font-anton'}>
-                        PORTFOLIO
+                        {title}
                     </Heading>
                     <Text mt={4} fontSize="lg" color="gray.500" className={'font-anybody'}>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the standard dummy text ever.
+                        {subtitle}
                     </Text>
                 </Box>
 
@@ -183,25 +179,13 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                                 placeholder="Select Batch"
                                 value={selectedBatch}
                                 onChange={(e) => setSelectedBatch(e.target.value)}
-                                w={{ base: "full", md: "16%" }}
+                                w={{ base: "full", md: "20%" }}
                                 mb={{ base: 2, md: 0 }}
                                 borderWidth="2px"
                             >
-                                <option value="Batch 21">Batch 21</option>
-                                <option value="Batch 22">Batch 22</option>
-                                <option value="Batch 23">Batch 23</option>
-                            </Select>
-
-                            <Select
-                                placeholder="Select Field"
-                                value={selectedField}
-                                onChange={(e) => setSelectedField(e.target.value)}
-                                w={{ base: "full", md: "16%" }}
-                                mb={{ base: 2, md: 0 }}
-                                borderWidth="2px"
-                            >
-                                <option value="Hardware">Hardware</option>
-                                <option value="Software">Software</option>
+                                <option value="b21">Batch 21</option>
+                                <option value="b22">Batch 22</option>
+                                <option value="b23">Batch 23</option>
                             </Select>
 
                             <Flex

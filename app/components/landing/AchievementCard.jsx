@@ -4,11 +4,12 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-function AchievementCard({ title, subtitle, description }) {
+function AchievementCard({ title, subtitle, description, image }) {
     return (
         <motion.div
             whileHover={{ y: -10 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            style={{ height: "100%" }}
         >
             <Box
                 borderWidth="1px"
@@ -28,26 +29,37 @@ function AchievementCard({ title, subtitle, description }) {
                         gap={{ base: 2, sm: 0 }}
                     >
                         <Box>
-                            <Text fontWeight="bold" fontSize={{ base: "md", sm: "lg" }} lineHeight="tight">{title}</Text>
-                            <Text fontSize={{ base: "sm", sm: "md" }} color="gray.600">{subtitle}</Text>
+                            <Text fontWeight="bold" fontSize={{ base: "md", sm: "lg" }} lineHeight="tight" noOfLines={2}>
+                                {title}
+                            </Text>
+                            {subtitle && (
+                                <Text fontSize={{ base: "sm", sm: "md" }} color="gray.600" textTransform="uppercase">
+                                    {subtitle}
+                                </Text>
+                            )}
                         </Box>
                         <Box
                             position="relative"
-                            width={{ base: "32px", sm: "36px", md: "40px" }}
-                            height={{ base: "32px", sm: "36px", md: "40px" }}
+                            width={{ base: "48px", sm: "56px", md: "64px" }}
+                            height={{ base: "48px", sm: "56px", md: "64px" }}
                             flexShrink={0}
+                            borderRadius="md"
+                            overflow="hidden"
+                            bg="gray.100"
                         >
                             <Image
-                                src="/img/triathlon.png"
-                                alt="Achievement icon"
-                                layout="fill"
-                                objectFit="contain"
+                                src={image || "/img/triathlon.png"}
+                                alt="Achievement"
+                                fill
+                                style={{ objectFit: "cover" }}
                             />
                         </Box>
                     </Flex>
-                    <Text fontSize={{ base: "xs", sm: "sm" }} color="gray.600">
-                        {description}
-                    </Text>
+                    {description && (
+                        <Text fontSize={{ base: "xs", sm: "sm" }} color="gray.600" noOfLines={3}>
+                            {description}
+                        </Text>
+                    )}
                 </Flex>
             </Box>
         </motion.div>

@@ -1,18 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useAuth } from '@/app/providers/Providers';
-import { Button } from "@chakra-ui/react";
-import { useRouter } from 'next/navigation';
 
 function HeroSection() {
-    const { auth, initialized } = useAuth();
-    const router = useRouter();
-
-    const handleRegister = () => {
-        router.push('/auth/signup');
-    };
-
     return (
         <section className="py-8 sm:py-12 md:py-16 px-4 border-b border-gray-200">
             <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
@@ -50,35 +40,8 @@ function HeroSection() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.6 }}
                     >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. We are a student chapter at the University of Edinburgh. We focus on AI, robotics and computer science events with a focus on providing opportunities to students. Join our community if you are interested in the world of technology and science.
+                        We are the AI Student Chapter at the University of Moratuwa. We focus on artificial intelligence, robotics and computer science events, with a focus on providing opportunities to students. Explore our projects, achievements and blogs to see what our community has been building and sharing.
                     </motion.p>
-                    {!(initialized && auth && auth.authenticated) &&
-                        <motion.div
-                            className="flex gap-3 sm:gap-4"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.8 }}
-                        >
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button size="md"
-                                    fontSize="sm"
-                                    px="4"
-                                    borderRadius="lg" onClick={handleRegister}>
-                                    REGISTER
-                                </Button>
-                            </motion.div>
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button onClick={() => auth && auth.login()} _hover={{ bg: "gray.800" }}
-                                    size="md"
-                                    fontSize="sm"
-                                    borderRadius="lg"
-                                    px="4" bg="black" color="white">
-                                    SIGN IN
-                                </Button>
-                            </motion.div>
-                        </motion.div>
-                    }
                 </motion.div>
                 <motion.div
                     className="w-full lg:w-1/2 mt-6 lg:mt-0"

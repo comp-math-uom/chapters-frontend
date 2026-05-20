@@ -1,29 +1,22 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Heading,
-    Input,
-    Stack,
-    Text,
-    VStack,
+    Alert, AlertIcon, Box, Button, Container, Flex, FormControl, FormErrorMessage, FormLabel,
+    Heading, HStack, Input, Stack, Text, VStack,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import { authService } from "@/app/lib/services/authService";
+import { supabase } from "@/app/lib/services/supabase";
 import { useAuth } from '@/app/providers/Providers';
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Page() {
     const { auth, initialized } = useAuth();
     const router = useRouter();
+    const [unverifiedEmail, setUnverifiedEmail] = useState(null);
+    const [resendStatus, setResendStatus] = useState(null);
+    const [resending, setResending] = useState(false);
 
     useEffect(() => {
         if (initialized && auth.authenticated) {
@@ -32,24 +25,25 @@ export default function Page() {
     }, [initialized, auth, router]);
 
     const validateEmail = (value) => {
-        if (!value) {
-            return 'Email is required';
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-            return 'Invalid email address';
-        }
+        if (!value) return 'Email is required';
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) return 'Invalid email address';
     };
 
     const validatePassword = (value) => {
-        if (!value) {
-            return 'Password is required';
-        }
+        if (!value) return 'Password is required';
     };
 
     const handleSubmit = async (values, actions) => {
         try {
             const { error } = await authService.signin(values.email, values.password);
             if (error) {
-                actions.setStatus({ error: error.message || 'Sign in failed. Please try again.' });
+                const isUnverified = /confirm|verify/i.test(error.message || '');
+                if (isUnverified) {
+                    setUnverifiedEmail(values.email);
+                    actions.setStatus({ error: null });
+                } else {
+                    actions.setStatus({ error: error.message || 'Sign in failed. Please try again.' });
+                }
                 actions.setSubmitting(false);
                 return;
             }
@@ -58,6 +52,20 @@ export default function Page() {
         } catch (_error) {
             actions.setSubmitting(false);
             actions.setStatus({ error: 'Sign in failed. Please try again.' });
+        }
+    };
+
+    const onResend = async () => {
+        if (!unverifiedEmail) return;
+        setResending(true);
+        setResendStatus(null);
+        try {
+            const { error } = await supabase.auth.resend({ type: 'signup', email: unverifiedEmail });
+            setResendStatus(error ? 'error' : 'sent');
+        } catch {
+            setResendStatus('error');
+        } finally {
+            setResending(false);
         }
     };
 
@@ -71,20 +79,30 @@ export default function Page() {
                         </Heading>
                     </VStack>
 
-                    <Box
-                        w="full"
-                        bg="white"
-                        rounded="lg"
-                        shadow="lg"
-                        p={8}
-                    >
-                        <Formik
-                            initialValues={{
-                                email: '',
-                                password: '',
-                            }}
-                            onSubmit={handleSubmit}
-                        >
+                    <Box w="full" bg="white" rounded="lg" shadow="lg" p={8}>
+                        {unverifiedEmail && (
+                            <Alert status="warning" borderRadius="md" mb={4}>
+                                <AlertIcon />
+                                <Stack spacing={2} flex={1}>
+                                    <Text fontSize="sm">
+                                        Your email <strong>{unverifiedEmail}</strong> hasn&apos;t been verified yet.
+                                        Please click the link in the verification email we sent you.
+                                    </Text>
+                                    {resendStatus === 'sent' && (
+                                        <Text fontSize="sm" color="green.600">Verification email resent.</Text>
+                                    )}
+                                    {resendStatus === 'error' && (
+                                        <Text fontSize="sm" color="red.600">Failed to resend. Try again shortly.</Text>
+                                    )}
+                                    <HStack>
+                                        <Button size="sm" onClick={onResend} isLoading={resending}>
+                                            Resend verification email
+                                        </Button>
+                                    </HStack>
+                                </Stack>
+                            </Alert>
+                        )}
+                        <Formik initialValues={{ email: '', password: '' }} onSubmit={handleSubmit}>
                             {(props) => (
                                 <Form>
                                     <Stack spacing={5}>
@@ -96,16 +114,7 @@ export default function Page() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
                                                     <FormLabel color="gray.700">Email address</FormLabel>
-                                                    <Input
-                                                        {...field}
-                                                        type="email"
-                                                        placeholder="your@email.com"
-                                                        bg='gray.50'
-                                                        borderColor='gray.300'
-                                                        _hover={{
-                                                            borderColor: 'gray.400'
-                                                        }}
-                                                    />
+                                                    <Input {...field} type="email" placeholder="your@email.com" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
                                                     <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -115,16 +124,7 @@ export default function Page() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
                                                     <FormLabel color="gray.700">Password</FormLabel>
-                                                    <Input
-                                                        {...field}
-                                                        type="password"
-                                                        placeholder="Enter your password"
-                                                        bg='gray.50'
-                                                        borderColor='gray.300'
-                                                        _hover={{
-                                                            borderColor: 'gray.400'
-                                                        }}
-                                                    />
+                                                    <Input {...field} type="password" placeholder="Enter your password" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
                                                     <FormErrorMessage>{form.errors.password}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -143,9 +143,7 @@ export default function Page() {
                                             size="lg"
                                             fontSize="md"
                                             isLoading={props.isSubmitting}
-                                            _hover={{
-                                                bg: "gray.700"
-                                            }}
+                                            _hover={{ bg: "gray.700" }}
                                         >
                                             Sign In
                                         </Button>

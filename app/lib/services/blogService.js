@@ -1,37 +1,53 @@
-import { authors } from "@/app/data/authors";
 import blogApi from "@/app/lib/services/blogApi";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BLOG_API;
 
 export const blogService = {
-    async likeBlog(blogId, userId, status = 1) {
+    async likeBlog(blogId, _userId, status = 1) {
         try {
             const response = await blogApi.post(`${API_BASE_URL}/blogs/blog/${blogId}/like`, { "like_value": status });
             return response.data;
         } catch (error) {
-            console.error(`Error liking blog ${blogId} by user ${userId}:`, error);
+            console.error(`Error liking blog ${blogId}:`, error);
             throw error;
         }
     },
 
-    async isLikedByUser(blogId, userId) {
+    async isLikedByUser(blogId, _userId) {
         try {
             const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${blogId}/like-status`);
             return response.data;
         } catch (error) {
-            console.error(`Error checking if blog ${blogId} is liked by user ${userId}:`, error);
+            console.error(`Error checking like status for blog ${blogId}:`, error);
             throw error;
         }
     },
 
-    async getBlogPreviewsFromAPI() {
+    /**
+     * Paginated preview fetch. Returns `{items, total, page, limit}`.
+     */
+    async getBlogPreviewsPage({ page = 1, limit = 12 } = {}) {
         try {
-            const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blogs`);
-            return response.data;
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blogs`, {
+                params: { page, limit },
+            });
+            const data = response.data || {};
+            return {
+                items: data.items || [],
+                total: data.total ?? 0,
+                page: data.page ?? page,
+                limit: data.limit ?? limit,
+            };
         } catch (error) {
             console.error("Error fetching blog previews:", error);
-            throw error;
+            return { items: [], total: 0, page, limit };
         }
+    },
+
+    /** Legacy callers that want the full array (capped to 100 for safety). */
+    async getBlogPreviewsFromAPI() {
+        const result = await this.getBlogPreviewsPage({ limit: 100 });
+        return result.items;
     },
 
     async getBlogByIdFromAPI(id) {
@@ -74,86 +90,6 @@ export const blogService = {
         }
     },
 
-    async getAuthors() {
-        return authors;
-    },
-
-    async getBlogComments(blogId) {
-        try {
-            const response = await blogApi.get(`${API_BASE_URL}/blogs/public/blog/${blogId}/comments`);
-            var orderedComments = response.data.sort((a, b) => new Date(b.commentedAt) - new Date(a.commentedAt));
-
-            orderedComments.forEach(comment => {
-                if (comment.replies && comment.replies.length > 0) {
-                    comment.replies.sort((a, b) => new Date(b.repliedAt) - new Date(a.repliedAt));
-                }
-            });
-            return orderedComments;
-        } catch (error) {
-            console.error(`Error fetching comments for blog ${blogId}:`, error);
-            throw error;
-        }
-    },
-
-    async addBlogComment(commentData) {
-        try {
-            const response = await blogApi.post(`${API_BASE_URL}/blogs/write-comment`, commentData);
-            return response.data;
-        } catch (error) {
-            console.error(`Error adding comment to blog ${blogId}:`, error);
-            throw error;
-        }
-    },
-
-    async addCommentReply(replyData) {
-        try {
-            const response = await blogApi.post(`${API_BASE_URL}/blogs/reply-comment`, replyData);
-            return response.data;
-        } catch (error) {
-            console.error(`Error adding reply to comment ${replyData.parentId}:`, error);
-            throw error;
-        }
-    },
-
-    async deleteBlogComment(commentId, blogId) {
-        try {
-            const response = await blogApi.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${commentId}`);
-            return response.data;
-        } catch (error) {
-            console.error(`Error deleting comment ${commentId} from blog ${blogId}:`, error);
-            throw error;
-        }
-    },
-
-    async deleteCommentReply(replyId, userId) {
-        try {
-            const response = await blogApi.delete(`${API_BASE_URL}/blogs/delete-comment-reply/${replyId}`);
-            return response.data;
-        } catch (error) {
-            console.error(`Error deleting reply ${replyId}:`, error);
-            throw error;
-        }
-    },
-
-    async updateComment(commentId, commentData, userId) {
-        try {
-            const response = await blogApi.put(`${API_BASE_URL}/blogs/edit-comment-reply/${commentId}`, commentData);
-            return response.data;
-        } catch (error) {
-            console.error(`Error updating comment ${commentId}:`, error);
-            throw error;
-        }
-    },
-
-    async updateCommentReply(replyId, replyData, userId) {
-        try {
-            const response = await blogApi.put(`${API_BASE_URL}/blogs/edit-comment-reply/${replyId}`, replyData);
-            return response.data;
-        } catch (error) {
-            console.error(`Error updating reply ${replyId}:`, error);
-            throw error;
-        }
-    }
-}
+};
 
 export default blogService;

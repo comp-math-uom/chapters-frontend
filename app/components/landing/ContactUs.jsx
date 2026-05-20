@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import contactService from "@/app/lib/services/contactService";
 
 function ContactUs() {
     const [formData, setFormData] = useState({
@@ -29,34 +30,21 @@ function ContactUs() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setFormStatus({ ...formStatus, isSubmitting: true });
+        setFormStatus({ ...formStatus, isSubmitting: true, error: null });
 
         try {
-            // Here you would typically send the form data to your backend
-            // For example: await axios.post('/api/contact', formData);
+            const ok = await contactService.send(formData);
+            if (!ok) throw new Error("Server refused the submission");
 
-            // Simulate API call with timeout
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Reset form and show success
             setFormData({ name: "", email: "", subject: "", message: "" });
-            setFormStatus({
-                isSubmitting: false,
-                isSubmitted: true,
-                error: null
-            });
+            setFormStatus({ isSubmitting: false, isSubmitted: true, error: null });
 
-            // Reset success message after 5 seconds
             setTimeout(() => {
-                setFormStatus(prev => ({ ...prev, isSubmitted: false }));
+                setFormStatus((prev) => ({ ...prev, isSubmitted: false }));
             }, 5000);
-
         } catch (error) {
-            setFormStatus({
-                isSubmitting: false,
-                isSubmitted: false,
-                error: "There was an error submitting the form. Please try again."
-            });
+            const detail = error?.response?.data?.detail || "There was an error submitting the form. Please try again.";
+            setFormStatus({ isSubmitting: false, isSubmitted: false, error: detail });
         }
     };
 

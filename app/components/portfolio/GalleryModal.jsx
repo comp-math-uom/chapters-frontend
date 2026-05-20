@@ -3,41 +3,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from '@/app/providers/Providers';
 import {
-    Avatar,
+    Badge,
     Box,
     Flex,
     HStack,
     IconButton,
     Image,
-    Input,
-    InputGroup,
-    InputRightElement,
     Modal,
     ModalBody,
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Tag,
     Text,
     useDisclosure,
-    VStack
+    Wrap,
+    WrapItem,
 } from "@chakra-ui/react";
-import { ChevronRightIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { CalendarIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import ContributorsList from "@/app/components/portfolio/ContributorsList";
-import contributors from "@/app/data/contributors";
 import Link from "next/link";
-import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 import portfolioService from "@/app/lib/services/portfolioService";
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
-import { feedbackService } from "@/app/lib/services/feedbackService";
 
-export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = false }) {
+export default function GalleryModal({ isOpen, onClose, galleryItem }) {
     const { auth } = useAuth();
-    const [profilePic, setProfilePic] = useState();
-    const [comment, setComment] = useState("");
-    const [comments, setComments] = useState([]);
-    const [imageHeight, setImageHeight] = useState(null);
+    const isAdmin = auth?.role === 'admin';
     const imageRef = useRef(null);
     const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -45,37 +38,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
-    const handleAddComment = async () => {
-        if (comment.trim()) {
-            const username = auth?.tokenParsed?.preferred_username || auth?.tokenParsed?.email || "Anonymous";
-            const feedbackData = {
-                content: comment,
-                username: username
-            };
-
-            try {
-                const response = await feedbackService.createFeedback(galleryItem.id, feedbackData);
-
-                const newComment = {
-                    id: response?.id || Date.now(),
-                    userName: username,
-                    userAvatar: profilePic,
-                    timeAgo: "Just now",
-                    content: comment
-                };
-
-                setComments([...comments, newComment]);
-                setComment("");
-            } catch (error) {
-                console.error("Failed to submit feedback", error);
-                setModalMessage("Failed to submit feedback. Please try again.");
-                setIsErrorModalOpen(true);
-            }
-        }
-    };
-
     const onClickDelete = (itemId) => {
-        console.log(`Opening delete modal for ID: ${itemId}`);
         setItemToDelete(itemId);
         onOpenDelete();
     };
@@ -84,14 +47,14 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
         try {
             const response = await portfolioService.deleteGalleryItem(itemToDelete);
             if (response.status === 200 || response.status === 204) {
-                setModalMessage("Post deleted successfully!");
+                setModalMessage("Project deleted successfully!");
                 setIsSuccessModalOpen(true);
             } else {
-                setModalMessage("Failed to delete the post. Please try again.");
+                setModalMessage("Failed to delete the project. Please try again.");
                 setIsErrorModalOpen(true);
             }
         } catch (error) {
-            setModalMessage("Failed to delete the post. Please try again.");
+            setModalMessage("Failed to delete the project. Please try again.");
             setIsErrorModalOpen(true);
         }
     };
@@ -102,21 +65,8 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
     };
 
     useEffect(() => {
-        if (imageRef.current) {
-            setImageHeight(imageRef.current.clientHeight);
-        }
+        // no-op: kept for layout effects in future
     }, [galleryItem]);
-
-    useEffect(() => {
-        setProfilePic(auth?.tokenParsed?.picture);
-    }, [auth]);
-
-    useEffect(() => {
-        if (!isOpen) {
-            setComments([]);
-            setComment("");
-        }
-    }, [isOpen]);
 
     return (
         <>
@@ -137,7 +87,6 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                 objectFit="contain"
                                 w="100%"
                                 h="100%"
-                                onLoad={() => setImageHeight(imageRef.current.clientHeight)}
                             />
                         </Box>
                         <Box flex={1} px={2} height={{ base: "60vh", md: "80vh" }}>
@@ -151,7 +100,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                             onClick={() => onClickDelete(galleryItem.id)}
                                             icon={<DeleteIcon />}
                                         />
-                                        <Link href={`/portfolio/edit-item/${galleryItem.id}`}>
+                                        <Link href={`/portfolio/projects/edit-item/${galleryItem.id}`}>
                                             <IconButton
                                                 variant='ghost'
                                                 colorScheme='gray'
@@ -171,46 +120,45 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                             </HStack>
                             <Box flex={1} px={7} overflowY="auto" maxHeight="calc(80vh - 60px)" overflowX="clip">
                                 <ModalHeader pl={0}>{galleryItem.topic}</ModalHeader>
+
+                                {/* Metadata row — batch, date, hidden badge for admins */}
+                                <HStack spacing={3} mb={3} flexWrap="wrap">
+                                    {galleryItem.batch && (
+                                        <Badge colorScheme="purple" variant="subtle" textTransform="uppercase">
+                                            {galleryItem.batch}
+                                        </Badge>
+                                    )}
+                                    {galleryItem.date && (
+                                        <HStack spacing={1} color="gray.600" fontSize="sm">
+                                            <CalendarIcon boxSize={3} />
+                                            <Text>{new Date(galleryItem.date).toLocaleDateString()}</Text>
+                                        </HStack>
+                                    )}
+                                    {galleryItem.visible === false && (
+                                        <Badge colorScheme="red" variant="subtle">HIDDEN</Badge>
+                                    )}
+                                </HStack>
+
                                 <Text mb={4} textAlign="justify">
                                     {galleryItem.description || "No description available."}
                                 </Text>
 
-                                <ContributorsList contributors={contributors} />
+                                <ContributorsList contributors={galleryItem.contributors || []} />
 
-                                <Flex gap={3} className="my-10" alignItems="center">
-                                    <Avatar
-                                        src={profilePic}
-                                        name={auth?.tokenParsed?.preferred_username || auth?.tokenParsed?.email || "John Doe"}
-                                    />
-                                    <InputGroup size='md' borderRadius="lg">
-                                        <Input
-                                            _focus={{
-                                                bg: "#e2e8f0",
-                                                borderColor: "transparent"
-                                            }}
-                                            borderRadius="full"
-                                            variant='filled'
-                                            placeholder='Leave a comment'
-                                            value={comment}
-                                            onChange={(e) => setComment(e.target.value)}
-                                        />
-                                        <InputRightElement>
-                                            <IconButton
-                                                borderRadius="full"
-                                                bg="black"
-                                                color="white"
-                                                size='xs'
-                                                icon={<ChevronRightIcon />}
-                                                onClick={handleAddComment}
-                                                aria-label="send"
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                </Flex>
-
-                                <FeedbackSection as="h6" size="xs" additionalFeedbacks={comments} projectId={galleryItem.id} />
-
-
+                                {galleryItem.searchTags?.length > 0 && (
+                                    <Box mt={4}>
+                                        <Text fontSize="xs" color="gray.500" mb={2} fontWeight="bold">TAGS</Text>
+                                        <Wrap spacing={2}>
+                                            {galleryItem.searchTags.map((tag) => (
+                                                <WrapItem key={tag}>
+                                                    <Tag size="sm" variant="outline" colorScheme="gray">
+                                                        {tag}
+                                                    </Tag>
+                                                </WrapItem>
+                                            ))}
+                                        </Wrap>
+                                    </Box>
+                                )}
                             </Box>
                         </Box>
                         <ErrorModal

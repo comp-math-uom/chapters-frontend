@@ -1,33 +1,22 @@
 "use client";
 
 import { Field, Form, Formik } from "formik";
-import { Button, FormControl, FormErrorMessage, FormLabel, Select, useToast } from "@chakra-ui/react";
+import { Button, FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react";
 import { CreatableSelect } from "chakra-react-select";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import { useBlog } from "@/app/providers/BlogProvider";
+import { useAuth } from "@/app/providers/Providers";
 import blogService from "@/app/lib/services/blogService";
-import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
 
-export default function BlogSettingsForm({initialValues, handleCancel, isEditMode = false, blogId}) {
+export default function BlogSettingsForm({ initialValues, handleCancel, isEditMode = false, blogId }) {
     const toast = useToast();
-    const [authors, setAuthors] = useState([]);
-    const {validateBlog, blogTitle, blogContent} = useBlog();
+    const { validateBlog, blogTitle, blogContent } = useBlog();
+    const { auth } = useAuth();
     const router = useRouter();
 
-    useEffect(() => {
-        const fetchAuthors = async () => {
-            const authorsData = await blogService.getAuthors();
-            setAuthors(authorsData);
-        };
-
-        fetchAuthors();
-    }, []);
-
     const uploadCoverImage = async (file) => {
-        // curl command: curl --location --request POST "https://api.imgbb.com/1/upload?expiration=600&key=YOUR_CLIENT_API_KEY" --form "image=R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        // I have base64 encoded the image and uploaded it to imgbb
         const formData = new FormData();
         formData.append('image', file);
         formData.append('key', process.env.NEXT_PUBLIC_IMAGEBB_API_KEY);
@@ -48,50 +37,26 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
     };
 
     const validate = (values) => {
-        debugger;
         const errors = {};
-
         if (!values.image) {
             errors.image = "Image is required";
         }
-        
-        if (!values.user_id) {
-            errors.author = "Author is required";
-        }
-        
         return errors;
-    }
+    };
 
     const initialFormValues = {
         tags: initialValues?.tags || [],
         image: initialValues?.image || null,
-        user_id: initialValues?.user_id || "",
-    }
-
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            };
-            fileReader.onerror = (error) => {
-                reject(error);
-            };
-        });
     };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
-    }
+    };
 
     const handleFormSubmit = async (values, formikActions) => {
-        // First validate the blog content and title
-        debugger;
         const isValid = validateBlog();
-
         if (!isValid) {
             toast({
                 title: "Validation Error",
@@ -105,40 +70,31 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
         }
 
         try {
-            // Handle image upload
             let imageUrl = values.image;
-            
-            // Only upload if it's a new File object
             if (values.image && values.image instanceof File) {
                 imageUrl = await uploadCoverImage(values.image);
                 if (!imageUrl) {
-                    // Upload failed, stop the submission
                     formikActions.setSubmitting(false);
                     return;
                 }
             }
-  
-            // Combine blog data with form values
+
+            // Author is implicit: the backend reads user_id from the JWT.
+            // We don't send a user_id field — sending one is ignored anyway.
             const completeData = {
-                ...values,
+                tags: values.tags,
                 post_image: imageUrl,
-                user_id: values.user_id,
                 title: blogTitle,
                 content: blogContent,
                 comment_constraint: true,
-                number_of_views: 0
+                number_of_views: 0,
             };
 
-            console.log(`${isEditMode ? 'Updating' : 'Creating'} blog data:`, completeData);
-            
-            let response;
-            if (isEditMode && blogId) {
-                response = await blogService.updateBlog(blogId, completeData);
-            } else {
-                response = await blogService.createBlog(completeData);
-            }
-            
-            if (response.error) {
+            const response = isEditMode && blogId
+                ? await blogService.updateBlog(blogId, completeData)
+                : await blogService.createBlog(completeData);
+
+            if (response?.error) {
                 toast({
                     title: `Error ${isEditMode ? 'Updating' : 'Creating'} Blog`,
                     description: response.error,
@@ -154,106 +110,84 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
                     duration: 3000,
                     isClosable: true,
                 });
-                
                 if (isEditMode) {
-                    // Close the drawer and possibly refresh the data
                     handleCancel();
-                    // Navigate to the blog view page
                     router.push(`/blog/${blogId}`);
                 } else {
                     router.push(`/blog`);
                 }
             }
-
         } catch (error) {
+            console.error(`Error ${isEditMode ? 'updating' : 'creating'} blog:`, error);
             toast({
                 title: "Error Processing Request",
-                description: `Failed to ${isEditMode ? 'update' : 'create'} the blog.`,
+                description: error?.response?.data?.detail || `Failed to ${isEditMode ? 'update' : 'create'} the blog.`,
                 status: "error",
                 duration: 5000,
                 isClosable: true,
             });
-            console.error(`Error ${isEditMode ? 'updating' : 'creating'} blog:`, error);
         }
 
         formikActions.setSubmitting(false);
-
     };
+
+    const authorDisplay = auth?.tokenParsed?.displayName
+        || `${auth?.tokenParsed?.firstName || ""} ${auth?.tokenParsed?.lastName || ""}`.trim()
+        || auth?.tokenParsed?.email
+        || "You";
 
     return (
         <Formik initialValues={initialFormValues} onSubmit={handleFormSubmit} validate={validate}>
             {(props) => (
-                <Form className="flex flex-col justify-between" style={{height: "calc(100vh - 100px)"}}
-                      onKeyDown={handleKeyDown}>
+                <Form
+                    className="flex flex-col justify-between"
+                    style={{ height: "calc(100vh - 100px)" }}
+                    onKeyDown={handleKeyDown}
+                >
                     <div className="px-2">
-                        <Field name='image' className="w-full sm:w-3/4 md:w-1/2">
-                            {({field, form}) => (
-                                <ImageUploadField
-                                    name="image"
-                                    label="Preview Image"
-                                />
-                            )}
+                        <Field name='image'>
+                            {() => <ImageUploadField name="image" label="Preview Image" />}
                         </Field>
 
-                        {/* Hide author selection when editing */}
+                        {/* Author is the logged-in user — no selector needed. */}
                         {!isEditMode && (
-                            <Field name='user_id'>
-                                {({field, form}) => (
-                                    <FormControl isInvalid={form.errors.user_id && form.touched.user_id} className="mb-6">
-                                        <FormLabel>Author</FormLabel>
-                                        <Select {...field} placeholder='Select Author'>
-                                            {authors.map((author) => (
-                                                <option key={author.id} value={author.id}>
-                                                    {author.name}
-                                                </option>
-                                            ))}
-                                        </Select>
-                                        <FormErrorMessage>{form.errors.user_id}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
+                            <FormControl className="mb-6">
+                                <FormLabel>Author</FormLabel>
+                                <div className="rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                                    {authorDisplay}
+                                </div>
+                            </FormControl>
                         )}
 
                         <Field name='tags'>
-                            {({field, form}) => (
-                                <FormControl className="mb-6"
-                                             isInvalid={form.errors.searchTags && form.touched.searchTags}>
+                            {({ field, form }) => (
+                                <FormControl className="mb-6" isInvalid={form.errors.tags && form.touched.tags}>
                                     <FormLabel>Tags</FormLabel>
                                     <CreatableSelect
                                         isMulti
-                                        value={field.value.map(tag => ({value: tag, label: tag}))}
+                                        value={field.value.map((tag) => ({ value: tag, label: tag }))}
                                         name={field.name}
                                         onChange={(selectedOptions) => {
-                                            const values = selectedOptions.map(option => option.value);
-                                            form.setFieldValue('tags', values);
+                                            form.setFieldValue('tags', selectedOptions.map((o) => o.value));
                                         }}
                                         onBlur={field.onBlur}
-                                        placeholder="Enter Tags (upto 5)"
+                                        placeholder="Enter Tags (up to 5)"
                                         components={{
-                                            DropdownIndicator: null,  // Removes the dropdown arrow
-                                            IndicatorSeparator: null, // Removes the separator
-                                            Menu: () => null,         // Removes the dropdown menu completely
+                                            DropdownIndicator: null,
+                                            IndicatorSeparator: null,
+                                            Menu: () => null,
                                         }}
                                         chakraStyles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                borderRadius: 'md',
-                                                cursor: 'text',
-                                            }),
-                                            valueContainer: (provided) => ({
-                                                ...provided,
-                                                padding: '2px 8px',
-                                            }),
+                                            control: (provided) => ({ ...provided, borderRadius: 'md', cursor: 'text' }),
+                                            valueContainer: (provided) => ({ ...provided, padding: '2px 8px' }),
                                         }}
                                         onCreateOption={(inputValue) => {
-                                            if (field.value.length >= 5) {
-                                                // Optionally show a toast or alert here
-                                                return;
-                                            }
-                                            const newValue = [...field.value, inputValue];
-                                            form.setFieldValue('tags', newValue);
+                                            if (field.value.length >= 5) return;
+                                            form.setFieldValue('tags', [...field.value, inputValue]);
                                         }}
-                                    /></FormControl>
+                                    />
+                                    <FormErrorMessage>{form.errors.tags}</FormErrorMessage>
+                                </FormControl>
                             )}
                         </Field>
                     </div>
@@ -264,17 +198,19 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
                             colorScheme='gray'
                             className="w-full sm:w-1/2"
                             onClick={handleCancel}
-                            isLoading={props.isSubmitting}>
+                            isLoading={props.isSubmitting}
+                        >
                             Cancel
                         </Button>
-                        <Button bg="black"
-                                color="white"
-                                _hover={{bg: "gray.800"}}
-                                mt={4}
-                                colorScheme='teal'
-                                className="w-full sm:w-1/2"
-                                isLoading={props.isSubmitting}
-                                type='submit'>
+                        <Button
+                            bg="black"
+                            color="white"
+                            _hover={{ bg: "gray.800" }}
+                            mt={4}
+                            className="w-full sm:w-1/2"
+                            isLoading={props.isSubmitting}
+                            type='submit'
+                        >
                             {isEditMode ? 'Update' : 'Publish'}
                         </Button>
                     </div>

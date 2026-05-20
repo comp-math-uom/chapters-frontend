@@ -1,44 +1,75 @@
-import photos from "@/app/data/photos";
-import contributors from "@/app/data/contributors";
 import axios from "axios";
 import batches from "@/app/data/batches";
 import portfolioApi from "@/app/lib/services/portfolioApi";
 
 
+// Normalize a project document from the backend into the shape the
+// gallery / forms / modal components expect.
+function normalizeProject(project) {
+    if (!project) return null;
+    return {
+        id: project.id,
+        src: project.image,
+        image: project.image,
+        width: project.width,
+        height: project.height,
+        topic: project.topic,
+        title: project.topic,
+        description: project.description,
+        date: project.date,
+        batch: project.batch,
+        featured: project.featured,
+        searchTags: project.search_tags || [],
+        contributors: project.contributors || [],
+        visible: project.visibility,
+    };
+}
+
+
+function applyAdvancedFilters(items, { year, month, batch }) {
+    let filtered = items;
+    if (batch) filtered = filtered.filter((p) => p.batch === batch);
+    if (year) {
+        filtered = filtered.filter((p) => p.date && new Date(p.date).getFullYear().toString() === year.toString());
+    }
+    if (month) {
+        filtered = filtered.filter((p) => p.date && (new Date(p.date).getMonth() + 1).toString() === month.toString());
+    }
+    return filtered;
+}
+
+
 const portfolioService = {
 
-    async fetchGalleryItems() {
+    /**
+     * Paginated fetch. Returns `{items, total, page, limit}`.
+     * Pass `featured: true` for the landing page; pass `page`/`limit` for listings.
+     */
+    async fetchProjectsPage({ featured = false, page = 1, limit = 12 } = {}) {
         try {
-            const response = await portfolioApi.get('projects/all?featured=true');
-            const projects = response.data.projects;
-
-            // Add this filter to protect against bad data
-            const validProjects = projects.filter(project =>
-                project.image && typeof project.image === 'string' && project.image.startsWith('http')
-            );
-
-            // Now, only map the projects that passed the filter
-            return validProjects.map(project => ({
-                id: project.id,
-                src: project.image,
-                width: project.width,
-                height: project.height,
-                topic: project.topic,
-                description: project.description,
-                date: project.date,
-                batch: project.batch,
-                featured: project.featured,
-                searchTags: project.search_tags,
-                visible: project.visibility,
-            }));
+            const response = await portfolioApi.get('projects/all', {
+                params: { featured, page, limit },
+            });
+            const projects = response.data.projects || [];
+            const items = projects
+                .filter((p) => p.image && typeof p.image === 'string' && p.image.startsWith('http'))
+                .map(normalizeProject);
+            return {
+                items,
+                total: response.data.total ?? items.length,
+                page: response.data.page ?? page,
+                limit: response.data.limit ?? limit,
+            };
         } catch (error) {
-            console.error("Failed to fetch gallery items:", error);
-            return [];
+            console.error("Failed to fetch projects:", error);
+            return { items: [], total: 0, page, limit };
         }
     },
 
-    async fetContributors() {
-        return contributors;
+    /** Legacy helper used by some callers; returns just the items array. */
+    async fetchGalleryItems(featuredOnly = false) {
+        const result = await this.fetchProjectsPage({ featured: featuredOnly, limit: 100 });
+        return result.items;
     },
 
     async fetchBatches() {
@@ -46,41 +77,34 @@ const portfolioService = {
     },
 
     async fetchGalleryItem(id) {
-        return photos.find(photo => photo.id == id);
+        try {
+            const response = await portfolioApi.get(`projects/${id}`);
+            return normalizeProject(response.data);
+        } catch (error) {
+            console.error(`Failed to fetch gallery item ${id}:`, error);
+            throw error;
+        }
     },
 
     async filterItems(filterQuery) {
-        let filteredItems = photos;
-        if (!filterQuery.advanced) {
-            filteredItems = filteredItems.filter(photo => {
-                if (photo.topic.includes(filterQuery.searchText)) {
-                    return true;
-                } else if (photo.description.includes(filterQuery.searchText)) {
-                    return true;
-                }
-                return false;
-            });
-        } else {
-            if (filterQuery.batch !== "") {
-                filteredItems = filteredItems.filter(photo => {
-                    console.log(photo.batch, filterQuery.batch);
-                    return photo.batch === filterQuery.batch
-                });
+        const { searchText, advanced } = filterQuery || {};
+
+        try {
+            let items;
+            if (searchText) {
+                const response = await portfolioApi.get('projects/search/', { params: { query: searchText } });
+                items = (response.data || [])
+                    .filter((p) => p.image && typeof p.image === 'string' && p.image.startsWith('http'))
+                    .map(normalizeProject);
+            } else {
+                items = await this.fetchGalleryItems(false);
             }
-            if (filterQuery.year !== "") {
-                filteredItems = filteredItems.filter(photo => {
-                    console.log(new Date(photo.date).getFullYear(), filterQuery.year);
-                    return new Date(photo.date).getFullYear().toString() === filterQuery.year;
-                });
-            }
-            if (filterQuery.month !== "") {
-                filteredItems = filteredItems.filter(photo => {
-                    console.log(new Date(photo.date).getMonth().toString(), filterQuery.month);
-                    return new Date(photo.date).getMonth().toString() === filterQuery.month
-                });
-            }
+            if (advanced) items = applyAdvancedFilters(items, filterQuery);
+            return items;
+        } catch (error) {
+            console.error("Failed to filter projects:", error);
+            return [];
         }
-        return filteredItems;
     },
 
     async uploadImage(file) {
@@ -116,33 +140,41 @@ const portfolioService = {
             date: formData.date,
             visibility: formData.visible,
             featured: formData.featured,
-
             image: imageUrl,
             width: 1080,
             height: 720,
         };
-        try {
-            const response = await portfolioApi.post('/projects/create', payload);
-            return response;
-        } catch (error) {
-            console.error("Error adding gallery item:", error.response || error.message);
-            throw error;
-        }
+        return await portfolioApi.post('/projects/create', payload);
     },
 
-    async updateGalleryItem(data) {
-        return await portfolioApi.put(`projects/${data.id}`, data)
+    async updateGalleryItem(id, formData) {
+        let imageUrl = formData.image;
+        if (formData.image && formData.image instanceof File) {
+            imageUrl = await this.uploadImage(formData.image);
+        }
+
+        const payload = {
+            topic: formData.title,
+            description: formData.description,
+            batch: formData.batch,
+            contributors: formData.contributors,
+            search_tags: formData.searchTags,
+            date: formData.date,
+            visibility: formData.visible,
+            featured: formData.featured,
+            image: imageUrl,
+        };
+        return await portfolioApi.put(`projects/${id}`, payload);
     },
 
     async deleteGalleryItem(id) {
         try {
-            const response = await portfolioApi.delete(`projects/${id}`);
-            return response;
+            return await portfolioApi.delete(`projects/${id}`);
         } catch (error) {
             console.error(`Error deleting project with ID ${id}:`, error);
             throw error;
         }
-    }
-
+    },
 };
+
 export default portfolioService;
