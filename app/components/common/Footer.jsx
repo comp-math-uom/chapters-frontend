@@ -67,8 +67,8 @@ export default function Footer() {
                             <Stack spacing="2" fontSize="sm" color="gray.600">
                                 <HStack spacing={2}>
                                     <FiMail />
-                                    <ChakraLink href="mailto:aichapter@uom.lk" _hover={{ color: "gray.900" }}>
-                                        aichapter@uom.lk
+                                    <ChakraLink href="mailto:aistudentchapter@uom.lk" _hover={{ color: "gray.900" }}>
+                                        aistudentchapter@uom.lk
                                     </ChakraLink>
                                 </HStack>
                                 <Text>Faculty of IT,</Text>

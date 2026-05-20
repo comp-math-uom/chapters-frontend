@@ -76,10 +76,12 @@ function AuthProvider({ children }) {
     const [initialized, setInitialized] = useState(false);
 
     // Track the last user_id we resolved a profile for. We use this to skip
-    // re-running side effects (re-fetching /user/me, recomputing auth state)
-    // when Supabase fires TOKEN_REFRESHED or duplicate INITIAL_SESSION events
-    // on tab refocus -- those events carry the same user, so the UI does not
-    // need to re-render and consumers should not re-fire their effects.
+    // re-running side effects when Supabase fires TOKEN_REFRESHED, duplicate
+    // INITIAL_SESSION, or a redundant SIGNED_IN for the same user on tab
+    // refocus -- those events carry the same user, so the UI does not need
+    // to re-render. ``null`` represents "anonymous"; the very first apply
+    // is forced (see initializeSession below) so the bootstrap path always
+    // populates state regardless of this ref's initial value.
     const currentUserIdRef = useRef(null);
     const profileCacheRef = useRef({});
 
@@ -113,10 +115,12 @@ function AuthProvider({ children }) {
             // without us touching the React tree.
             setAuthHeader(nextToken);
 
-            // Same user as before? This is a TOKEN_REFRESHED or duplicate
-            // INITIAL_SESSION event. Skip the React-state churn so consumers
-            // do not re-render and listing pages do not re-fetch.
-            if (!force && nextUserId === currentUserIdRef.current && nextUserId !== null) {
+            // Same user (or still anonymous) as before? This is a
+            // TOKEN_REFRESHED, duplicate INITIAL_SESSION, or redundant
+            // SIGNED_IN event. Skip the React-state churn so consumers do
+            // not re-render and pages do not re-mount (which would wipe
+            // form state).
+            if (!force && nextUserId === currentUserIdRef.current) {
                 return;
             }
             currentUserIdRef.current = nextUserId;
@@ -148,14 +152,15 @@ function AuthProvider({ children }) {
             // SIGNED_OUT must always reset the cache and state.
             if (event === 'SIGNED_OUT') {
                 profileCacheRef.current = {};
-                currentUserIdRef.current = null;
                 applySession(null, { force: true });
                 return;
             }
-            // SIGNED_IN / USER_UPDATED can carry new profile info -- force a
-            // refresh. TOKEN_REFRESHED / INITIAL_SESSION just update the
-            // bearer token; the dedupe inside applySession handles that.
-            const force = event === 'SIGNED_IN' || event === 'USER_UPDATED';
+            // USER_UPDATED may carry new profile data (name/avatar changes) --
+            // refresh so the UI reflects the change. SIGNED_IN, TOKEN_REFRESHED
+            // and INITIAL_SESSION just confirm the existing session on tab
+            // refocus; the dedupe inside applySession skips them when the
+            // user_id is unchanged so forms keep their state.
+            const force = event === 'USER_UPDATED';
             applySession(nextSession || null, { force });
         });
 

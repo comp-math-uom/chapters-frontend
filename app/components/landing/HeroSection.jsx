@@ -97,8 +97,11 @@ function HeroSection() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 1.1 }}
                     >
-                        Lorem ipsum dolor sit amet consectetur adipiscing elit lacinia imperdiet torquor consequat sit
-                        habitasse vestibulum mauris libero. Sit eget faucibus magna rhoncus ultricies elit libero. Sed nec felis ipsum torquor non sed libero. Sed nec felis ipsum amet sit non felis ipsum torquor.
+                        Our work spans the breadth of modern artificial intelligence -
+                        from deep learning models and intelligent systems research to
+                        applied computer science projects that solve real problems. The
+                        chapter exists to share what we learn, recognise the achievements
+                        of our peers, and connect AI students with the wider community.
                     </motion.p>
                     <motion.div
                         className="flex flex-wrap justify-around gap-4"
