@@ -8,6 +8,7 @@ import Link from "next/link";
 import { CreatableSelect } from "chakra-react-select";
 import { useEffect, useState } from "react";
 import portfolioService from "@/app/lib/services/portfolioService"
+import ContributorsInput from "@/app/components/portfolio/ContributorsInput";
 
 export default function PortfolioForm({ initialValues, handleSubmit }) {
 
@@ -85,28 +86,14 @@ export default function PortfolioForm({ initialValues, handleSubmit }) {
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.contributors && form.touched.contributors} className="mb-10">
                                         <FormLabel>Contributors</FormLabel>
-                                        <CreatableSelect
-                                            isMulti
-                                            name={field.name}
-                                            value={(field.value || []).map((name) => ({ value: name, label: name }))}
-                                            onChange={(selectedOptions) => {
-                                                form.setFieldValue('contributors', (selectedOptions || []).map((o) => o.value));
+                                        <ContributorsInput
+                                            value={field.value}
+                                            onChange={(contributors) => {
+                                                form.setFieldValue('contributors', contributors);
+                                                form.setFieldTouched('contributors', true);
                                             }}
-                                            onBlur={() => form.setFieldTouched('contributors', true)}
-                                            placeholder="Type a name and press Enter to add"
-                                            components={{
-                                                DropdownIndicator: null,
-                                                IndicatorSeparator: null,
-                                                Menu: () => null,
-                                            }}
-                                            chakraStyles={{
-                                                control: (provided) => ({ ...provided, borderRadius: 'md', cursor: 'text' }),
-                                                valueContainer: (provided) => ({ ...provided, padding: '2px 8px' }),
-                                            }}
-                                            onCreateOption={(inputValue) => {
-                                                const newValue = [...(field.value || []), inputValue.trim()].filter(Boolean);
-                                                form.setFieldValue('contributors', newValue);
-                                            }}
+                                            namePlaceholder="Contributor name"
+                                            urlPlaceholder="Profile link (optional)"
                                         />
                                         <FormErrorMessage>{form.errors.contributors}</FormErrorMessage>
                                     </FormControl>

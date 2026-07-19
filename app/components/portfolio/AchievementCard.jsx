@@ -59,7 +59,11 @@ export default function AchievementCard({ achievement, onClick }) {
                 <Box mt="auto">
                     {achievement.recipients?.length > 0 && (
                         <Text fontSize="xs" color="gray.500" noOfLines={1} mb={1}>
-                            <strong>Recipients:</strong> {achievement.recipients.join(", ")}
+                            <strong>Recipients:</strong>{" "}
+                            {achievement.recipients
+                                .map((r) => (typeof r === "string" ? r : r?.name))
+                                .filter(Boolean)
+                                .join(", ")}
                         </Text>
                     )}
                     {achievement.batch && (

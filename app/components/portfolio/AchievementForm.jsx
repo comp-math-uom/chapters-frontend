@@ -9,6 +9,7 @@ import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import Link from "next/link";
 import { CreatableSelect } from "chakra-react-select";
+import ContributorsInput from "@/app/components/portfolio/ContributorsInput";
 
 const CATEGORIES = [
     { value: "competition", label: "Competition" },
@@ -87,14 +88,11 @@ export default function AchievementForm({ initialValues, handleSubmit }) {
                                 {({ field, form }) => (
                                     <FormControl className="mb-10">
                                         <FormLabel>Recipients</FormLabel>
-                                        <CreatableSelect
-                                            isMulti
-                                            value={(field.value || []).map((name) => ({ value: name, label: name }))}
-                                            onChange={(opts) => form.setFieldValue('recipients', (opts || []).map((o) => o.value))}
-                                            placeholder="Type a name and press Enter"
-                                            components={{ DropdownIndicator: null, IndicatorSeparator: null, Menu: () => null }}
-                                            chakraStyles={{ control: (p) => ({ ...p, cursor: 'text' }) }}
-                                            onCreateOption={(v) => form.setFieldValue('recipients', [...(field.value || []), v.trim()].filter(Boolean))}
+                                        <ContributorsInput
+                                            value={field.value}
+                                            onChange={(recipients) => form.setFieldValue('recipients', recipients)}
+                                            namePlaceholder="Recipient name"
+                                            urlPlaceholder="Profile link (optional)"
                                         />
                                     </FormControl>
                                 )}
