@@ -78,7 +78,7 @@ export default function AchievementsPage() {
             <Box width="full" py={16}>
                 <VStack spacing={6} align="center">
                     <Box maxW="2xl" textAlign="center">
-                        <Heading as="h1" size="4xl" fontWeight="bold" className="font-anton">
+                        <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className="font-anton">
                             ACHIEVEMENTS
                         </Heading>
                         <Text mt={4} fontSize="lg" color="gray.500" className="font-anybody">
