@@ -13,10 +13,9 @@ export default function BlogPreview({ blogPreview }) {
         || "Author";
 
     return (
-        <Link href={`/blog/${blogPreview.blog_id || blogPreview.blogPost_id}`} className="block w-full sm:max-w-sm">
+        <Link href={`/blog/${blogPreview.blog_id || blogPreview.blogPost_id}`} className="block w-full h-full">
             <Card
-                maxW={['100%', 'sm']}
-                className="mt-10"
+                w="100%"
                 boxShadow='md'
                 cursor="pointer"
                 transition="all 0.3s ease-in-out"

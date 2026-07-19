@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Box, Heading, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import BlogPreview from "@/app/components/blog/BlogPreview";
 import blogService from "@/app/lib/services/blogService";
-import CoverImage from '../../../public/img/blogCover.jpg';
-import Image from 'next/image';
 import { useNav } from "@/app/providers/NavigationProvider";
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
@@ -59,36 +58,39 @@ export default function Home() {
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
     return (
-        <>
-            <div className="w-full h-[400px] relative">
-                <Image
-                    src={CoverImage}
-                    alt='Blog Cover Image'
-                    fill
-                    className="object-cover"
-                    priority
-                />
-            </div>
-            {isLoading ? (
-                <div className="container mx-auto px-4 sm:px-8 md:px-12 lg:px-20 mt-8 md:mt-12 lg:mt-20">
-                    <LoadingSpinner text="Loading blog posts..." />
-                </div>
-            ) : (
+        <div className="container flex flex-col justify-center m-auto px-4 sm:px-6 md:px-10 lg:px-20">
+            <Box width="full" py={16}>
+                <VStack spacing={6} align="center">
+                    <Box maxW="2xl" textAlign="center">
+                        <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className="font-anton">
+                            BLOG
+                        </Heading>
+                        <Text mt={4} fontSize="lg" color="gray.500" className="font-anybody">
+                            Insights, tutorials and stories from our AI community.
+                        </Text>
+                    </Box>
+                </VStack>
+            </Box>
+
+            {isLoading && <LoadingSpinner text="Loading blog posts..." />}
+            {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later." />}
+            {!isLoading && !isError && blogPreviews.length === 0 && (
+                <Box textAlign="center" py={16} color="gray.500">
+                    <Text fontSize="lg">No blog posts published yet. Check back soon.</Text>
+                </Box>
+            )}
+            {!isLoading && !isError && blogPreviews.length > 0 && (
                 <>
-                    <div
-                        style={{ paddingBottom: '20px' }}
-                        className="container flex flex-wrap justify-center m-auto px-4 sm:px-8 md:px-12 lg:px-20 gap-4 sm:gap-6 md:gap-10 lg:gap-20 mt-8 md:mt-12 lg:mt-20"
-                    >
+                    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} pb={4}>
                         {blogPreviews.map((blogPreview, index) => (
                             <BlogPreview key={blogPreview.blog_id || blogPreview.blogPost_id || index} blogPreview={blogPreview} />
                         ))}
-                    </div>
-                    <div className="container mx-auto" style={{ paddingBottom: '60px' }}>
+                    </SimpleGrid>
+                    <Box pb={16}>
                         <Pagination page={page} totalPages={totalPages} onChange={loadPage} />
-                    </div>
+                    </Box>
                 </>
             )}
-            {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later." />}
-        </>
+        </div>
     );
 }
