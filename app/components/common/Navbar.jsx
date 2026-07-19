@@ -46,6 +46,7 @@ function Navbar() {
 
     const NavLinks = ({ onLinkClick }) => (
         <>
+            <Link passHref href="/" className="font-impact hover:text-gray-700" onClick={onLinkClick}>HOME</Link>
             <Link passHref href="/portfolio/projects" className="font-impact hover:text-gray-700" onClick={onLinkClick}>PROJECTS</Link>
             <Link passHref href="/portfolio/achievements" className="font-impact hover:text-gray-700" onClick={onLinkClick}>ACHIEVEMENTS</Link>
             <Link passHref href="/blog" className="font-impact hover:text-gray-700" onClick={onLinkClick}>BLOG</Link>
