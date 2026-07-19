@@ -44,22 +44,24 @@ function Navbar() {
 
     const isAdmin = auth?.role === 'admin';
 
+    const navLinkClass = "relative font-impact text-sm tracking-wide text-slate-700 transition-colors duration-200 hover:text-primary-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary-600 after:transition-all after:duration-300 hover:after:w-full";
+
     const NavLinks = ({ onLinkClick }) => (
         <>
-            <Link passHref href="/" className="font-impact hover:text-gray-700" onClick={onLinkClick}>HOME</Link>
-            <Link passHref href="/portfolio/projects" className="font-impact hover:text-gray-700" onClick={onLinkClick}>PROJECTS</Link>
-            <Link passHref href="/portfolio/achievements" className="font-impact hover:text-gray-700" onClick={onLinkClick}>ACHIEVEMENTS</Link>
-            <Link passHref href="/blog" className="font-impact hover:text-gray-700" onClick={onLinkClick}>BLOG</Link>
-            <Link passHref href="/about" className="font-impact hover:text-gray-700" onClick={onLinkClick}>ABOUT US</Link>
+            <Link passHref href="/" className={navLinkClass} onClick={onLinkClick}>HOME</Link>
+            <Link passHref href="/portfolio/projects" className={navLinkClass} onClick={onLinkClick}>PROJECTS</Link>
+            <Link passHref href="/portfolio/achievements" className={navLinkClass} onClick={onLinkClick}>ACHIEVEMENTS</Link>
+            <Link passHref href="/blog" className={navLinkClass} onClick={onLinkClick}>BLOG</Link>
+            <Link passHref href="/about" className={navLinkClass} onClick={onLinkClick}>ABOUT US</Link>
         </>
     );
 
     return (
-        <div className="fixed top-0 left-0 right-0 bg-white z-50">
+        <div className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 shadow-nav">
             <div className="flex items-center justify-between px-4 sm:px-5 py-3 container mx-auto">
                 <div className="ml-0 sm:ml-4 md:ml-14">
                     <Link href="/" passHref>
-                        <h1 className="m-0 text-xl ml-4 md:ml-0 sm:text-2xl md:text-3xl font-impact cursor-pointer">CHAPTERS</h1>
+                        <h1 className="m-0 text-xl ml-4 md:ml-0 sm:text-2xl md:text-3xl font-logo cursor-pointer transition-colors hover:text-primary-600">CHAPTERS</h1>
                     </Link>
                 </div>
 
@@ -72,10 +74,14 @@ function Navbar() {
                 <div className="flex items-center gap-2 sm:gap-5">
                     {!isMobile && navActionButton.label !== "" && (
                         <Button
-                            bg="black"
+                            bg="slate.900"
                             color="white"
                             size="sm"
-                            _hover={{ bg: "gray.700" }}
+                            borderRadius="full"
+                            px={5}
+                            boxShadow="sm"
+                            transition="all 0.2s"
+                            _hover={{ bg: "primary.600", boxShadow: "md", transform: "translateY(-1px)" }}
                             onClick={navActionButton.action}
                         >
                             {navActionButton.label}
@@ -118,7 +124,7 @@ function Navbar() {
                         !isMobile && initialized && (
                             <Link
                                 href="/auth/login"
-                                className="text-sm text-gray-600 hover:text-gray-900 hover:underline px-2"
+                                className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors px-2"
                             >
                                 Sign in
                             </Link>
@@ -130,6 +136,7 @@ function Navbar() {
                             aria-label="Open menu"
                             icon={<FiMenu />}
                             variant="ghost"
+                            borderRadius="full"
                             onClick={onOpen}
                         />
                     )}
@@ -147,9 +154,11 @@ function Navbar() {
 
                             {navActionButton.label !== "" && (
                                 <Button
-                                    bg="black"
+                                    bg="slate.900"
                                     color="white"
-                                    _hover={{ bg: "gray.700" }}
+                                    borderRadius="full"
+                                    boxShadow="sm"
+                                    _hover={{ bg: "primary.600" }}
                                     onClick={() => {
                                         onClose();
                                         navActionButton.action();
@@ -161,17 +170,17 @@ function Navbar() {
 
                             {!initialized || !auth || !auth.authenticated ? (
                                 <HStack spacing={4} pt={4} w="full">
-                                    <Link href="/auth/login" className="text-sm hover:underline" onClick={onClose}>
+                                    <Link href="/auth/login" className="text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" onClick={onClose}>
                                         Sign in
                                     </Link>
-                                    <span>|</span>
-                                    <Link href="/auth/signup" className="text-sm hover:underline" onClick={onClose}>
+                                    <span className="text-slate-300">|</span>
+                                    <Link href="/auth/signup" className="text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" onClick={onClose}>
                                         Sign up
                                     </Link>
                                 </HStack>
                             ) : (
                                 <VStack spacing={3} pt={4} w="full" align="flex-start">
-                                    <p className="text-base text-black">{displayName}</p>
+                                    <p className="text-base text-slate-900 font-medium">{displayName}</p>
                                     <Button
                                         variant="ghost"
                                         leftIcon={<FiUser />}
@@ -197,8 +206,6 @@ function Navbar() {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-
-            <hr />
         </div>
     );
 }

@@ -103,13 +103,13 @@ export default function BlogHeader({blog, blogId}) {
     return (
         <Box width={'full'} paddingTop={[6, 8, 12, 16]} px={[4, 8, 12, 20]}>
             <VStack spacing={2} align={"left"}>
-                <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className={'font-anton'}>
+                <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className={'font-anton'} color="slate.900" letterSpacing="tight">
                     {blog.title}
                 </Heading>
                 <HStack spacing={2} mt={[3, 4, 5]} flexWrap="wrap">
                     <Avatar src={blog.user_image}/>
                     <VStack align={"left"}>
-                        <HStack spacing={2} color="gray.700" fontSize={["md", "lg"]} flexWrap="wrap">
+                        <HStack spacing={2} color="slate.700" fontSize={["md", "lg"]} flexWrap="wrap">
                             <Text>Written by {blog.user_display_name}</Text>
                             <Text>|</Text>
                             <Text>
@@ -125,7 +125,7 @@ export default function BlogHeader({blog, blogId}) {
                                 <Text
                                     key={index}
                                     fontSize="m"
-                                    color="gray.600"
+                                    color="primary.600"
                                 >
                                     #{tag}
                                 </Text>
@@ -135,20 +135,20 @@ export default function BlogHeader({blog, blogId}) {
                 </HStack>
                 <HStack marginTop={6} spacing={6} flexWrap="wrap" justify="space-between">
                     <HStack spacing={6}>
-                        <HStack className="cursor-pointer hover:opacity-80" onClick={handleLike}>
+                        <HStack className="cursor-pointer transition-colors hover:text-primary-600" onClick={handleLike}>
                             {isLiked ? (
-                                <BiSolidLike size={23} className="text-gray-600" />
+                                <BiSolidLike size={23} className="text-primary-600" />
                             ) : (
-                                <BiLike size={23} className="text-gray-600" />
+                                <BiLike size={23} className="text-slate-600" />
                             )}
-                            <Text fontSize="sm" color="gray.600">{likesCount}</Text>
-                        </HStack>                        
-                        <HStack spacing={1}>
-                            <BiComment size={23} className="text-gray-600"/>
-                            <Text fontSize="sm" color="gray.600">12</Text>
+                            <Text fontSize="sm" color="slate.600">{likesCount}</Text>
                         </HStack>
-                        <HStack spacing={1} className="cursor-pointer hover:opacity-80" onClick={handleShare}>
-                            <BsShare size={20} className="text-gray-600"/>
+                        <HStack spacing={1}>
+                            <BiComment size={23} className="text-slate-600"/>
+                            <Text fontSize="sm" color="slate.600">12</Text>
+                        </HStack>
+                        <HStack spacing={1} className="cursor-pointer transition-colors hover:text-primary-600" onClick={handleShare}>
+                            <BsShare size={20} className="text-slate-600"/>
                         </HStack>
                     </HStack>
                     <Menu>
@@ -158,8 +158,9 @@ export default function BlogHeader({blog, blogId}) {
                             icon={<BsThreeDots />}
                             variant="ghost"
                             size="sm"
-                            color="gray.600"
-                            _hover={{ bg: "gray.100" }}
+                            borderRadius="full"
+                            color="slate.600"
+                            _hover={{ bg: "slate.100" }}
                         />
                         <MenuList>
                             <MenuItem icon={<EditIcon />} onClick={handleEdit}>

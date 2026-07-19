@@ -2,8 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-    font-family: Anton, sans-serif;
+html {
     scroll-behavior: smooth;
+}
+
+body {
+    color: #1e293b;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background-color: #bfdbfe;
+    color: #1e3a8a;
+}
+
+:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Slim, unobtrusive scrollbar for a more polished feel (WebKit browsers) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 999px;
+    border: 2px solid #f8fafc;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
 }

@@ -2,6 +2,7 @@
 
 import { NavigationProvider } from "@/app/providers/NavigationProvider";
 import { ChakraProvider } from "@chakra-ui/react";
+import theme from "@/app/theme";
 import { useEffect, useState, useRef, createContext, useContext, useCallback } from 'react';
 import { supabase } from "@/app/lib/services/supabase";
 import api from "@/app/lib/services/axios";
@@ -181,7 +182,7 @@ export function Providers({ children }) {
     return (
         <AuthProvider>
             <NavigationProvider>
-                <ChakraProvider>
+                <ChakraProvider theme={theme}>
                     {children}
                 </ChakraProvider>
             </NavigationProvider>

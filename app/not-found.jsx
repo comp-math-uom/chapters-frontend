@@ -21,18 +21,18 @@ export default function NotFound() {
                 <Box mb={8}>
                     <Image src={img} alt="Page Not Found" width={500}/>
                 </Box>
-                <Heading size="2xl" mb={4}>
+                <Heading size="2xl" mb={4} fontFamily="display" color="slate.900">
                     Oops! Page Not Found
                 </Heading>
-                <Text color="gray.500" mb={8}>
+                <Text color="slate.500" mb={8}>
                     The page you are looking for does not seem to exist.
                 </Text>
                 <Button
                     leftIcon={<FaHome/>}
-                    bg="black"
+                    bg="slate.900"
                     color="white"
-                    _hover={{bg: "gray.800"}}
-                    borderRadius="md"
+                    _hover={{bg: "primary.600"}}
+                    borderRadius="full"
                     py={5}
                 >
                     <Link href="/">

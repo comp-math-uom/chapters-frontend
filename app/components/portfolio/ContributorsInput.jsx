@@ -67,7 +67,7 @@ export default function ContributorsInput({
                 <Wrap spacing={2}>
                     {entries.map((entry, idx) => (
                         <WrapItem key={`${entry.name}-${idx}`}>
-                            <Tag size="md" borderRadius="full" variant="subtle" colorScheme="gray" px={3} py={1}>
+                            <Tag size="md" borderRadius="full" variant="subtle" colorScheme="slate" px={3} py={1}>
                                 <TagLabel>{entry.name}</TagLabel>
                                 {entry.url && <LinkIcon boxSize={2.5} ml={1.5} />}
                                 <TagCloseButton onClick={() => handleRemove(idx)} />

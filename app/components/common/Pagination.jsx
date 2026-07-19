@@ -34,20 +34,22 @@ export default function Pagination({ page, totalPages, onChange }) {
                 icon={<ChevronLeftIcon />}
                 size="sm"
                 variant="ghost"
+                borderRadius="full"
                 isDisabled={page <= 1}
                 onClick={() => goTo(page - 1)}
             />
             {pages.map((p, idx) =>
                 p === "…" ? (
-                    <Text key={`ellipsis-${idx}`} px={2} color="gray.500" fontSize="sm">…</Text>
+                    <Text key={`ellipsis-${idx}`} px={2} color="slate.400" fontSize="sm">…</Text>
                 ) : (
                     <Button
                         key={p}
                         size="sm"
+                        borderRadius="full"
                         variant={p === page ? "solid" : "ghost"}
-                        bg={p === page ? "black" : undefined}
-                        color={p === page ? "white" : undefined}
-                        _hover={p === page ? { bg: "gray.800" } : undefined}
+                        bg={p === page ? "slate.900" : undefined}
+                        color={p === page ? "white" : "slate.600"}
+                        _hover={p === page ? { bg: "primary.600" } : { bg: "slate.100" }}
                         onClick={() => goTo(p)}
                     >
                         {p}
@@ -59,6 +61,7 @@ export default function Pagination({ page, totalPages, onChange }) {
                 icon={<ChevronRightIcon />}
                 size="sm"
                 variant="ghost"
+                borderRadius="full"
                 isDisabled={page >= totalPages}
                 onClick={() => goTo(page + 1)}
             />

@@ -62,10 +62,10 @@ export default function Home() {
             <Box width="full" py={16}>
                 <VStack spacing={6} align="center">
                     <Box maxW="2xl" textAlign="center">
-                        <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className="font-anton">
+                        <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className="font-anton" color="slate.900" letterSpacing="tight">
                             BLOG
                         </Heading>
-                        <Text mt={4} fontSize="lg" color="gray.500" className="font-anybody">
+                        <Text mt={4} fontSize="lg" color="slate.500" className="font-anybody">
                             Insights, tutorials and stories from our AI community.
                         </Text>
                     </Box>
@@ -75,7 +75,7 @@ export default function Home() {
             {isLoading && <LoadingSpinner text="Loading blog posts..." />}
             {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later." />}
             {!isLoading && !isError && blogPreviews.length === 0 && (
-                <Box textAlign="center" py={16} color="gray.500">
+                <Box textAlign="center" py={16} color="slate.500">
                     <Text fontSize="lg">No blog posts published yet. Check back soon.</Text>
                 </Box>
             )}

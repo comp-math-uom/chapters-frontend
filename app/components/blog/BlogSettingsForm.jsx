@@ -153,7 +153,7 @@ export default function BlogSettingsForm({ initialValues, handleCancel, isEditMo
                         {!isEditMode && (
                             <FormControl className="mb-6">
                                 <FormLabel>Author</FormLabel>
-                                <div className="rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                                <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
                                     {authorDisplay}
                                 </div>
                             </FormControl>
@@ -195,7 +195,10 @@ export default function BlogSettingsForm({ initialValues, handleCancel, isEditMo
                     <div className="flex flex-col sm:flex-row justify-between w-full gap-4 px-2">
                         <Button
                             mt={4}
-                            colorScheme='gray'
+                            variant="outline"
+                            borderColor="slate.300"
+                            borderRadius="lg"
+                            _hover={{ bg: "slate.100" }}
                             className="w-full sm:w-1/2"
                             onClick={handleCancel}
                             isLoading={props.isSubmitting}
@@ -203,9 +206,10 @@ export default function BlogSettingsForm({ initialValues, handleCancel, isEditMo
                             Cancel
                         </Button>
                         <Button
-                            bg="black"
+                            bg="slate.900"
                             color="white"
-                            _hover={{ bg: "gray.800" }}
+                            borderRadius="lg"
+                            _hover={{ bg: "primary.600" }}
                             mt={4}
                             className="w-full sm:w-1/2"
                             isLoading={props.isSubmitting}

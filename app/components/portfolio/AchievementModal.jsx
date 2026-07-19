@@ -43,10 +43,15 @@ export default function AchievementModal({ isOpen, onClose, achievement, onDelet
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "4xl" }} isCentered>
-                <ModalOverlay />
-                <ModalContent maxH={{ base: "100vh", md: "85vh" }}>
+                <ModalOverlay bg="blackAlpha.700" backdropFilter="blur(2px)" />
+                <ModalContent
+                    maxH={{ base: "100vh", md: "85vh" }}
+                    borderRadius={{ base: 0, md: "2xl" }}
+                    overflow="hidden"
+                    boxShadow="card-hover"
+                >
                     <ModalBody display="flex" flexDirection={{ base: "column", md: "row" }} padding={0}>
-                        <Box flex={{ base: "none", md: 1 }} maxH={{ base: "40vh", md: "85vh" }} bg="gray.50">
+                        <Box flex={{ base: "none", md: 1 }} maxH={{ base: "40vh", md: "85vh" }} bg="slate.900">
                             <Image
                                 src={achievement.image}
                                 alt={achievement.title}
@@ -55,16 +60,22 @@ export default function AchievementModal({ isOpen, onClose, achievement, onDelet
                                 h="100%"
                             />
                         </Box>
-                        <Box flex={1} px={2} maxH={{ base: "60vh", md: "85vh" }} overflowY="auto">
+                        <Box flex={1} bg="white" maxH={{ base: "60vh", md: "85vh" }} display="flex" flexDirection="column">
                             <HStack
-                                className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"}
-                                paddingLeft={4}
+                                justify={isAdmin ? "space-between" : "flex-end"}
+                                px={4}
+                                py={3}
+                                borderBottom="1px solid"
+                                borderColor="slate.100"
+                                flexShrink={0}
                             >
                                 {isAdmin && (
-                                    <Flex gap={2}>
+                                    <Flex gap={1}>
                                         <IconButton
                                             variant="ghost"
-                                            colorScheme="gray"
+                                            borderRadius="full"
+                                            color="slate.600"
+                                            _hover={{ bg: "slate.100" }}
                                             aria-label="Delete"
                                             onClick={openDel}
                                             icon={<DeleteIcon />}
@@ -72,7 +83,9 @@ export default function AchievementModal({ isOpen, onClose, achievement, onDelet
                                         <Link href={`/portfolio/achievements/edit-item/${achievement.id}`}>
                                             <IconButton
                                                 variant="ghost"
-                                                colorScheme="gray"
+                                                borderRadius="full"
+                                                color="slate.600"
+                                                _hover={{ bg: "slate.100" }}
                                                 aria-label="Edit"
                                                 icon={<EditIcon />}
                                             />
@@ -81,42 +94,46 @@ export default function AchievementModal({ isOpen, onClose, achievement, onDelet
                                 )}
                                 <IconButton
                                     variant="ghost"
-                                    colorScheme="gray"
+                                    borderRadius="full"
+                                    color="slate.600"
+                                    _hover={{ bg: "slate.100" }}
                                     aria-label="Close"
                                     onClick={onClose}
                                     icon={<CloseIcon />}
                                 />
                             </HStack>
 
-                            <Box px={6} pb={6}>
-                                <ModalHeader pl={0} pb={2}>{achievement.title}</ModalHeader>
+                            <Box px={7} py={5} overflowY="auto">
+                                <ModalHeader p={0} mb={3} fontFamily="display" fontSize="2xl" color="slate.900" lineHeight="short">
+                                    {achievement.title}
+                                </ModalHeader>
 
-                                <HStack spacing={3} mb={3} flexWrap="wrap">
+                                <HStack spacing={3} mb={4} flexWrap="wrap">
                                     {achievement.category && (
-                                        <Badge colorScheme="gray" textTransform="uppercase">
+                                        <Badge colorScheme="slate" borderRadius="full" px={2} textTransform="uppercase">
                                             {achievement.category}
                                         </Badge>
                                     )}
                                     {achievement.batch && (
-                                        <Badge colorScheme="purple" variant="subtle" textTransform="uppercase">
+                                        <Badge colorScheme="primary" borderRadius="full" px={2} textTransform="uppercase">
                                             {achievement.batch}
                                         </Badge>
                                     )}
                                     {achievement.date && (
-                                        <HStack spacing={1} color="gray.600" fontSize="sm">
+                                        <HStack spacing={1} color="slate.500" fontSize="sm">
                                             <CalendarIcon boxSize={3} />
                                             <Text>{new Date(achievement.date).toLocaleDateString()}</Text>
                                         </HStack>
                                     )}
                                     {achievement.featured && (
-                                        <Badge colorScheme="yellow" variant="solid">FEATURED</Badge>
+                                        <Badge colorScheme="yellow" variant="solid" borderRadius="full" px={2}>FEATURED</Badge>
                                     )}
                                     {achievement.visible === false && (
-                                        <Badge colorScheme="red" variant="subtle">HIDDEN</Badge>
+                                        <Badge colorScheme="red" borderRadius="full" px={2}>HIDDEN</Badge>
                                     )}
                                 </HStack>
 
-                                <Text mb={4} textAlign="justify">
+                                <Text mb={4} color="slate.600" lineHeight="tall">
                                     {achievement.description || "No description available."}
                                 </Text>
 
@@ -124,11 +141,11 @@ export default function AchievementModal({ isOpen, onClose, achievement, onDelet
 
                                 {achievement.searchTags?.length > 0 && (
                                     <Box mt={4}>
-                                        <Text fontSize="xs" color="gray.500" mb={2} fontWeight="bold">TAGS</Text>
+                                        <Text fontSize="xs" color="slate.500" mb={2} fontWeight="bold" letterSpacing="wider">TAGS</Text>
                                         <Wrap spacing={2}>
                                             {achievement.searchTags.map((tag) => (
                                                 <WrapItem key={tag}>
-                                                    <Tag size="sm" variant="outline" colorScheme="gray">
+                                                    <Tag size="sm" variant="subtle" colorScheme="slate" borderRadius="full">
                                                         {tag}
                                                     </Tag>
                                                 </WrapItem>

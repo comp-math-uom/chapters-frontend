@@ -40,7 +40,7 @@ function AchievementsSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
         >
-            <Box as="section" py={{ base: 8, md: 16 }} px={4} borderBottom="1px" borderColor="gray.200">
+            <Box as="section" py={{ base: 8, md: 16 }} px={4} borderBottom="1px" borderColor="slate.200">
                 <Container maxW="container.xl">
                     <Flex
                         direction={{ base: "column", md: "row" }}
@@ -56,7 +56,7 @@ function AchievementsSection() {
                             transition={{ duration: 0.7 }}
                             className="text-center md:text-left"
                         >
-                            <Heading as="h2" fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }} fontWeight="bold" mb={6}>
+                            <Heading as="h2" fontFamily="display" fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }} fontWeight="bold" mb={6} color="slate.900" letterSpacing="tight">
                                 ACHIEVEMENTS
                             </Heading>
                         </motion.div>
@@ -84,9 +84,9 @@ function AchievementsSection() {
                     </Flex>
 
                     {isLoading ? (
-                        <Text textAlign="center" color="gray.500">Loading featured achievements…</Text>
+                        <Text textAlign="center" color="slate.500">Loading featured achievements…</Text>
                     ) : items.length === 0 ? (
-                        <Text textAlign="center" color="gray.500">
+                        <Text textAlign="center" color="slate.500">
                             No featured achievements yet. Check back soon.
                         </Text>
                     ) : (
@@ -117,10 +117,13 @@ function AchievementsSection() {
                         <Link href="/portfolio/achievements">
                             <Button
                                 variant="outline"
-                                borderColor="black"
-                                _hover={{ bg: "black", color: "white" }}
+                                borderWidth="2px"
+                                borderColor="slate.900"
+                                color="slate.900"
+                                _hover={{ bg: "slate.900", color: "white", boxShadow: "md" }}
                                 borderRadius="full"
                                 px={6}
+                                transition="all 0.2s"
                             >
                                 SEE ALL ACHIEVEMENTS
                             </Button>

@@ -23,23 +23,26 @@ export default function NoSearchResults({onClear}) {
             spacing={4}
             py={12}
             px={4}
-            className="w-full mx-auto text-center bg-gray-50 rounded-lg"
+            className="w-full mx-auto text-center bg-slate-50 rounded-2xl"
         >
-            <Box className="p-4 bg-gray-100 rounded-full">
+            <Box className="p-4 bg-white rounded-full shadow-soft text-slate-400">
                 <SearchIcon/>
             </Box>
 
-            <Text className="text-2xl font-semibold text-gray-900">
+            <Text className="text-2xl font-semibold text-slate-900 font-display">
                 No Results Found
             </Text>
 
-            <Text className="text-gray-600 max-w-md">
+            <Text className="text-slate-600 max-w-md">
                 We could not find any items matching your search criteria. Try adjusting your filters or search terms.
             </Text>
 
             <Button
                 onClick={onClear}
-                colorScheme="gray"
+                bg="slate.900"
+                color="white"
+                _hover={{ bg: "primary.600" }}
+                borderRadius="full"
                 className="mt-2"
                 _focusVisible={{outline: 'none'}}
             >

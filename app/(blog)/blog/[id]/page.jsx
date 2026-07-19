@@ -55,7 +55,7 @@ export default function Page({ params }) {
                         alt={"Cover Image"}
                         width={750}
                         height={500}
-                        className="w-full md:w-[80%] lg:w-[750px] h-auto mb-8 md:mb-0 object-cover"
+                        className="w-full md:w-[80%] lg:w-[750px] h-auto mb-8 md:mb-0 object-cover rounded-2xl shadow-card"
                         style={{ maxHeight: '500px' }}
                     />
                 </div>

@@ -53,7 +53,7 @@ function Portfolio() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl w-full font-black mt-2 md:mt-6">
+                        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl w-full font-black mt-2 md:mt-6 tracking-tight text-slate-900">
                             PROJECTS
                         </h1>
                     </motion.div>
@@ -64,7 +64,7 @@ function Portfolio() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
-                        <p className="mt-2 md:mt-4 text-base md:text-lg text-gray-700 text-center md:text-left">
+                        <p className="mt-2 md:mt-4 text-base md:text-lg text-slate-600 leading-relaxed text-center md:text-left">
                             Explore the results of our learning. This portfolio presents a diverse collection of
                             projects by University of Moratuwa AI students, ranging from in-depth research to practical
                             applications.
@@ -72,7 +72,7 @@ function Portfolio() {
                         <div className="flex justify-center md:justify-start">
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                 <Link href="/portfolio/projects">
-                                    <button className="mt-4 md:mt-6 inline-block border-2 border-black px-4 sm:px-6 py-2 font-bold rounded-full hover:bg-black hover:text-white transition">
+                                    <button className="mt-4 md:mt-6 inline-block border-2 border-slate-900 px-4 sm:px-6 py-2 font-bold rounded-full shadow-sm hover:bg-slate-900 hover:text-white hover:shadow-md transition-all">
                                         BROWSE PROJECTS
                                     </button>
                                 </Link>
@@ -88,7 +88,8 @@ function Portfolio() {
                             fontSize={{ base: "lg", md: "xl" }}
                             mb={4}
                             textAlign="left"
-                            color="gray.700"
+                            color="slate.700"
+                            fontFamily="display"
                         >
                             FEATURED PROJECTS
                         </Heading>
@@ -98,11 +99,13 @@ function Portfolio() {
                                 return (
                                     <Link key={project.id} href="/portfolio/projects" style={{ display: "block", height: "100%" }}>
                                         <Box
-                                            borderRadius="md"
+                                            borderRadius="xl"
                                             overflow="hidden"
                                             bg="white"
-                                            boxShadow="sm"
-                                            _hover={{ boxShadow: "lg", transform: "translateY(-4px)" }}
+                                            border="1px solid"
+                                            borderColor="slate.100"
+                                            boxShadow="card"
+                                            _hover={{ boxShadow: "card-hover", transform: "translateY(-4px)" }}
                                             transition="all 0.2s"
                                             h="100%"
                                             display="flex"
@@ -118,22 +121,22 @@ function Portfolio() {
                                             <Box p={4} textAlign="left" flex={1} display="flex" flexDirection="column">
                                                 <HStack mb={2} justify="space-between" flexWrap="wrap">
                                                     {project.batch && (
-                                                        <Badge colorScheme="gray" textTransform="uppercase">
+                                                        <Badge colorScheme="primary" borderRadius="full" px={2} textTransform="uppercase">
                                                             {project.batch}
                                                         </Badge>
                                                     )}
                                                     {date && (
-                                                        <HStack spacing={1} color="gray.500" fontSize="xs">
+                                                        <HStack spacing={1} color="slate.500" fontSize="xs">
                                                             <CalendarIcon boxSize={2.5} />
                                                             <Text>{date.toLocaleDateString()}</Text>
                                                         </HStack>
                                                     )}
                                                 </HStack>
-                                                <Text fontWeight="bold" fontSize="md" noOfLines={2} mb={1}>
+                                                <Text fontWeight="bold" fontSize="md" noOfLines={2} mb={1} color="slate.900">
                                                     {project.topic}
                                                 </Text>
                                                 {project.description && (
-                                                    <Text fontSize="sm" color="gray.600" noOfLines={2}>
+                                                    <Text fontSize="sm" color="slate.600" noOfLines={2}>
                                                         {project.description}
                                                     </Text>
                                                 )}

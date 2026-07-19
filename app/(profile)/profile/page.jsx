@@ -70,16 +70,16 @@ export default function ProfilePage() {
 
     return (
         <Container maxW="3xl" py={12} px={{ base: 4, md: 6 }}>
-            <Heading mb={8} className="font-anton">Your profile</Heading>
+            <Heading mb={8} className="font-anton" color="slate.900" letterSpacing="tight">Your profile</Heading>
 
-            <Box bg="white" p={8} borderRadius="lg" boxShadow="sm" border="1px" borderColor="gray.200">
+            <Box bg="white" p={8} borderRadius="2xl" boxShadow="card" border="1px" borderColor="slate.100">
                 <HStack spacing={6} mb={8} align="flex-start" flexWrap="wrap">
                     <Avatar src={auth.tokenParsed?.picture} name={displayName} size="2xl" />
                     <VStack align="flex-start" spacing={2}>
-                        <Heading size="lg">{displayName}</Heading>
-                        <Text color="gray.600">{user?.email}</Text>
-                        <Badge colorScheme={role === 'admin' ? 'purple' : 'gray'}>{role}</Badge>
-                        <Text fontSize="sm" color="gray.500">Member since {memberSince}</Text>
+                        <Heading size="lg" fontFamily="display" color="slate.900">{displayName}</Heading>
+                        <Text color="slate.600">{user?.email}</Text>
+                        <Badge colorScheme={role === 'admin' ? 'primary' : 'slate'} borderRadius="full" px={2} textTransform="uppercase">{role}</Badge>
+                        <Text fontSize="sm" color="slate.500">Member since {memberSince}</Text>
                     </VStack>
                 </HStack>
 
@@ -87,27 +87,27 @@ export default function ProfilePage() {
                     <Stack spacing={4}>
                         <HStack spacing={4} flexWrap="wrap">
                             <FormControl flex="1" minW="200px">
-                                <FormLabel>First name</FormLabel>
-                                <Input value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
+                                <FormLabel color="slate.700">First name</FormLabel>
+                                <Input value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} borderColor="slate.200" borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                             </FormControl>
                             <FormControl flex="1" minW="200px">
-                                <FormLabel>Last name</FormLabel>
-                                <Input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
+                                <FormLabel color="slate.700">Last name</FormLabel>
+                                <Input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} borderColor="slate.200" borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                             </FormControl>
                         </HStack>
                         <FormControl>
-                            <FormLabel>Avatar URL</FormLabel>
-                            <Input value={form.avatarUrl} onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })} placeholder="https://..." />
+                            <FormLabel color="slate.700">Avatar URL</FormLabel>
+                            <Input value={form.avatarUrl} onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })} placeholder="https://..." borderColor="slate.200" borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                         </FormControl>
                         <HStack justify="flex-end" pt={2}>
-                            <Button onClick={() => setEditing(false)} variant="ghost">Cancel</Button>
-                            <Button onClick={onSave} bg="black" color="white" _hover={{ bg: "gray.800" }} isLoading={saving}>
+                            <Button onClick={() => setEditing(false)} variant="ghost" borderRadius="lg">Cancel</Button>
+                            <Button onClick={onSave} bg="slate.900" color="white" borderRadius="lg" _hover={{ bg: "primary.600" }} isLoading={saving}>
                                 Save
                             </Button>
                         </HStack>
                     </Stack>
                 ) : (
-                    <Button onClick={() => setEditing(true)} variant="outline">Edit profile</Button>
+                    <Button onClick={() => setEditing(true)} variant="outline" borderColor="slate.300" borderRadius="lg" _hover={{ bg: "slate.100" }}>Edit profile</Button>
                 )}
             </Box>
 

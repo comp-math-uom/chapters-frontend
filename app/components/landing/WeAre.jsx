@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 function WeAre() {
     return (
         <motion.div
-            className="w-full bg-black text-white rounded-3xl p-6 sm:p-8 md:p-12 my-8 md:my-16"
+            className="w-full bg-slate-900 text-white rounded-3xl p-6 sm:p-8 md:p-12 my-8 md:my-16 shadow-card-hover"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -20,7 +20,7 @@ function WeAre() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
                     <motion.h2
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
+                        className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 tracking-tight"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -29,7 +29,7 @@ function WeAre() {
                         WE ARE
                     </motion.h2>
                     <motion.p
-                        className="text-base md:text-lg"
+                        className="text-base md:text-lg text-slate-300 leading-relaxed"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -53,10 +53,10 @@ function WeAre() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
                     <motion.div
-                        className="bg-white p-4 sm:p-6 rounded-3xl w-full max-w-xs sm:max-w-sm md:max-w-md"
+                        className="bg-white p-4 sm:p-6 rounded-3xl w-full max-w-xs sm:max-w-sm md:max-w-md shadow-card"
                         whileHover={{
                             y: -10,
-                            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)"
+                            boxShadow: "0px 20px 45px -10px rgba(0, 0, 0, 0.35)"
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     >

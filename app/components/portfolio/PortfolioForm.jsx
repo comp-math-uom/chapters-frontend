@@ -112,17 +112,17 @@ export default function PortfolioForm({ initialValues, handleSubmit }) {
                                                 form.setFieldTouched('date', true);
                                             }}
                                             propsConfigs={{
-                                                triggerBtnProps: { width: '100%', justifyContent: 'flex-start' },
+                                                triggerBtnProps: { width: '100%', justifyContent: 'flex-start', borderColor: 'slate.200', borderRadius: 'lg' },
                                                 dateNavBtnProps: {
                                                     colorScheme: 'gray', variant: 'outline',
-                                                    _hover: { backgroundColor: 'black', color: 'white' },
+                                                    _hover: { backgroundColor: 'slate.900', color: 'white' },
                                                 },
                                                 dayOfMonthBtnProps: {
                                                     defaultBtnProps: {
                                                         colorScheme: 'gray', variant: 'outline',
-                                                        _hover: { backgroundColor: 'black', color: 'white' },
+                                                        _hover: { backgroundColor: 'primary.50' },
                                                     },
-                                                    selectedBtnProps: { backgroundColor: 'black', color: 'white' },
+                                                    selectedBtnProps: { backgroundColor: 'slate.900', color: 'white' },
                                                 },
                                             }}
                                         />
@@ -189,16 +189,16 @@ export default function PortfolioForm({ initialValues, handleSubmit }) {
                     </div>
 
                     <div className="flex justify-end">
-                        <Button mt={4} colorScheme='gray' mr={4} className="w-1/6" isLoading={props.isSubmitting}>
+                        <Button variant="outline" borderColor="slate.300" color="slate.700" _hover={{ bg: "slate.100" }} mt={4} borderRadius="lg" mr={4} className="w-1/6" isLoading={props.isSubmitting}>
                             <Link style={{ width: '100%' }} href={'/portfolio/projects'}>
                                 Cancel
                             </Link>
                         </Button>
                         <Button
-                            bg="black"
+                            bg="slate.900"
                             color="white"
-                            _hover={{ bg: "gray.800" }}
-                            mt={4} colorScheme='teal' className="w-1/6"
+                            _hover={{ bg: "primary.600" }}
+                            mt={4} borderRadius="lg" className="w-1/6"
                             isLoading={props.isSubmitting}
                             type='submit'
                         >

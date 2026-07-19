@@ -78,10 +78,10 @@ export default function AchievementsPage() {
             <Box width="full" py={16}>
                 <VStack spacing={6} align="center">
                     <Box maxW="2xl" textAlign="center">
-                        <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className="font-anton">
+                        <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className="font-anton" color="slate.900" letterSpacing="tight">
                             ACHIEVEMENTS
                         </Heading>
-                        <Text mt={4} fontSize="lg" color="gray.500" className="font-anybody">
+                        <Text mt={4} fontSize="lg" color="slate.500" className="font-anybody">
                             Awards, competition wins and recognitions earned by the chapter.
                         </Text>
                     </Box>

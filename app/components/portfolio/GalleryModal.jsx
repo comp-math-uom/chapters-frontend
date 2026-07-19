@@ -71,31 +71,47 @@ export default function GalleryModal({ isOpen, onClose, galleryItem }) {
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "5xl" }} closeOnOverlayClick={true} isCentered>
-                <ModalOverlay />
-                <ModalContent maxW={{ base: "100%", md: "83vw" }} w={{ base: "100%", md: "83vw" }} maxH={{ base: "100vh", md: "80vh" }}>
+                <ModalOverlay bg="blackAlpha.700" backdropFilter="blur(2px)" />
+                <ModalContent
+                    maxW={{ base: "100%", md: "83vw" }}
+                    w={{ base: "100%", md: "83vw" }}
+                    maxH={{ base: "100vh", md: "80vh" }}
+                    borderRadius={{ base: 0, md: "2xl" }}
+                    overflow="hidden"
+                    boxShadow="card-hover"
+                >
                     <ModalBody display="flex" flexDirection={{ base: "column", md: "row" }} padding={0} maxHeight={{ base: "100vh", md: "80vh" }}>
                         <Box
                             flex={{ base: "none", md: 1 }}
                             maxHeight={{ base: "40vh", md: "80vh" }}
                             position="relative"
+                            bg="slate.900"
                         >
                             <Image
                                 ref={imageRef}
                                 src={galleryItem.src}
                                 alt={galleryItem.topic}
-                                roundedTopStart={"md"}
                                 objectFit="contain"
                                 w="100%"
                                 h="100%"
                             />
                         </Box>
-                        <Box flex={1} px={2} height={{ base: "60vh", md: "80vh" }}>
-                            <HStack className={isAdmin ? "flex justify-between mt-2" : "flex justify-end mt-2"} paddingLeft={4}>
+                        <Box flex={1} bg="white" height={{ base: "60vh", md: "80vh" }} display="flex" flexDirection="column">
+                            <HStack
+                                justify={isAdmin ? "space-between" : "flex-end"}
+                                px={4}
+                                py={3}
+                                borderBottom="1px solid"
+                                borderColor="slate.100"
+                                flexShrink={0}
+                            >
                                 {isAdmin &&
-                                    <Flex gap={2}>
+                                    <Flex gap={1}>
                                         <IconButton
                                             variant='ghost'
-                                            colorScheme='gray'
+                                            borderRadius="full"
+                                            color="slate.600"
+                                            _hover={{ bg: "slate.100" }}
                                             aria-label='Delete'
                                             onClick={() => onClickDelete(galleryItem.id)}
                                             icon={<DeleteIcon />}
@@ -103,7 +119,9 @@ export default function GalleryModal({ isOpen, onClose, galleryItem }) {
                                         <Link href={`/portfolio/projects/edit-item/${galleryItem.id}`}>
                                             <IconButton
                                                 variant='ghost'
-                                                colorScheme='gray'
+                                                borderRadius="full"
+                                                color="slate.600"
+                                                _hover={{ bg: "slate.100" }}
                                                 aria-label='Edit'
                                                 icon={<EditIcon />}
                                             />
@@ -112,34 +130,38 @@ export default function GalleryModal({ isOpen, onClose, galleryItem }) {
                                 }
                                 <IconButton
                                     variant='ghost'
-                                    colorScheme='gray'
+                                    borderRadius="full"
+                                    color="slate.600"
+                                    _hover={{ bg: "slate.100" }}
                                     aria-label='Close'
                                     onClick={onClose}
                                     icon={<CloseIcon />}
                                 />
                             </HStack>
-                            <Box flex={1} px={7} overflowY="auto" maxHeight="calc(80vh - 60px)" overflowX="clip">
-                                <ModalHeader pl={0}>{galleryItem.topic}</ModalHeader>
+                            <Box flex={1} px={7} py={5} overflowY="auto" overflowX="clip">
+                                <ModalHeader p={0} mb={3} fontFamily="display" fontSize="2xl" color="slate.900" lineHeight="short">
+                                    {galleryItem.topic}
+                                </ModalHeader>
 
                                 {/* Metadata row - batch, date, hidden badge for admins */}
-                                <HStack spacing={3} mb={3} flexWrap="wrap">
+                                <HStack spacing={3} mb={4} flexWrap="wrap">
                                     {galleryItem.batch && (
-                                        <Badge colorScheme="purple" variant="subtle" textTransform="uppercase">
+                                        <Badge colorScheme="primary" borderRadius="full" px={2} textTransform="uppercase">
                                             {galleryItem.batch}
                                         </Badge>
                                     )}
                                     {galleryItem.date && (
-                                        <HStack spacing={1} color="gray.600" fontSize="sm">
+                                        <HStack spacing={1} color="slate.500" fontSize="sm">
                                             <CalendarIcon boxSize={3} />
                                             <Text>{new Date(galleryItem.date).toLocaleDateString()}</Text>
                                         </HStack>
                                     )}
                                     {galleryItem.visible === false && (
-                                        <Badge colorScheme="red" variant="subtle">HIDDEN</Badge>
+                                        <Badge colorScheme="red" borderRadius="full" px={2}>HIDDEN</Badge>
                                     )}
                                 </HStack>
 
-                                <Text mb={4} textAlign="justify">
+                                <Text mb={4} color="slate.600" lineHeight="tall">
                                     {galleryItem.description || "No description available."}
                                 </Text>
 
@@ -147,11 +169,11 @@ export default function GalleryModal({ isOpen, onClose, galleryItem }) {
 
                                 {galleryItem.searchTags?.length > 0 && (
                                     <Box mt={4}>
-                                        <Text fontSize="xs" color="gray.500" mb={2} fontWeight="bold">TAGS</Text>
+                                        <Text fontSize="xs" color="slate.500" mb={2} fontWeight="bold" letterSpacing="wider">TAGS</Text>
                                         <Wrap spacing={2}>
                                             {galleryItem.searchTags.map((tag) => (
                                                 <WrapItem key={tag}>
-                                                    <Tag size="sm" variant="outline" colorScheme="gray">
+                                                    <Tag size="sm" variant="subtle" colorScheme="slate" borderRadius="full">
                                                         {tag}
                                                     </Tag>
                                                 </WrapItem>

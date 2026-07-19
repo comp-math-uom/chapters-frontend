@@ -10,9 +10,9 @@ import React from "react";
 export default function ContributorsList({ contributors, label = "Contributors" }) {
     if (!contributors || contributors.length === 0) return null;
     return (
-        <div className="my-8">
-            <Heading as="h6" size="xs" mb={3}>
-                {label}:
+        <div className="my-6">
+            <Heading as="h6" size="xs" mb={3} color="slate.500" letterSpacing="wider" textTransform="uppercase">
+                {label}
             </Heading>
             <Wrap spacing={2}>
                 {contributors.map((entry, idx) => {
@@ -24,7 +24,7 @@ export default function ContributorsList({ contributors, label = "Contributors" 
                                 size="md"
                                 borderRadius="full"
                                 variant="subtle"
-                                colorScheme="gray"
+                                colorScheme="slate"
                                 px={3}
                                 py={1}
                             >
@@ -33,9 +33,9 @@ export default function ContributorsList({ contributors, label = "Contributors" 
                                         <Link
                                             href={url}
                                             isExternal
-                                            color="blue.600"
+                                            color="primary.600"
                                             textDecoration="underline"
-                                            _hover={{ color: "blue.700" }}
+                                            _hover={{ color: "primary.700" }}
                                         >
                                             {name}
                                         </Link>

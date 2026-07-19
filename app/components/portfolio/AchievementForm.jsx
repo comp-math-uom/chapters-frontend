@@ -120,7 +120,10 @@ export default function AchievementForm({ initialValues, handleSubmit }) {
                                                 form.setFieldTouched('date', true);
                                             }}
                                             propsConfigs={{
-                                                triggerBtnProps: { width: '100%', justifyContent: 'flex-start' },
+                                                triggerBtnProps: { width: '100%', justifyContent: 'flex-start', borderColor: 'slate.200', borderRadius: 'lg' },
+                                                dayOfMonthBtnProps: {
+                                                    selectedBtnProps: { backgroundColor: 'slate.900', color: 'white' },
+                                                },
                                             }}
                                         />
                                         <FormErrorMessage>{form.errors.date}</FormErrorMessage>
@@ -175,16 +178,16 @@ export default function AchievementForm({ initialValues, handleSubmit }) {
                     </div>
 
                     <div className="flex justify-end">
-                        <Button mt={4} colorScheme='gray' mr={4} className="w-1/6" isLoading={props.isSubmitting}>
+                        <Button variant="outline" borderColor="slate.300" color="slate.700" _hover={{ bg: "slate.100" }} mt={4} borderRadius="lg" mr={4} className="w-1/6" isLoading={props.isSubmitting}>
                             <Link style={{ width: '100%' }} href={'/portfolio/achievements'}>
                                 Cancel
                             </Link>
                         </Button>
                         <Button
-                            bg="black"
+                            bg="slate.900"
                             color="white"
-                            _hover={{ bg: "gray.800" }}
-                            mt={4} className="w-1/6"
+                            _hover={{ bg: "primary.600" }}
+                            mt={4} borderRadius="lg" className="w-1/6"
                             isLoading={props.isSubmitting}
                             type="submit"
                         >

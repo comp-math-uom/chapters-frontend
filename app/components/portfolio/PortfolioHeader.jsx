@@ -89,10 +89,10 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
         <Box width="full" py={16}>
             <VStack spacing={8} align="center">
                 <Box maxW="2xl" textAlign="center">
-                    <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className={'font-anton'}>
+                    <Heading as="h1" size={["2xl", "3xl", "4xl"]} fontWeight="bold" className={'font-anton'} color="slate.900" letterSpacing="tight">
                         {title}
                     </Heading>
-                    <Text mt={4} fontSize="lg" color="gray.500" className={'font-anybody'}>
+                    <Text mt={4} fontSize="lg" color="slate.500" className={'font-anybody'}>
                         {subtitle}
                     </Text>
                 </Box>
@@ -100,20 +100,22 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
                 <Flex w="full" maxW="7xl" justify="center" align="center">
                     <InputGroup size="lg">
                         <InputLeftElement pointerEvents="none">
-                            <SearchIcon color="gray.300"/>
+                            <SearchIcon color="slate.400"/>
                         </InputLeftElement>
                         <Input
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                             onKeyDown={handleEnterPress}
                             placeholder=""
-                            borderWidth={2}
-                            borderColor="gray.300"
-                            borderRadius="xl"
-                            _focus={{borderColor: "blue.500", boxShadow: "0 0 0 1px #3182ce"}}
+                            bg="white"
+                            borderWidth={1}
+                            borderColor="slate.200"
+                            borderRadius="full"
+                            boxShadow="soft"
+                            _focus={{ borderColor: "primary.500", boxShadow: "0 0 0 3px var(--chakra-colors-primary-100)" }}
                         />
                         <InputRightElement>
-                            <Button variant="ghost" colorScheme='gray'
+                            <Button variant="ghost" borderRadius="full"
                                     _focusVisible={{outline: 'none'}}
                                     onClick={() => setSearchText("")} size="sm">X</Button>
                         </InputRightElement>
@@ -123,7 +125,8 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
                             <Button
                                 onClick={handleToggleFilter}
                                 bg="transparent"
-                                _hover={{background: "transparent"}}
+                                borderRadius="full"
+                                _hover={{background: "slate.100"}}
                                 width="100%"
                                 height="100%"
                                 p={0}
@@ -154,7 +157,10 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
                                 onChange={(e) => setSelectedYear(e.target.value)}
                                 w={{ base: "full", md: "16%" }}
                                 mb={{ base: 2, md: 0 }}
-                                borderWidth="2px"
+                                borderWidth="1px"
+                                borderColor="slate.200"
+                                borderRadius="lg"
+                                bg="white"
                             >
                                 <option value="2022">2022</option>
                                 <option value="2023">2023</option>
@@ -181,7 +187,10 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
                                 onChange={(e) => setSelectedBatch(e.target.value)}
                                 w={{ base: "full", md: "20%" }}
                                 mb={{ base: 2, md: 0 }}
-                                borderWidth="2px"
+                                borderWidth="1px"
+                                borderColor="slate.200"
+                                borderRadius="lg"
+                                bg="white"
                             >
                                 <option value="b21">Batch 21</option>
                                 <option value="b22">Batch 22</option>
@@ -194,14 +203,21 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
                                 justify={{ base: "space-between", md: "flex-end" }}
                                 mt={{ base: 2, md: 0 }}
                             >
-                                <Button w={{ base: "48%", md: "auto" }} onClick={handleReset}>
+                                <Button
+                                    variant="outline"
+                                    borderColor="slate.300"
+                                    color="slate.700"
+                                    _hover={{ bg: "slate.100" }}
+                                    w={{ base: "48%", md: "auto" }}
+                                    onClick={handleReset}
+                                >
                                     Clear
                                 </Button>
 
                                 <Button
-                                    bg="black"
+                                    bg="slate.900"
                                     color="white"
-                                    _hover={{bg: "gray.800"}}
+                                    _hover={{bg: "primary.600"}}
                                     w={{ base: "48%", md: "auto" }}
                                     onClick={() => handleFilterClick(true)}
                                 >

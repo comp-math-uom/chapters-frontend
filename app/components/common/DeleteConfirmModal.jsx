@@ -9,17 +9,17 @@ export default function DeleteConfirmModal({isOpen, onClose, onDelete, message =
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
-            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
-            <ModalContent>
-                <ModalHeader>Delete Confirmation</ModalHeader>
+            <ModalOverlay bg="blackAlpha.500" backdropFilter="blur(2px)" />
+            <ModalContent borderRadius="xl">
+                <ModalHeader color="slate.900" fontFamily="display">Delete Confirmation</ModalHeader>
                 <ModalBody>
-                    <Text>
+                    <Text color="slate.600">
                         {message}
                     </Text>
                 </ModalBody>
                 <ModalFooter gap={3}>
-                    <Button colorScheme="red" onClick={handleDelete}>Delete</Button>
-                    <Button onClick={onClose}>Cancel</Button>
+                    <Button colorScheme="red" borderRadius="lg" onClick={handleDelete}>Delete</Button>
+                    <Button variant="outline" borderColor="slate.300" borderRadius="lg" _hover={{ bg: "slate.100" }} onClick={onClose}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

@@ -48,29 +48,33 @@ export default function ImageUploadField({name, label}) {
             <FormLabel>{label}</FormLabel>
             <Box
                 {...getRootProps()}
-                border={meta.error ? "2px solid" : "1px"}
-                borderRadius="md"
-                borderColor={meta.error && meta.touched ? "red.500" : "gray.200"}
+                border={meta.error ? "2px solid" : "2px dashed"}
+                borderRadius="xl"
+                borderColor={meta.error && meta.touched ? "red.500" : "slate.200"}
+                bg="slate.50"
                 p={6}
                 style={{height: 400}}
                 _active={{
-                    borderColor: "blue.500"
+                    borderColor: "primary.500"
                 }}
                 _focus={{
-                    borderColor: "blue.500"
+                    borderColor: "primary.500"
                 }}
                 cursor="pointer"
                 transition="all 0.2s"
                 _hover={{
-                    borderColor: "gray.300"
+                    borderColor: "primary.400",
+                    bg: "primary.50"
                 }}
             >
                 <input {...getInputProps()} />
                 {!preview ? (
                     <Center flexDirection="column" justifyContent="center" alignItems="center"
                             style={{"height": "100%"}}>
-                        <Icon as={FiUpload} w={8} h={8} color="gray.400" mb={2}/>
-                        <Text textAlign="center" color="gray.500">
+                        <Center w={12} h={12} borderRadius="full" bg="white" boxShadow="soft" mb={3}>
+                            <Icon as={FiUpload} w={5} h={5} color="slate.400"/>
+                        </Center>
+                        <Text textAlign="center" color="slate.500">
                             {isDragActive
                                 ? "Drop the image here"
                                 : "Drag and drop an image here, or click to select"}
@@ -84,8 +88,9 @@ export default function ImageUploadField({name, label}) {
                             maxH="200px"
                             mx="auto"
                             objectFit="contain"
+                            borderRadius="lg"
                         />
-                        <Text fontSize="sm" color="gray.500" mt={2} textAlign="center">
+                        <Text fontSize="sm" color="slate.500" mt={2} textAlign="center">
                             Click or drag to replace
                         </Text>
                     </Box>

@@ -90,10 +90,10 @@ export default function AdminBlogsPage() {
         <Container maxW="7xl" py={10} px={{ base: 4, md: 6 }}>
             <VStack align="stretch" spacing={6}>
                 <HStack justify="space-between" flexWrap="wrap">
-                    <Heading className="font-anton">Blog moderation</Heading>
+                    <Heading className="font-anton" color="slate.900" letterSpacing="tight">Blog moderation</Heading>
                     <HStack>
-                        <Text fontSize="sm" color="gray.600">Show:</Text>
-                        <Select value={filter} onChange={(e) => setFilter(e.target.value)} maxW="200px" size="sm">
+                        <Text fontSize="sm" color="slate.600">Show:</Text>
+                        <Select value={filter} onChange={(e) => setFilter(e.target.value)} maxW="200px" size="sm" borderColor="slate.200" borderRadius="lg" bg="white">
                             <option value="all">All blogs</option>
                             <option value="visible">Visible only</option>
                             <option value="hidden">Hidden only</option>
@@ -104,19 +104,19 @@ export default function AdminBlogsPage() {
                 {isLoading && <LoadingSpinner />}
                 {isError && !isLoading && <ErrorBlock msg="Failed to load blogs." />}
                 {!isLoading && !isError && blogs.length === 0 && (
-                    <Text color="gray.500">No blogs match this filter.</Text>
+                    <Text color="slate.500">No blogs match this filter.</Text>
                 )}
                 {!isLoading && !isError && blogs.length > 0 && (
-                    <TableContainer bg="white" borderRadius="md" border="1px" borderColor="gray.200">
+                    <TableContainer bg="white" borderRadius="xl" border="1px" borderColor="slate.100" boxShadow="card">
                         <Table size="sm">
                             <Thead>
                                 <Tr>
-                                    <Th>Cover</Th>
-                                    <Th>Title</Th>
-                                    <Th>Author</Th>
-                                    <Th>Posted</Th>
-                                    <Th>Status</Th>
-                                    <Th>Actions</Th>
+                                    <Th color="slate.500">Cover</Th>
+                                    <Th color="slate.500">Title</Th>
+                                    <Th color="slate.500">Author</Th>
+                                    <Th color="slate.500">Posted</Th>
+                                    <Th color="slate.500">Status</Th>
+                                    <Th color="slate.500">Actions</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -125,24 +125,24 @@ export default function AdminBlogsPage() {
                                     const author = `${b.user_first_name || ''} ${b.user_last_name || ''}`.trim() || b.user_username || b.user_id;
                                     const id = b.blog_id || b.blogPost_id;
                                     return (
-                                        <Tr key={id}>
+                                        <Tr key={id} _hover={{ bg: "slate.50" }}>
                                             <Td>
                                                 {b.post_image ? (
-                                                    <Image src={b.post_image} alt="" boxSize="48px" objectFit="cover" borderRadius="sm" />
+                                                    <Image src={b.post_image} alt="" boxSize="48px" objectFit="cover" borderRadius="md" />
                                                 ) : (
-                                                    <Box boxSize="48px" bg="gray.100" borderRadius="sm" />
+                                                    <Box boxSize="48px" bg="slate.100" borderRadius="md" />
                                                 )}
                                             </Td>
                                             <Td maxW="300px">
-                                                <Text fontWeight="bold" noOfLines={1}>{b.title}</Text>
-                                                <Text fontSize="xs" color="gray.500" noOfLines={1}>
+                                                <Text fontWeight="bold" noOfLines={1} color="slate.900">{b.title}</Text>
+                                                <Text fontSize="xs" color="slate.500" noOfLines={1}>
                                                     {b.content_preview}
                                                 </Text>
                                             </Td>
-                                            <Td>{author}</Td>
-                                            <Td>{b.postedAt ? new Date(b.postedAt).toLocaleDateString() : '-'}</Td>
+                                            <Td color="slate.600">{author}</Td>
+                                            <Td color="slate.600">{b.postedAt ? new Date(b.postedAt).toLocaleDateString() : '-'}</Td>
                                             <Td>
-                                                <Badge colorScheme={visible ? 'green' : 'red'}>
+                                                <Badge colorScheme={visible ? 'green' : 'red'} borderRadius="full" px={2}>
                                                     {visible ? 'Visible' : 'Hidden'}
                                                 </Badge>
                                             </Td>
@@ -152,6 +152,7 @@ export default function AdminBlogsPage() {
                                                         <IconButton
                                                             size="sm"
                                                             variant="ghost"
+                                                            borderRadius="full"
                                                             aria-label="View"
                                                             icon={<ExternalLinkIcon />}
                                                         />
@@ -159,6 +160,7 @@ export default function AdminBlogsPage() {
                                                     <IconButton
                                                         size="sm"
                                                         variant="ghost"
+                                                        borderRadius="full"
                                                         aria-label={visible ? 'Hide' : 'Show'}
                                                         icon={visible ? <ViewOffIcon /> : <ViewIcon />}
                                                         onClick={() => onToggleVisibility(id, visible)}
@@ -166,6 +168,7 @@ export default function AdminBlogsPage() {
                                                     <IconButton
                                                         size="sm"
                                                         variant="ghost"
+                                                        borderRadius="full"
                                                         colorScheme="red"
                                                         aria-label="Delete"
                                                         icon={<DeleteIcon />}

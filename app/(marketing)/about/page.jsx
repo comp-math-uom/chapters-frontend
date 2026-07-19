@@ -44,16 +44,16 @@ export default function AboutUsPage() {
     return (
         <Container maxW="6xl" py={12} px={{ base: 4, md: 6 }}>
             <VStack spacing={4} align="center" textAlign="center" mb={10}>
-                <Heading as="h1" size="3xl" className="font-anton">
+                <Heading as="h1" size="3xl" className="font-anton" color="slate.900" letterSpacing="tight">
                     {data.hero_title || "About Chapters"}
                 </Heading>
-                <Text fontSize="lg" color="gray.600" maxW="2xl">
+                <Text fontSize="lg" color="slate.600" maxW="2xl">
                     {data.hero_subtitle || "The AI Student Chapter"}
                 </Text>
             </VStack>
 
             {data.cover_image && (
-                <Box mb={10} borderRadius="lg" overflow="hidden" maxH="400px">
+                <Box mb={10} borderRadius="2xl" overflow="hidden" maxH="400px" boxShadow="card">
                     <Image src={data.cover_image} alt="About cover" w="full" objectFit="cover" />
                 </Box>
             )}
@@ -68,25 +68,25 @@ export default function AboutUsPage() {
 
             {data.team?.length > 0 && (
                 <Box mb={12}>
-                    <Heading as="h2" size="lg" mb={6} className="font-anton">OUR TEAM</Heading>
+                    <Heading as="h2" size="lg" mb={6} className="font-anton" color="slate.900" letterSpacing="tight">OUR TEAM</Heading>
                     <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={6}>
                         {data.team.map((member, idx) => (
                             <VStack key={idx} spacing={2}>
                                 <Avatar src={member.image_url} name={member.name} size="xl" />
-                                <Text fontWeight="bold">{member.name}</Text>
-                                <Text fontSize="sm" color="gray.600">{member.role}</Text>
+                                <Text fontWeight="bold" color="slate.900">{member.name}</Text>
+                                <Text fontSize="sm" color="slate.600">{member.role}</Text>
                             </VStack>
                         ))}
                     </SimpleGrid>
                 </Box>
             )}
 
-            <Box id="contactUS" bg="gray.50" p={8} borderRadius="lg">
-                <Heading as="h2" size="lg" mb={4} className="font-anton">CONTACT US</Heading>
+            <Box id="contactUS" bg="slate.50" p={8} borderRadius="2xl">
+                <Heading as="h2" size="lg" mb={4} className="font-anton" color="slate.900" letterSpacing="tight">CONTACT US</Heading>
                 {data.contact_email && (
-                    <Text mb={2}>
+                    <Text mb={2} color="slate.700">
                         <strong>Email:</strong>{" "}
-                        <ChakraLink href={`mailto:${data.contact_email}`} color="blue.600">
+                        <ChakraLink href={`mailto:${data.contact_email}`} color="primary.600">
                             {data.contact_email}
                         </ChakraLink>
                     </Text>
@@ -94,7 +94,7 @@ export default function AboutUsPage() {
                 {data.contact_links?.length > 0 && (
                     <HStack spacing={4} mt={3}>
                         {data.contact_links.map((url, idx) => (
-                            <ChakraLink key={idx} href={url} isExternal color="blue.600">
+                            <ChakraLink key={idx} href={url} isExternal color="primary.600">
                                 {url}
                             </ChakraLink>
                         ))}

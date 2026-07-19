@@ -16,30 +16,31 @@ export default function BlogPreview({ blogPreview }) {
         <Link href={`/blog/${blogPreview.blog_id || blogPreview.blogPost_id}`} className="block w-full h-full">
             <Card
                 w="100%"
-                boxShadow='md'
+                borderRadius="xl"
+                overflow="hidden"
+                boxShadow='card'
                 cursor="pointer"
                 transition="all 0.3s ease-in-out"
                 _hover={{
                     transform: "translateY(-8px)",
-                    boxShadow: "2xl",
-                    borderColor: "gray.200"
+                    boxShadow: "card-hover",
+                    borderColor: "primary.100"
                 }}
                 border="1px"
-                borderColor="transparent"
+                borderColor="slate.100"
                 h="100%"
             >
                 {blogPreview.post_image && (
                     <Image
                         height="240px"
                         objectFit="cover"
-                        borderTopRadius="md"
                         src={blogPreview.post_image}
                         alt={blogPreview.title}
                         transition="all 0.3s ease-in-out"
                     />
                 )}
                 <CardBody>
-                    <Heading as='h4' size='md' noOfLines={3}>
+                    <Heading as='h4' size='md' noOfLines={3} fontFamily="display" color="slate.900">
                         {blogPreview.title}
                     </Heading>
                 </CardBody>
@@ -53,7 +54,7 @@ export default function BlogPreview({ blogPreview }) {
                                 size="sm"
                             />
                         </Tooltip>
-                        <Box fontSize="sm" color="gray.600" noOfLines={1}>
+                        <Box fontSize="sm" color="slate.600" noOfLines={1}>
                             {authorName}
                         </Box>
                     </Flex>

@@ -15,7 +15,7 @@ function Forum() {
                     transition={{ duration: 0.7 }}
                 >
                     <motion.h2
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6"
+                        className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 tracking-tight text-slate-900"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -24,7 +24,7 @@ function Forum() {
                         FORUM
                     </motion.h2>
                     <motion.p
-                        className="text-base md:text-lg mb-6 md:mb-8"
+                        className="text-base md:text-lg mb-6 md:mb-8 text-slate-600 leading-relaxed"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -44,7 +44,7 @@ function Forum() {
                     >
                         <Link href="/blog">
                             <button
-                                className="px-4 sm:px-6 py-2 sm:py-3 border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors duration-300">
+                                className="px-4 sm:px-6 py-2 sm:py-3 font-medium border-2 border-slate-900 rounded-full shadow-sm hover:bg-slate-900 hover:text-white hover:shadow-md transition-all duration-300">
                                 VIEW THE FORUM
                             </button>
                         </Link>
@@ -59,8 +59,7 @@ function Forum() {
                     transition={{ duration: 0.7 }}
                 >
                     <div className="relative">
-                        <div
-                            className="absolute top-0 right-0 w-48 h-48 rounded-full -z-10 translate-x-1/4"></div>
+                        <div className="absolute inset-0 -z-10 rounded-full bg-primary-100/50 blur-3xl scale-75" />
                         <motion.div
                             animate={{
                                 y: [0, -10, 0],

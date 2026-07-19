@@ -16,19 +16,19 @@ import { CheckCircleIcon } from '@chakra-ui/icons';
 export default function SuccessModal({isOpen, onClose, successMessage}) {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
-            <ModalOverlay/>
-            <ModalContent>
+            <ModalOverlay bg="blackAlpha.500" backdropFilter="blur(2px)"/>
+            <ModalContent borderRadius="xl">
                 <ModalHeader>
                     <Flex align="center" gap={2}>
                         <CheckCircleIcon color="green.500"/>
-                        <Text>Success</Text>
+                        <Text color="slate.900" fontFamily="display">Success</Text>
                     </Flex>
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody color="slate.600">
                     {successMessage || "Operation completed successfully."}
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="green" onClick={onClose}>
+                    <Button colorScheme="green" borderRadius="lg" onClick={onClose}>
                         OK
                     </Button>
                 </ModalFooter>

@@ -122,7 +122,7 @@ const BlogEditor = () => {
 
     return (
         <div className={styles.editor}>
-            <Box bg="gray.50" px={5} pt={5} mb={5} borderRadius="md">
+            <Box bg="slate.50" px={5} pt={5} mb={5} borderRadius="xl">
                 <FormControl isInvalid={errors?.title}>
                     <Input
                         variant="unstyled"
@@ -140,8 +140,8 @@ const BlogEditor = () => {
 
             {/* Featured Image Display */}
             {blogImage && (
-                <Box mb={5} borderRadius="md" overflow="hidden">
-                    <img 
+                <Box mb={5} borderRadius="xl" overflow="hidden" boxShadow="card">
+                    <img
                         src={blogImage} 
                         alt="Blog featured image" 
                         style={{
@@ -264,9 +264,9 @@ const BlogEditor = () => {
                                 />
                             </PopoverBody>
                             <PopoverFooter display="flex" justifyContent="flex-end">
-                                <Button bg="black"
+                                <Button bg="slate.900"
                                         color="white"
-                                        _hover={{bg: "gray.800"}}
+                                        _hover={{bg: "primary.600"}}
                                         size="md"
                                         fontSize="sm"
                                         borderRadius="lg"

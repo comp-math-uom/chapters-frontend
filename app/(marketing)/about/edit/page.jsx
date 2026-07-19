@@ -104,7 +104,7 @@ export default function EditAboutUsPage() {
 
     return (
         <Container maxW="4xl" py={12} px={{ base: 4, md: 6 }}>
-            <Heading mb={8} className="font-anton">Edit About Us</Heading>
+            <Heading mb={8} className="font-anton" color="slate.900" letterSpacing="tight">Edit About Us</Heading>
 
             <Stack spacing={6}>
                 <FormControl>
@@ -196,8 +196,8 @@ export default function EditAboutUsPage() {
                 </Box>
 
                 <HStack justify="flex-end" pt={4}>
-                    <Button onClick={() => router.push('/about')} variant="ghost">Cancel</Button>
-                    <Button bg="black" color="white" _hover={{ bg: "gray.800" }} onClick={onSave} isLoading={saving}>
+                    <Button onClick={() => router.push('/about')} variant="ghost" borderRadius="lg">Cancel</Button>
+                    <Button bg="slate.900" color="white" borderRadius="lg" _hover={{ bg: "primary.600" }} onClick={onSave} isLoading={saving}>
                         Save changes
                     </Button>
                 </HStack>

@@ -86,7 +86,7 @@ export default function Page() {
 
     return (
         <div className="container flex flex-col h-full m-auto justify-start px-4 sm:px-6 md:px-10 lg:px-20">
-            <h1 className="text-3xl md:text-4xl font-bold my-6 md:my-10">Edit Project</h1>
+            <h1 className="font-display text-3xl md:text-4xl font-bold my-6 md:my-10 text-slate-900 tracking-tight">Edit Project</h1>
             <PortfolioForm initialValues={portfolioItem} handleSubmit={handleSubmit} />
             <ErrorModal
                 isOpen={isErrorModalOpen}

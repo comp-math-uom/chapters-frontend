@@ -87,18 +87,18 @@ export default function Page() {
     // ---- Success state: "Check your inbox" card ----
     if (submittedEmail) {
         return (
-            <Flex bg="gray.50" alignItems="center" justifyContent="center" minH="80vh">
+            <Flex bg="slate.50" alignItems="center" justifyContent="center" minH="80vh">
                 <Container maxW="md">
                     <VStack spacing={6}>
-                        <Heading fontFamily="impact" fontSize="6xl" color="gray.700">
+                        <Heading fontFamily="Impact, sans-serif" fontSize="6xl" color="slate.900">
                             C H A P T E R S
                         </Heading>
-                        <Box w="full" bg="white" rounded="lg" shadow="lg" p={8}>
+                        <Box w="full" bg="white" rounded="2xl" boxShadow="card" border="1px solid" borderColor="slate.100" p={8}>
                             <VStack spacing={5} align="stretch">
-                                <Heading fontSize="2xl" color="gray.700" textAlign="center">
+                                <Heading fontFamily="display" fontSize="2xl" color="slate.900" textAlign="center">
                                     Check your inbox
                                 </Heading>
-                                <Alert status="info" borderRadius="md">
+                                <Alert status="info" borderRadius="lg">
                                     <AlertIcon />
                                     <Text fontSize="sm">
                                         We sent a verification link to <strong>{submittedEmail}</strong>.
@@ -106,28 +106,28 @@ export default function Page() {
                                     </Text>
                                 </Alert>
 
-                                <Text fontSize="sm" color="gray.600" textAlign="center">
+                                <Text fontSize="sm" color="slate.600" textAlign="center">
                                     Didn&apos;t get the email? Check your spam folder or resend it below.
                                 </Text>
 
                                 {resendStatus === 'sent' && (
-                                    <Alert status="success" borderRadius="md">
+                                    <Alert status="success" borderRadius="lg">
                                         <AlertIcon />
                                         Verification email resent.
                                     </Alert>
                                 )}
                                 {resendStatus === 'error' && (
-                                    <Alert status="error" borderRadius="md">
+                                    <Alert status="error" borderRadius="lg">
                                         <AlertIcon />
                                         Failed to resend. Please try again in a minute.
                                     </Alert>
                                 )}
 
                                 <HStack justify="center" spacing={3}>
-                                    <Button onClick={onResend} variant="outline" isLoading={resending}>
+                                    <Button onClick={onResend} variant="outline" borderColor="slate.300" borderRadius="lg" isLoading={resending}>
                                         Resend email
                                     </Button>
-                                    <Button bg="black" color="white" _hover={{ bg: "gray.700" }} onClick={() => router.push('/auth/login')}>
+                                    <Button bg="slate.900" color="white" borderRadius="lg" _hover={{ bg: "primary.600" }} onClick={() => router.push('/auth/login')}>
                                         Back to sign in
                                     </Button>
                                 </HStack>
@@ -141,16 +141,16 @@ export default function Page() {
 
     // ---- Default state: signup form ----
     return (
-        <Flex bg="gray.50" alignItems="center" justifyContent="center">
+        <Flex bg="slate.50" alignItems="center" justifyContent="center">
             <Container maxW="md">
                 <VStack spacing={8}>
                     <VStack textAlign="center">
-                        <Heading fontFamily="impact" fontSize="6xl" color="gray.700">
+                        <Heading fontFamily="Impact, sans-serif" fontSize="6xl" color="slate.900">
                             C H A P T E R S
                         </Heading>
                     </VStack>
 
-                    <Box w="full" bg="white" rounded="lg" shadow="lg" p={8}>
+                    <Box w="full" bg="white" rounded="2xl" boxShadow="card" border="1px solid" borderColor="slate.100" p={8}>
                         <Formik
                             initialValues={{ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }}
                             onSubmit={handleSubmit}
@@ -158,15 +158,15 @@ export default function Page() {
                             {(props) => (
                                 <Form>
                                     <Stack spacing={5}>
-                                        <Heading className='text-center mb-4' fontSize="2xl" color="gray.700">
+                                        <Heading className='text-center mb-4' fontFamily="display" fontSize="2xl" color="slate.900">
                                             Create an Account
                                         </Heading>
                                         <HStack spacing={4}>
                                             <Field name="firstName" validate={(value) => validateField(value, 'First name')}>
                                                 {({ field, form }) => (
                                                     <FormControl isInvalid={form.errors.firstName && form.touched.firstName}>
-                                                        <FormLabel color="gray.700">First Name</FormLabel>
-                                                        <Input {...field} placeholder="John" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
+                                                        <FormLabel color="slate.700">First Name</FormLabel>
+                                                        <Input {...field} placeholder="John" bg='white' borderColor='slate.200' borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                                                         <FormErrorMessage>{form.errors.firstName}</FormErrorMessage>
                                                     </FormControl>
                                                 )}
@@ -175,8 +175,8 @@ export default function Page() {
                                             <Field name="lastName" validate={(value) => validateField(value, 'Last name')}>
                                                 {({ field, form }) => (
                                                     <FormControl isInvalid={form.errors.lastName && form.touched.lastName}>
-                                                        <FormLabel color="gray.700">Last Name</FormLabel>
-                                                        <Input {...field} placeholder="Doe" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
+                                                        <FormLabel color="slate.700">Last Name</FormLabel>
+                                                        <Input {...field} placeholder="Doe" bg='white' borderColor='slate.200' borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                                                         <FormErrorMessage>{form.errors.lastName}</FormErrorMessage>
                                                     </FormControl>
                                                 )}
@@ -186,8 +186,8 @@ export default function Page() {
                                         <Field name="email" validate={validateEmail}>
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.email && form.touched.email}>
-                                                    <FormLabel color="gray.700">Email address</FormLabel>
-                                                    <Input {...field} type="email" placeholder="your@email.com" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
+                                                    <FormLabel color="slate.700">Email address</FormLabel>
+                                                    <Input {...field} type="email" placeholder="your@email.com" bg='white' borderColor='slate.200' borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                                                     <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -196,8 +196,8 @@ export default function Page() {
                                         <Field name="password" validate={validatePassword}>
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                                    <FormLabel color="gray.700">Password</FormLabel>
-                                                    <Input {...field} type="password" placeholder="Enter your password" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
+                                                    <FormLabel color="slate.700">Password</FormLabel>
+                                                    <Input {...field} type="password" placeholder="Enter your password" bg='white' borderColor='slate.200' borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                                                     <FormErrorMessage>{form.errors.password}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -206,8 +206,8 @@ export default function Page() {
                                         <Field name="confirmPassword" validate={(value) => validateConfirmPassword(props.values.password, value)}>
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.confirmPassword && form.touched.confirmPassword}>
-                                                    <FormLabel color="gray.700">Confirm Password</FormLabel>
-                                                    <Input {...field} type="password" placeholder="Confirm your password" bg='gray.50' borderColor='gray.300' _hover={{ borderColor: 'gray.400' }} />
+                                                    <FormLabel color="slate.700">Confirm Password</FormLabel>
+                                                    <Input {...field} type="password" placeholder="Confirm your password" bg='white' borderColor='slate.200' borderRadius="lg" _hover={{ borderColor: 'slate.300' }} />
                                                     <FormErrorMessage>{form.errors.confirmPassword}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -221,12 +221,13 @@ export default function Page() {
 
                                         <Button
                                             type="submit"
-                                            bg="black"
+                                            bg="slate.900"
                                             color="white"
+                                            borderRadius="lg"
                                             size="lg"
                                             fontSize="md"
                                             isLoading={props.isSubmitting}
-                                            _hover={{ bg: "gray.700" }}
+                                            _hover={{ bg: "primary.600" }}
                                         >
                                             Create Account
                                         </Button>
@@ -236,9 +237,9 @@ export default function Page() {
                         </Formik>
                     </Box>
 
-                    <Text color="gray.700" fontSize="sm">
+                    <Text color="slate.700" fontSize="sm">
                         Already have an account?{' '}
-                        <Button variant="link" color="gray.600" _hover={{ color: "gray.700" }} fontSize="sm" onClick={() => router.push('/auth/login')}>
+                        <Button variant="link" color="primary.600" _hover={{ color: "primary.700" }} fontSize="sm" onClick={() => router.push('/auth/login')}>
                             Sign in
                         </Button>
                     </Text>

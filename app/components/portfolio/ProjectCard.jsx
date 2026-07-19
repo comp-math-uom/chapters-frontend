@@ -12,18 +12,20 @@ export default function ProjectCard({ project, onClick }) {
     return (
         <Box
             bg="white"
-            borderRadius="md"
+            borderRadius="xl"
             overflow="hidden"
-            boxShadow="sm"
+            border="1px solid"
+            borderColor="slate.100"
+            boxShadow="card"
             transition="all 0.2s"
             cursor="pointer"
             onClick={onClick}
-            _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
+            _hover={{ boxShadow: "card-hover", transform: "translateY(-4px)" }}
             h="100%"
             display="flex"
             flexDirection="column"
         >
-            <Box position="relative" bg="gray.50">
+            <Box position="relative" bg="slate.50">
                 <Image
                     src={project.image}
                     alt={project.topic}
@@ -33,37 +35,37 @@ export default function ProjectCard({ project, onClick }) {
                 />
                 <Flex position="absolute" top={2} right={2} gap={1}>
                     {project.featured && (
-                        <Badge colorScheme="yellow" variant="solid">FEATURED</Badge>
+                        <Badge colorScheme="yellow" variant="solid" borderRadius="full" px={2}>FEATURED</Badge>
                     )}
                     {project.visible === false && (
-                        <Badge colorScheme="red" variant="solid">HIDDEN</Badge>
+                        <Badge colorScheme="red" variant="solid" borderRadius="full" px={2}>HIDDEN</Badge>
                     )}
                 </Flex>
             </Box>
             <Box p={4} flex={1} display="flex" flexDirection="column">
                 <HStack mb={2} justify="space-between" flexWrap="wrap">
                     {project.batch && (
-                        <Badge colorScheme="gray" textTransform="uppercase">
+                        <Badge colorScheme="primary" borderRadius="full" px={2} textTransform="uppercase">
                             {project.batch}
                         </Badge>
                     )}
                     {date && (
-                        <HStack spacing={1} color="gray.500" fontSize="xs">
+                        <HStack spacing={1} color="slate.500" fontSize="xs">
                             <CalendarIcon boxSize={2.5} />
                             <Text>{date.toLocaleDateString()}</Text>
                         </HStack>
                     )}
                 </HStack>
-                <Heading as="h3" size="md" mb={2} noOfLines={2}>
+                <Heading as="h3" size="md" mb={2} noOfLines={2} fontFamily="display" color="slate.900">
                     {project.topic}
                 </Heading>
                 {project.description && (
-                    <Text color="gray.600" fontSize="sm" noOfLines={3} mb={3}>
+                    <Text color="slate.600" fontSize="sm" noOfLines={3} mb={3}>
                         {project.description}
                     </Text>
                 )}
                 {contributorNames.length > 0 && (
-                    <Text fontSize="xs" color="gray.500" noOfLines={1} mt="auto">
+                    <Text fontSize="xs" color="slate.500" noOfLines={1} mt="auto">
                         <strong>Contributors:</strong> {contributorNames.join(", ")}
                     </Text>
                 )}
