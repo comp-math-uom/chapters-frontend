@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 function WeAre() {
     return (
         <motion.div
+            id="about-us"
             className="w-full bg-black text-white rounded-3xl p-6 sm:p-8 md:p-12 my-8 md:my-16 ml-4 md:ml-0"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}

@@ -1,17 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useAuth } from '@/app/providers/Providers';
 import {
-    Avatar,
     Box,
     Flex,
     HStack,
     IconButton,
     Image,
-    Input,
-    InputGroup,
-    InputRightElement,
     Modal,
     ModalBody,
     ModalContent,
@@ -19,24 +14,18 @@ import {
     ModalOverlay,
     Text,
     useDisclosure,
-    VStack
 } from "@chakra-ui/react";
-import { ChevronRightIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import ContributorsList from "@/app/components/portfolio/ContributorsList";
-import contributors from "@/app/data/contributors";
 import Link from "next/link";
-import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 import DeleteConfirmModal from "@/app/components/common/DeleteConfirmModal";
 import portfolioService from "@/app/lib/services/portfolioService";
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
-import { feedbackService } from "@/app/lib/services/feedbackService";
 
 export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = false }) {
-    const { auth } = useAuth();
-    const [profilePic, setProfilePic] = useState();
-    const [comment, setComment] = useState("");
-    const [comments, setComments] = useState([]);
+    const [availableContributors, setAvailableContributors] = useState([]);
+    const [displayContributors, setDisplayContributors] = useState([]);
     const [imageHeight, setImageHeight] = useState(null);
     const imageRef = useRef(null);
     const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
@@ -44,35 +33,6 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
-
-    const handleAddComment = async () => {
-        if (comment.trim()) {
-            const username = auth?.tokenParsed?.preferred_username || auth?.tokenParsed?.email || "Anonymous";
-            const feedbackData = {
-                content: comment,
-                username: username
-            };
-
-            try {
-                const response = await feedbackService.createFeedback(galleryItem.id, feedbackData);
-
-                const newComment = {
-                    id: response?.id || Date.now(),
-                    userName: username,
-                    userAvatar: profilePic,
-                    timeAgo: "Just now",
-                    content: comment
-                };
-
-                setComments([...comments, newComment]);
-                setComment("");
-            } catch (error) {
-                console.error("Failed to submit feedback", error);
-                setModalMessage("Failed to submit feedback. Please try again.");
-                setIsErrorModalOpen(true);
-            }
-        }
-    };
 
     const onClickDelete = (itemId) => {
         console.log(`Opening delete modal for ID: ${itemId}`);
@@ -107,16 +67,37 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
         }
     }, [galleryItem]);
 
-    useEffect(() => {
-        setProfilePic(auth?.tokenParsed?.picture);
-    }, [auth]);
 
     useEffect(() => {
         if (!isOpen) {
-            setComments([]);
-            setComment("");
+            setDisplayContributors([]);
         }
     }, [isOpen]);
+
+    useEffect(() => {
+        portfolioService.fetContributors().then((data) => {
+            setAvailableContributors(data || []);
+        });
+    }, []);
+
+    useEffect(() => {
+        const contributorIds = Array.isArray(galleryItem?.contributors) ? galleryItem.contributors : [];
+        if (contributorIds.length === 0) {
+            setDisplayContributors([]);
+            return;
+        }
+
+        const idSet = new Set(contributorIds);
+        const matched = availableContributors.filter(
+            (profile) => idSet.has(profile.value) || (profile.email && idSet.has(profile.email))
+        );
+
+        if (matched.length > 0) {
+            setDisplayContributors(matched);
+        } else {
+            setDisplayContributors(contributorIds.map((value) => ({ label: value, value })));
+        }
+    }, [availableContributors, galleryItem]);
 
     return (
         <>
@@ -175,40 +156,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem, isAdmin = f
                                     {galleryItem.description || "No description available."}
                                 </Text>
 
-                                <ContributorsList contributors={contributors} />
-
-                                <Flex gap={3} className="my-10" alignItems="center">
-                                    <Avatar
-                                        src={profilePic}
-                                        name={auth?.tokenParsed?.preferred_username || auth?.tokenParsed?.email || "John Doe"}
-                                    />
-                                    <InputGroup size='md' borderRadius="lg">
-                                        <Input
-                                            _focus={{
-                                                bg: "#e2e8f0",
-                                                borderColor: "transparent"
-                                            }}
-                                            borderRadius="full"
-                                            variant='filled'
-                                            placeholder='Leave a comment'
-                                            value={comment}
-                                            onChange={(e) => setComment(e.target.value)}
-                                        />
-                                        <InputRightElement>
-                                            <IconButton
-                                                borderRadius="full"
-                                                bg="black"
-                                                color="white"
-                                                size='xs'
-                                                icon={<ChevronRightIcon />}
-                                                onClick={handleAddComment}
-                                                aria-label="send"
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                </Flex>
-
-                                <FeedbackSection as="h6" size="xs" additionalFeedbacks={comments} projectId={galleryItem.id} />
+                                <ContributorsList contributors={displayContributors} />
 
 
                             </Box>

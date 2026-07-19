@@ -28,7 +28,7 @@ function Navbar() {
 
     const scrollToContact = (e) => {
         e.preventDefault();
-        const contactSection = document.getElementById('contactUS');
+        const contactSection = document.getElementById('contactUs');
         if (contactSection) {
             contactSection.scrollIntoView({ behavior: 'smooth' });
             onClose(); // Close mobile menu if open
@@ -70,10 +70,11 @@ function Navbar() {
 
     const NavLinks = () => (
         <>
-            <Link passHref href="/portfolio" className="font-impact hover:text-gray-700">PORTFOLIO</Link>
-            <Link passHref href="/blog" className="font-impact hover:text-gray-700">BLOG</Link>
-            <Link passHref href="/forum" className="font-impact hover:text-gray-700">FORUM</Link>
-            <Link passHref href="/#contactUs" className="font-impact hover:text-gray-700" onClick={scrollToContact}>CONTACT US</Link>
+            <Link passHref href="/projects" className="font-impact hover:text-gray-700">PROJECTS</Link>
+            <Link passHref href="/achievements" className="font-impact hover:text-gray-700">ACHIEVEMENTS</Link>
+            <Link passHref href="/blog" className="font-impact hover:text-gray-700">BLOGS</Link>
+            <Link passHref href="/#about-us" className="font-impact hover:text-gray-700">ABOUT US</Link>
+            <Link passHref href="/#contactUs" className="font-impact hover:text-gray-700" onClick={scrollToContact}>CONTACT</Link>
         </>
     );
 
@@ -102,20 +103,25 @@ function Navbar() {
                     {initialized && auth && auth.authenticated ? (
                         <div className="flex items-center gap-2">
                             <p className="text-base text-black text-decoration-none hidden sm:block">
-                                {auth.tokenParsed?.preferred_username || auth.tokenParsed?.email || JSON.stringify(auth.tokenParsed) || 'User'}
+                                {auth.displayName || auth.tokenParsed?.displayName || auth.tokenParsed?.preferred_username || 'User'}
                             </p>
                             <Menu placement="bottom-end">
                                 <MenuButton>
                                     <Avatar
                                         src={profilePic}
-                                        alt={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
-                                        name={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
+                                        alt={auth.displayName || auth.tokenParsed?.displayName}
+                                        name={auth.displayName || auth.tokenParsed?.displayName}
                                         size={{ base: "sm", md: "md" }}
                                         cursor="pointer"
                                         _hover={{ opacity: 0.8 }}
                                     />
                                 </MenuButton>
                                 <MenuList minW="200px">
+                                    {auth?.isAdmin && (
+                                        <MenuItem onClick={() => router.push('/blog/admin')}>
+                                            Blog Admin
+                                        </MenuItem>
+                                    )}
                                     <MenuItem icon={<FiUser />}>
                                         Profile
                                     </MenuItem>
@@ -126,17 +132,9 @@ function Navbar() {
                             </Menu>
                         </div>
                     ) : (
-                        <Button
-                            bg="black"
-                            color="white"
-                            size="md"
-                            fontWeight="semibold"
-                            borderRadius="lg"
-                            onClick={() => auth && auth.login()}
-                            _hover={{ bg: "gray.700" }}
-                        >
-                            Sign In
-                        </Button>
+                        <Link href="/auth/login" className="text-sm text-gray-600 hover:text-gray-800">
+                            Sign in
+                        </Link>
                     )}
 
                     {isMobile && (
@@ -171,37 +169,32 @@ function Navbar() {
 
                             {!initialized || !auth || !auth.authenticated ? (
                                 <HStack spacing={4} pt={4} w="full">
-                                    <Button
-                                        bg="black"
-                                        color="white"
-                                        size="md"
-                                        fontWeight="semibold"
-                                        borderRadius="lg"
-                                        onClick={() => auth && auth.login()}
-                                        _hover={{ bg: "gray.700" }}
-                                    >
-                                        Sign In
-                                    </Button>
+                                    <Link href="/auth/login" className="hover:underline">Sign in</Link>
                                     <span>|</span>
-                                    <Link href="auth/signup" className="hover:underline">Sign Up</Link>
+                                    <Link href="/auth/signup" className="hover:underline">Sign up</Link>
                                 </HStack>
                             ) : (
                                 <HStack spacing={4} pt={4} w="full">
                                     <p className="text-base text-black text-decoration-none hidden sm:block">
-                                        {auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
+                                        {auth.displayName || auth.tokenParsed?.displayName}
                                     </p>
                                     <Menu placement="bottom-end">
                                         <MenuButton>
                                             <Avatar
                                                 src={profilePic}
-                                                alt={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
-                                                name={auth.tokenParsed?.preferred_username || auth.tokenParsed?.email}
+                                                alt={auth.displayName || auth.tokenParsed?.displayName}
+                                                name={auth.displayName || auth.tokenParsed?.displayName}
                                                 size={{ base: "sm", md: "md" }}
                                                 cursor="pointer"
                                                 _hover={{ opacity: 0.8 }}
                                             />
                                         </MenuButton>
                                         <MenuList minW="200px">
+                                            {auth?.isAdmin && (
+                                                <MenuItem onClick={() => router.push('/blog/admin')}>
+                                                    Blog Admin
+                                                </MenuItem>
+                                            )}
                                             <MenuItem icon={<FiUser />}>
                                                 Profile
                                             </MenuItem>

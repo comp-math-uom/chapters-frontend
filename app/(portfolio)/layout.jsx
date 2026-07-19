@@ -4,7 +4,7 @@ import Footer from "@/app/components/common/Footer";
 import Loading from "@/app/loading";
 
 export const metadata = {
-    title: "CHAPTERS | Portfolio",
+    title: "CHAPTERS | Projects",
     description: "Chapters - AI/ML Portal",
 };
 

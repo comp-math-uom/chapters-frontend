@@ -2,7 +2,7 @@
 
 import PortfolioSectionPage from "@/app/components/portfolio/PortfolioSectionPage";
 
-export default function Home() {
+export default function ProjectsPage() {
     return (
         <PortfolioSectionPage
             section="projects"

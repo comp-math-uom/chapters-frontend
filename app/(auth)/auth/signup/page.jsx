@@ -73,7 +73,10 @@ export default function Page() {
                 return;
             }
             actions.setSubmitting(false);
-            router.push('/auth/login');
+            actions.resetForm();
+            actions.setStatus({
+                success: `We sent a verification email to ${values.email}. Please verify your email before signing in.`
+            });
         } catch (error) {
             actions.setSubmitting(false);
             actions.setStatus({ error: 'Signup failed. Please try again.' });
@@ -219,6 +222,11 @@ export default function Page() {
                                                 {props.status.error}
                                             </Text>
                                         )}
+                                        {props.status && props.status.success && (
+                                            <Text color="green.600" fontSize="sm" textAlign="center">
+                                                {props.status.success}
+                                            </Text>
+                                        )}
 
                                         <Button
                                             type="submit"
@@ -233,6 +241,16 @@ export default function Page() {
                                         >
                                             Create Account
                                         </Button>
+                                        {props.status && props.status.success && (
+                                            <Button
+                                                variant="link"
+                                                color="gray.600"
+                                                fontSize="sm"
+                                                onClick={() => router.push('/auth/login')}
+                                            >
+                                                Go to sign in
+                                            </Button>
+                                        )}
                                     </Stack>
                                 </Form>
                             )}

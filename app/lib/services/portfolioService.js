@@ -1,16 +1,19 @@
-import photos from "@/app/data/photos";
-import contributors from "@/app/data/contributors";
 import axios from "axios";
 import batches from "@/app/data/batches";
 import portfolioApi from "@/app/lib/services/portfolioApi";
-
-const API_URL = "http://localhost:3000/portfolio";
+import { supabase } from "@/app/lib/services/supabase";
 
 const portfolioService = {
 
-    async fetchGalleryItems() {
+    async fetchGalleryItems({ featured = false, section = null, category = null } = {}) {
         try {
-            const response = await portfolioApi.get('projects/all?featured=true');
+            const response = await portfolioApi.get('projects/all', {
+                params: {
+                    featured,
+                    section: section || undefined,
+                    category: category || undefined,
+                }
+            });
             const projects = response.data.projects;
 
             // Add this filter to protect against bad data
@@ -29,6 +32,9 @@ const portfolioService = {
                 date: project.date,
                 batch: project.batch,
                 featured: project.featured,
+                section: project.section,
+                category: project.category,
+                contributors: project.contributors || [],
                 searchTags: project.search_tags,
                 visible: project.visibility,
             }));
@@ -39,49 +45,82 @@ const portfolioService = {
     },
 
     async fetContributors() {
-        return contributors;
+        try {
+            const { data, error } = await supabase
+                .from("profiles")
+                .select("id, full_name, email, avatar_url")
+                .order("full_name", { ascending: true });
+
+            if (error) {
+                throw error;
+            }
+
+            return (data || [])
+                .filter((profile) => profile.full_name || profile.email)
+                .map((profile) => ({
+                    label: profile.full_name || profile.email,
+                    value: profile.id,
+                    email: profile.email,
+                    image: profile.avatar_url || "",
+                }));
+        } catch (error) {
+            console.error("Failed to fetch contributors from Supabase:", error);
+            return [];
+        }
     },
 
     async fetchBatches() {
         return batches;
     },
 
-    async fetchGalleryItem(id) {
-        return photos.find(photo => photo.id == id);
+    async fetchGalleryItem(id, { includeHidden = false } = {}) {
+        try {
+            const url = includeHidden ? `/projects/${id}/admin` : `/projects/${id}`;
+            const response = await portfolioApi.get(url);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to fetch project ${id}:`, error);
+            throw error;
+        }
     },
 
     async filterItems(filterQuery) {
-        let filteredItems = photos;
-        if (!filterQuery.advanced) {
-            filteredItems = filteredItems.filter(photo => {
-                if (photo.topic.includes(filterQuery.searchText)) {
-                    return true;
-                } else if (photo.description.includes(filterQuery.searchText)) {
-                    return true;
-                }
-                return false;
-            });
-        } else {
-            if (filterQuery.batch !== "") {
-                filteredItems = filteredItems.filter(photo => {
-                    console.log(photo.batch, filterQuery.batch);
-                    return photo.batch === filterQuery.batch
-                });
+        try {
+            const params = {
+                query: filterQuery.searchText || undefined,
+                section: filterQuery.section || undefined,
+                category: filterQuery.category || undefined,
+                batch: filterQuery.batch || undefined,
+                year: filterQuery.year ? Number(filterQuery.year) : undefined,
+                month: filterQuery.month ? Number(filterQuery.month) : undefined,
+            };
+
+            if (filterQuery.tags && filterQuery.tags.length > 0) {
+                params.tags = filterQuery.tags;
             }
-            if (filterQuery.year !== "") {
-                filteredItems = filteredItems.filter(photo => {
-                    console.log(new Date(photo.date).getFullYear(), filterQuery.year);
-                    return new Date(photo.date).getFullYear().toString() === filterQuery.year;
-                });
-            }
-            if (filterQuery.month !== "") {
-                filteredItems = filteredItems.filter(photo => {
-                    console.log(new Date(photo.date).getMonth().toString(), filterQuery.month);
-                    return new Date(photo.date).getMonth().toString() === filterQuery.month
-                });
-            }
+
+            const response = await portfolioApi.get('/projects/search', { params });
+            const projects = response.data || [];
+            return projects.map(project => ({
+                id: project.id,
+                src: project.image,
+                width: project.width,
+                height: project.height,
+                topic: project.topic,
+                description: project.description,
+                date: project.date,
+                batch: project.batch,
+                featured: project.featured,
+                section: project.section,
+                category: project.category,
+                contributors: project.contributors || [],
+                searchTags: project.search_tags,
+                visible: project.visibility,
+            }));
+        } catch (error) {
+            console.error("Failed to filter projects:", error);
+            return [];
         }
-        return filteredItems;
     },
 
     async uploadImage(file) {
@@ -111,6 +150,8 @@ const portfolioService = {
         const payload = {
             topic: formData.title,
             description: formData.description,
+            section: formData.section,
+            category: formData.category,
             batch: formData.batch,
             contributors: formData.contributors,
             search_tags: formData.searchTags,
@@ -132,7 +173,19 @@ const portfolioService = {
     },
 
     async updateGalleryItem(data) {
-        return await axios.put(`${API_URL}/${data.id}`, data)
+        const { id, image, ...rest } = data;
+        let imageUrl = image;
+
+        if (image instanceof File) {
+            imageUrl = await this.uploadImage(image);
+        }
+
+        const payload = {
+            ...rest,
+            image: imageUrl,
+        };
+
+        return await portfolioApi.put(`/projects/${id}`, payload);
     },
 
     async deleteGalleryItem(id) {

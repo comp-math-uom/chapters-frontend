@@ -6,15 +6,12 @@ import blogService from "@/app/lib/services/blogService";
 import BlogContent from "@/app/components/blog/BlogContent";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import Image from "next/image";
-import BlogComment from "@/app/components/blog/BlogComment";
 
 
 export default function Page({params}) {
     const [blog, setBlog] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [notFoundError, setNotFoundError] = useState(false);
-    const [comments, setComments] = useState([]);
-    const [userId, setUserId] = useState("1");
 
     // Fetch the blog post when params.id changes
     useEffect(() => {
@@ -38,21 +35,6 @@ export default function Page({params}) {
         };
         fetchBlog();
     }, [params.id]);
-
-    // Fetch comments when blog is loaded
-    useEffect(() => {
-        const fetchBlogComments = async () => {
-            if (!blog || !blog.blog_id) return;
-            try {
-                const apiResult = await blogService.getBlogComments(blog.blog_id);
-                setComments(apiResult || []);
-            } catch (error) {
-                console.error("Error fetching blog comments:", error);
-                setComments([]);
-            }
-        };
-        fetchBlogComments();
-    }, [blog]);
 
 
     if (isLoading) {
@@ -81,7 +63,6 @@ export default function Page({params}) {
                 />
             </div>
             <BlogContent blog={blog}/>
-            <BlogComment comments={comments} setComments={setComments} blogId={params.id} user_id={userId}/>
         </div>
     );
 }

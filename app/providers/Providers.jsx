@@ -8,6 +8,11 @@ import api from "@/app/lib/services/axios";
 import portfolioApi from "@/app/lib/services/portfolioApi";
 import blogApi from "@/app/lib/services/blogApi";
 
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+
 const AuthContext = createContext();
 
 export function useAuth() {
@@ -49,19 +54,36 @@ function AuthProvider({ children }) {
         const mapSessionToAuthShape = (activeSession) => {
             const user = activeSession?.user;
             const metadata = user?.user_metadata || {};
+            const appMetadata = user?.app_metadata || {};
+            const email = (user?.email || "").toLowerCase();
             const preferredUsername = metadata.username || user?.email?.split("@")[0] || user?.id || null;
             const picture = metadata.avatar_url || metadata.picture || null;
+            const roles = Array.isArray(appMetadata.roles) ? appMetadata.roles : [];
+            const normalizedRoles = roles.map((role) => String(role).toLowerCase());
+            const isAdminEmail = email && ADMIN_EMAILS.includes(email);
+            const displayName = metadata.full_name
+                || metadata.name
+                || [metadata.first_name, metadata.last_name].filter(Boolean).join(" ")
+                || metadata.username
+                || user?.email?.split("@")[0]
+                || user?.id
+                || "User";
 
             return {
                 authenticated: Boolean(activeSession?.access_token),
                 token: activeSession?.access_token || null,
+                roles: normalizedRoles,
+                isAdmin: normalizedRoles.includes("admin") || normalizedRoles.includes("moderator") || isAdminEmail,
+                displayName,
                 tokenParsed: activeSession ? {
                     sub: user?.id || null,
                     email: user?.email || null,
                     preferred_username: preferredUsername,
                     picture,
                     firstName: metadata.first_name || "",
-                    lastName: metadata.last_name || ""
+                    lastName: metadata.last_name || "",
+                    roles: normalizedRoles,
+                    displayName,
                 } : null,
                 login: async () => {
                     if (typeof window !== "undefined") {

@@ -7,7 +7,6 @@ import ContactUs from "@/app/components/landing/ContactUs";
 import WeAre from "@/app/components/landing/WeAre";
 import Blog from "@/app/components/landing/Blog";
 import AchievementsSection from "@/app/components/landing/AchievementsSection";
-import Forum from "@/app/components/landing/Forum";
 import Portfolio from "@/app/components/landing/Portfolio";
 import { motion, useScroll, useSpring } from "framer-motion";
 
@@ -30,7 +29,6 @@ export default function Home() {
                 <HeroSection />
                 <AchievementsSection/>
                 <Portfolio />
-                <Forum />
                 <Blog />
                 <WeAre />
                 <ContactUs />

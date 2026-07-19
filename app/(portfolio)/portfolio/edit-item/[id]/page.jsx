@@ -1,7 +1,6 @@
 "use client";
 
 import PortfolioForm from "@/app/components/portfolio/PortfolioForm";
-import FeedbackSection from "@/app/components/portfolio/FeedbackSection";
 import portfolioService from "@/app/lib/services/portfolioService";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -10,6 +9,7 @@ import { useParams } from "next/navigation";
 import ErrorModal from "@/app/components/common/ErrorModal";
 import SuccessModal from "@/app/components/common/SuccessModal";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
+import { useAuth } from "@/app/providers/Providers";
 
 export default function Page() {
     const router = useRouter();
@@ -19,22 +19,31 @@ export default function Page() {
     const [modalMessage, setModalMessage] = useState("");
     const [portfolioItem, setPortfolioItem] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const { auth, initialized } = useAuth();
+
+    useEffect(() => {
+        if (initialized && !auth?.isAdmin) {
+            router.push('/');
+        }
+    }, [initialized, auth, router]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await portfolioService.fetchGalleryItem(id);
+                const data = await portfolioService.fetchGalleryItem(id, { includeHidden: true });
                 setPortfolioItem({
                     title: data.topic || "",
                     description: data.description || "",
-                    searchTags: data.searchTags || "",
-                    image: data.src || "",
-                    visible: data.visible || "",
-                    featured: data.featured || "",
+                    section: data.section || "projects",
+                    category: data.category || "",
+                    searchTags: data.search_tags || [],
+                    image: data.image || "",
+                    visible: data.visibility ?? true,
+                    featured: data.featured ?? false,
                     batch: data.batch || "",
-                    contributors: data.contributors || "",
+                    contributors: data.contributors || [],
+                    date: data.date || new Date(),
                 });
-                console.log(portfolioItem);
             } catch (error) {
                 console.error("Failed to fetch portfolio item:", error);
                 setModalMessage("Failed to load portfolio item.");
@@ -47,13 +56,26 @@ export default function Page() {
         if (id) {
             fetchData();
         }
-    }, [id, portfolioItem]);
+    }, [id]);
 
     const handleSubmit = async (values) => {
         try {
-            let response = await portfolioService.addGalleryItem(values);
-            console.log(response);
-            if (response.status !== 200) {
+            const payload = {
+                id,
+                topic: values.title,
+                description: values.description,
+                section: values.section,
+                category: values.category,
+                batch: values.batch,
+                contributors: values.contributors,
+                search_tags: values.searchTags,
+                date: values.date,
+                visibility: values.visible,
+                featured: values.featured,
+                image: values.image,
+            };
+            const response = await portfolioService.updateGalleryItem(payload);
+            if (response.status === 200) {
                 setModalMessage("Post updated successfully!");
                 setIsSuccessModalOpen(true);
             } else {
@@ -81,7 +103,6 @@ export default function Page() {
                 Edit Post
             </h1>
             <PortfolioForm initialValues={portfolioItem} handleSubmit={handleSubmit} />
-            <FeedbackSection isAdmin={true} />
             <ErrorModal
                 isOpen={isErrorModalOpen}
                 onClose={() => setIsErrorModalOpen(false)}

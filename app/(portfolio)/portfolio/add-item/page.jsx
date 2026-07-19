@@ -15,7 +15,7 @@ export default function Page() {
     const { auth, initialized } = useAuth();
 
     useEffect(() => {
-        if (initialized && !auth.authenticated) {
+        if (initialized && !auth?.isAdmin) {
             router.push('/');
         }
     }, [initialized, auth, router]);
@@ -27,7 +27,7 @@ export default function Page() {
         try {
             let response = await portfolioService.addGalleryItem(values);
             console.log(response);
-            if (response.status !== 200) {
+            if (response.status === 201) {
                 setModalMessage("Post added successfully!");
                 setIsSuccessModalOpen(true);
             } else {

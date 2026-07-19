@@ -22,14 +22,22 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
-export default function PortfolioHeader({filterFn, resetFn}) {
+export default function PortfolioHeader({
+    filterFn,
+    resetFn,
+    section = "projects",
+    title = "PROJECTS",
+    description = "Explore student work curated by the AI Students Chapter.",
+    categoryOptions = ["1st-year projects", "2nd-year projects", "Research projects", "Final-year projects"],
+}) {
     const [filterIcon, setFilterIcon] = useState(LineFilter);
     const [showText, setShowText] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedBatch, setSelectedBatch] = useState('');
-    const [selectedField, setSelectedField] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [tagText, setTagText] = useState('');
 
     const monthList = [
         {name: "January", number: 1},
@@ -59,12 +67,18 @@ export default function PortfolioHeader({filterFn, resetFn}) {
     };
 
     const handleFilterClick = (isAdvanced = true) => {
+        const tags = tagText
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean);
         const filterData = {
             searchText,
             year: selectedYear,
             month: selectedMonth,
             batch: selectedBatch,
-            field: selectedField,
+            category: selectedCategory,
+            tags,
+            section,
             advanced: isAdvanced
         };
         filterFn(filterData);
@@ -84,7 +98,8 @@ export default function PortfolioHeader({filterFn, resetFn}) {
         setSelectedYear('');
         setSelectedMonth('');
         setSelectedBatch('');
-        setSelectedField('');
+        setSelectedCategory('');
+        setTagText('');
         resetFn();
     }
 
@@ -93,11 +108,10 @@ export default function PortfolioHeader({filterFn, resetFn}) {
             <VStack spacing={8} align="center">
                 <Box maxW="2xl" textAlign="center">
                     <Heading as="h1" size="4xl" fontWeight="bold" className={'font-anton'}>
-                        PORTFOLIO
+                        {title}
                     </Heading>
                     <Text mt={4} fontSize="lg" color="gray.500" className={'font-anybody'}>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the standard dummy text ever.
+                        {description}
                     </Text>
                 </Box>
 
@@ -193,16 +207,26 @@ export default function PortfolioHeader({filterFn, resetFn}) {
                             </Select>
 
                             <Select
-                                placeholder="Select Field"
-                                value={selectedField}
-                                onChange={(e) => setSelectedField(e.target.value)}
+                                placeholder="Select Category"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
                                 w={{ base: "full", md: "16%" }}
                                 mb={{ base: 2, md: 0 }}
                                 borderWidth="2px"
                             >
-                                <option value="Hardware">Hardware</option>
-                                <option value="Software">Software</option>
+                                {categoryOptions.map((category) => (
+                                    <option key={category} value={category}>{category}</option>
+                                ))}
                             </Select>
+
+                            <Input
+                                placeholder="Tech stack (comma-separated)"
+                                value={tagText}
+                                onChange={(e) => setTagText(e.target.value)}
+                                w={{ base: "full", md: "24%" }}
+                                mb={{ base: 2, md: 0 }}
+                                borderWidth="2px"
+                            />
 
                             <Flex
                                 w={{ base: "full", md: "auto" }}

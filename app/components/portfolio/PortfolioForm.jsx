@@ -14,6 +14,25 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
     const [contributors, setContributors] = useState([]);
     const [batches, setBatches] = useState([]);
 
+    const sectionOptions = [
+        { value: "projects", label: "Projects" },
+        { value: "achievements", label: "Achievements" },
+    ];
+
+    const projectCategories = [
+        "1st-year projects",
+        "2nd-year projects",
+        "Research projects",
+        "Final-year projects",
+    ];
+
+    const achievementCategories = [
+        "Awards",
+        "Competitions",
+        "Publications",
+        "Talks",
+    ];
+
     const validate = (values) => {
         const errors = {};
         if (!values.title) {
@@ -22,20 +41,23 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
         if (!values.description) {
             errors.description = "Description is required";
         }
+        if (!values.section) {
+            errors.section = "Section is required";
+        }
+        if (!values.category) {
+            errors.category = "Category is required";
+        }
         if (values.searchTags.length > 5) {
             errors.searchTags = "Maximum 5 tags allowed";
         }
         if (!values.image) {
             errors.image = "Image is required";
         }
-        if (!values.batch) {
+        if (values.section === "projects" && !values.batch) {
             errors.batch = "Batch is required";
         }
         if (!values.date) {
             errors.date = "Date is required";
-        }
-        if (!values.batch) {
-            errors.batch = "Batch is required";
         }
         if (!values.contributors || values.contributors.length === 0) {
             errors.contributors = "Please select at least one contributor";
@@ -46,13 +68,15 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
     const initialFormValues = {
         title: initialValues?.title || "",
         description: initialValues?.description || "",
+        section: initialValues?.section || "projects",
+        category: initialValues?.category || "",
         searchTags: initialValues?.searchTags || [],
         image: initialValues?.image || null,
         visible: initialValues?.visible || true,
         featured: initialValues?.featured || false,
         batch: initialValues?.batch || "",
-        date: initialValues?.date || new Date(),
-        contributors: initialValues?.contributors || [],
+        date: initialValues?.date ? new Date(initialValues.date) : new Date(),
+        contributors: Array.isArray(initialValues?.contributors) ? initialValues?.contributors : [],
     }
 
     useEffect(() => {
@@ -91,16 +115,45 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
 
                     <div className="flex flex-col md:flex-row gap-10">
                         <div className="flex flex-col md:w-1/2 w-full">
+                            <Field name='section'>
+                                {({field, form}) => (
+                                    <FormControl isInvalid={form.errors.section && form.touched.section} className="mb-10">
+                                        <FormLabel>Section</FormLabel>
+                                        <Select {...field} placeholder='Select Section'>
+                                            {sectionOptions.map((section) => (
+                                                <option key={section.value} value={section.value}>
+                                                    {section.label}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        <FormErrorMessage>{form.errors.section}</FormErrorMessage>
+                                    </FormControl>
+                                )}
+                            </Field>
+                            <Field name='category'>
+                                {({field, form}) => (
+                                    <FormControl isInvalid={form.errors.category && form.touched.category} className="mb-10">
+                                        <FormLabel>Category</FormLabel>
+                                        <Select {...field} placeholder='Select Category'>
+                                            {(form.values.section === "achievements" ? achievementCategories : projectCategories)
+                                                .map((category) => (
+                                                    <option key={category} value={category}>
+                                                        {category}
+                                                    </option>
+                                                ))}
+                                        </Select>
+                                        <FormErrorMessage>{form.errors.category}</FormErrorMessage>
+                                    </FormControl>
+                                )}
+                            </Field>
                             <Field name='batch'>
                                 {({field, form}) => (
                                     <FormControl isInvalid={form.errors.batch && form.touched.batch} className="mb-10">
                                         <FormLabel>Batch</FormLabel>
                                         <Select {...field} placeholder='Select Batch'>
-                                            {batches.map((batch) => {
-                                                console.log(batch, initialValues)
-                                                return (<option key={batch.value} value={batch.value}
-                                                        selected={initialValues?.batch === batch.value}>{batch.label}</option>)
-                                            })}
+                                            {batches.map((batch) => (
+                                                <option key={batch.value} value={batch.value}>{batch.label}</option>
+                                            ))}
                                         </Select>
                                         <FormErrorMessage>{form.errors.batch}</FormErrorMessage>
                                     </FormControl>
@@ -181,7 +234,7 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                                 {({field, form}) => (
                                     <FormControl className="mb-6"
                                                  isInvalid={form.errors.searchTags && form.touched.searchTags}>
-                                        <FormLabel>Search Tags</FormLabel>
+                                        <FormLabel>Tech Stack / Keywords</FormLabel>
                                         <CreatableSelect
                                             isMulti
                                             value={field.value.map(tag => ({value: tag, label: tag}))}
@@ -221,16 +274,26 @@ export default function PortfolioForm({initialValues, handleSubmit}) {
                             </Field>
                             <div className="flex">
                                 <Field name="visible">
-                                    {({field}) => (
+                                    {({field, form}) => (
                                         <FormControl className="mb-6">
-                                            <Checkbox  {...field} defaultChecked>Visible</Checkbox>
+                                            <Checkbox
+                                                isChecked={field.value}
+                                                onChange={(e) => form.setFieldValue(field.name, e.target.checked)}
+                                            >
+                                                Visible
+                                            </Checkbox>
                                         </FormControl>
                                     )}
                                 </Field>
                                 <Field name="featured">
-                                    {({field}) => (
+                                    {({field, form}) => (
                                         <FormControl className="mb-6">
-                                            <Checkbox  {...field}>Featured</Checkbox>
+                                            <Checkbox
+                                                isChecked={field.value}
+                                                onChange={(e) => form.setFieldValue(field.name, e.target.checked)}
+                                            >
+                                                Featured
+                                            </Checkbox>
                                         </FormControl>
                                     )}
                                 </Field>

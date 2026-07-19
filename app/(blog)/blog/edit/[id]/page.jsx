@@ -9,6 +9,8 @@ import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import { BlogProvider, useBlog } from "@/app/providers/BlogProvider";
 import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/react";
 import { notFound } from 'next/navigation';
+import { useAuth } from "@/app/providers/Providers";
+import { useRouter } from "next/navigation";
 
 function EditBlogContent({ params }) {
     const [blog, setBlog] = useState(null);
@@ -17,12 +19,20 @@ function EditBlogContent({ params }) {
     const { setNavActionButton } = useNav();
     const { initializeBlogData } = useBlog();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { auth, initialized } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (initialized && !auth?.authenticated) {
+            router.push('/');
+        }
+    }, [initialized, auth, router]);
 
     useEffect(() => {
         const fetchBlog = async () => {
             try {
                 setIsLoading(true);
-                const blogData = await blogService.getBlogByIdFromAPI(params.id);
+                const blogData = await blogService.getBlogByIdForEdit(params.id);
                 console.log("Fetched blog data for editing:", blogData);
 
                 if (!blogData) {
@@ -77,7 +87,6 @@ function EditBlogContent({ params }) {
                             initialValues={{
                                 tags: blog.tags || [],
                                 image: blog.post_image || null,
-                                user_id: blog.user_id || "",
                             }}
                             handleCancel={onClose}
                             isEditMode={true}

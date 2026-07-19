@@ -36,7 +36,7 @@ function Portfolio() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl w-full font-black mt-2 md:mt-6">PORTFOLIO</h1>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl w-full font-black mt-2 md:mt-6">PROJECTS</h1>
                     </motion.div>
                     <motion.div
                         className="w-full md:w-3/5 flex flex-col"
@@ -46,17 +46,15 @@ function Portfolio() {
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
                         <p className="mt-2 md:mt-4 text-base md:text-lg text-gray-700 text-center md:text-left">
-                            Explore the results of our learning. This portfolio presents a diverse collection of
-                            projects by University of Moratuwa AI students, ranging from in-depth research to practical
-                            applications. Witness the technical skills, creative approaches, and problem-solving
-                            capabilities we cultivate.
+                            Explore student projects across batches and research tracks. See the technical skills,
+                            creative approaches, and problem-solving capabilities we cultivate.
                         </p>
                         <div className="flex justify-center md:justify-start">
                             <motion.div
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                <Link href="/portfolio">
+                                <Link href="/projects">
                                     <button
                                         className="mt-4 md:mt-6 inline-block border-2 border-black px-4 sm:px-6 py-2 font-bold rounded-full hover:bg-black hover:text-white transition">
                                         BROWSE PROJECTS

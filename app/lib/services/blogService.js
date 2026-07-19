@@ -44,6 +44,16 @@ export const blogService = {
         }
     },
 
+    async getBlogByIdForEdit(id) {
+        try {
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/blog/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching blog for edit ${id}:`, error);
+            throw error;
+        }
+    },
+
     async createBlog(blogData) {
         try {
             const response = await blogApi.post(`${API_BASE_URL}/blogs/createblog`, blogData);
@@ -70,6 +80,28 @@ export const blogService = {
             return response.data;
         } catch (error) {
             console.error(`Error deleting blog with ID ${id}:`, error);
+            throw error;
+        }
+    },
+
+    async getAdminBlogs(status) {
+        try {
+            const response = await blogApi.get(`${API_BASE_URL}/blogs/admin/blogs`, {
+                params: status ? { status } : undefined,
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching admin blogs:", error);
+            throw error;
+        }
+    },
+
+    async updateBlogStatus(id, status) {
+        try {
+            const response = await blogApi.put(`${API_BASE_URL}/blogs/admin/blogs/${id}/status`, { status });
+            return response.data;
+        } catch (error) {
+            console.error(`Error updating blog status for ${id}:`, error);
             throw error;
         }
     },

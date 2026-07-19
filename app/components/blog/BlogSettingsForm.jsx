@@ -6,24 +6,14 @@ import { CreatableSelect } from "chakra-react-select";
 import ImageUploadField from "@/app/components/portfolio/ImageFileUpload";
 import { useBlog } from "@/app/providers/BlogProvider";
 import blogService from "@/app/lib/services/blogService";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
 
 export default function BlogSettingsForm({initialValues, handleCancel, isEditMode = false, blogId}) {
     const toast = useToast();
-    const [authors, setAuthors] = useState([]);
     const {validateBlog, blogTitle, blogContent} = useBlog();
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchAuthors = async () => {
-            const authorsData = await blogService.getAuthors();
-            setAuthors(authorsData);
-        };
-
-        fetchAuthors();
-    }, []);
 
     const uploadCoverImage = async (file) => {
         // curl command: curl --location --request POST "https://api.imgbb.com/1/upload?expiration=600&key=YOUR_CLIENT_API_KEY" --form "image=R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
@@ -55,17 +45,12 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
             errors.image = "Image is required";
         }
         
-        if (!values.user_id) {
-            errors.author = "Author is required";
-        }
-        
         return errors;
     }
 
     const initialFormValues = {
         tags: initialValues?.tags || [],
         image: initialValues?.image || null,
-        user_id: initialValues?.user_id || "",
     }
 
     const convertToBase64 = (file) => {
@@ -122,10 +107,9 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
             const completeData = {
                 ...values,
                 post_image: imageUrl,
-                user_id: values.user_id,
                 title: blogTitle,
                 content: blogContent,
-                comment_constraint: true,
+                comment_constraint: false,
                 number_of_views: 0
             };
 
@@ -195,29 +179,10 @@ export default function BlogSettingsForm({initialValues, handleCancel, isEditMod
                             )}
                         </Field>
 
-                        {/* Hide author selection when editing */}
-                        {!isEditMode && (
-                            <Field name='user_id'>
-                                {({field, form}) => (
-                                    <FormControl isInvalid={form.errors.user_id && form.touched.user_id} className="mb-6">
-                                        <FormLabel>Author</FormLabel>
-                                        <Select {...field} placeholder='Select Author'>
-                                            {authors.map((author) => (
-                                                <option key={author.id} value={author.id}>
-                                                    {author.name}
-                                                </option>
-                                            ))}
-                                        </Select>
-                                        <FormErrorMessage>{form.errors.user_id}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-                        )}
-
                         <Field name='tags'>
                             {({field, form}) => (
                                 <FormControl className="mb-6"
-                                             isInvalid={form.errors.searchTags && form.touched.searchTags}>
+                                             isInvalid={form.errors.tags && form.touched.tags}>
                                     <FormLabel>Tags</FormLabel>
                                     <CreatableSelect
                                         isMulti

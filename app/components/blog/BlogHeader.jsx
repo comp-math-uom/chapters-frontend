@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import DeleteConfirmModal from '@/app/components/common/DeleteConfirmModal';
 import blogService from '@/app/lib/services/blogService';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/providers/Providers';
 
 export default function BlogHeader({blog, blogId}) {
     const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure();
@@ -14,7 +15,13 @@ export default function BlogHeader({blog, blogId}) {
     const [likesCount, setLikesCount] = useState(blog.likes_count || 0);
     const router = useRouter();
     const toast = useToast();
-    const userId = '1'; //TODO: Replace with actual user ID from context or state
+    const { auth } = useAuth();
+    const userId = auth?.tokenParsed?.sub || null;
+    const canManage = Boolean(auth?.isAdmin || (userId && blog.user_id === userId));
+
+    const authorName = [blog.user_first_name, blog.user_last_name].filter(Boolean).join(" ")
+        || blog.user_username
+        || "Student";
 
     const handleShare = async () => {
         try {
@@ -45,6 +52,17 @@ export default function BlogHeader({blog, blogId}) {
 
     const handleLike = async () => {
         try {
+            if (!auth?.authenticated) {
+                toast({
+                    title: "Sign in required",
+                    description: "Please sign in to like posts.",
+                    status: "info",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top",
+                });
+                return;
+            }
             if (isLiked) {
                 await blogService.likeBlog(blogId, userId, 0);
                 setIsLiked(false);
@@ -89,16 +107,19 @@ export default function BlogHeader({blog, blogId}) {
         // Check if the user has liked the blog
         const checkIfLiked = async () => {
             try {
-                // Assuming blogService has a method to check if the blog is liked by the user
-                const liked = await blogService.isLikedByUser(blogId, userId);
-                setIsLiked(liked);
+                if (!auth?.authenticated) {
+                    setIsLiked(false);
+                    return;
+                }
+                const likedStatus = await blogService.isLikedByUser(blogId, userId);
+                setIsLiked(Boolean(likedStatus?.is_liked));
             } catch (error) {
                 console.error('Error checking if blog is liked:', error);
             }
         };
 
         checkIfLiked();
-    }, [blogId]);
+    }, [blogId, auth?.authenticated, userId]);
 
     return (
         <Box width={'full'} paddingTop={[6, 8, 12, 16]} px={[4, 8, 12, 20]}>
@@ -107,10 +128,10 @@ export default function BlogHeader({blog, blogId}) {
                     {blog.title}
                 </Heading>
                 <HStack spacing={2} mt={[3, 4, 5]} flexWrap="wrap">
-                    <Avatar src={blog.user_image}/>
+                    <Avatar src={blog.user_image_url}/>
                     <VStack align={"left"}>
                         <HStack spacing={2} color="gray.700" fontSize={["md", "lg"]} flexWrap="wrap">
-                            <Text>Written by {blog.user_display_name}</Text>
+                            <Text>Written by {authorName}</Text>
                             <Text>|</Text>
                             <Text>
                                 {new Date(blog.postedAt).toLocaleDateString("en-US", {
@@ -143,33 +164,31 @@ export default function BlogHeader({blog, blogId}) {
                             )}
                             <Text fontSize="sm" color="gray.600">{likesCount}</Text>
                         </HStack>                        
-                        <HStack spacing={1}>
-                            <BiComment size={23} className="text-gray-600"/>
-                            <Text fontSize="sm" color="gray.600">12</Text>
-                        </HStack>
                         <HStack spacing={1} className="cursor-pointer hover:opacity-80" onClick={handleShare}>
                             <BsShare size={20} className="text-gray-600"/>
                         </HStack>
                     </HStack>
-                    <Menu>
-                        <MenuButton
-                            as={IconButton}
-                            aria-label="Options"
-                            icon={<BsThreeDots />}
-                            variant="ghost"
-                            size="sm"
-                            color="gray.600"
-                            _hover={{ bg: "gray.100" }}
-                        />
-                        <MenuList>
-                            <MenuItem icon={<EditIcon />} onClick={handleEdit}>
-                                Edit
-                            </MenuItem>
-                            <MenuItem icon={<DeleteIcon />} onClick={onDeleteOpen}>
-                                Delete
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
+                    {canManage && (
+                        <Menu>
+                            <MenuButton
+                                as={IconButton}
+                                aria-label="Options"
+                                icon={<BsThreeDots />}
+                                variant="ghost"
+                                size="sm"
+                                color="gray.600"
+                                _hover={{ bg: "gray.100" }}
+                            />
+                            <MenuList>
+                                <MenuItem icon={<EditIcon />} onClick={handleEdit}>
+                                    Edit
+                                </MenuItem>
+                                <MenuItem icon={<DeleteIcon />} onClick={onDeleteOpen}>
+                                    Delete
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                    )}
                 </HStack>
             </VStack>
             <DeleteConfirmModal 

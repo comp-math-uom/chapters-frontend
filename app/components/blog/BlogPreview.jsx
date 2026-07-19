@@ -3,6 +3,10 @@ import Link from "next/link";
 
 
 export default function BlogPreview({blogPreview}) {
+    const authorName = [blogPreview.user_first_name, blogPreview.user_last_name].filter(Boolean).join(" ")
+        || blogPreview.user_username
+        || "Student";
+
     return (
         <Card 
             maxW={['100%', 'sm']} 
@@ -37,9 +41,9 @@ export default function BlogPreview({blogPreview}) {
 
             <CardFooter justify='space-between' flexWrap='wrap' sx={{'& > button': {minW: '136px'}}}>
                 <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                    <Avatar name={blogPreview.user_display_name} src={blogPreview.user_image}/>
+                    <Avatar name={authorName} src={blogPreview.user_image_url}/>
                     <Box>
-                        <Text> {blogPreview.user_display_name} </Text>
+                        <Text> {authorName} </Text>
                     </Box>
                 </Flex>
                 <Button 
@@ -50,7 +54,7 @@ export default function BlogPreview({blogPreview}) {
                         borderColor: "gray.400"
                     }}
                 >
-                    <Link className="w-full h-full flex items-center justify-center" href={`blog/${blogPreview.blog_id}`}>
+                    <Link className="w-full h-full flex items-center justify-center" href={`/blog/${blogPreview.blog_id}`}>
                         Read
                     </Link>
                 </Button>

@@ -5,17 +5,16 @@ import BlogPreview from "@/app/components/blog/BlogPreview";
 import blogService from "@/app/lib/services/blogService";
 import CoverImage from '../../../public/img/blogCover.jpg';
 import Image from 'next/image'
-import { useNav } from "@/app/providers/NavigationProvider";
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import ErrorBlock from "@/app/components/common/ErrorBlock";
 import { useAuth } from '@/app/providers/Providers';
+import FloatingButton from "@/app/components/portfolio/FloatingButton";
 
 export default function Home() {
     const [blogPreviews, setBlogPreviews] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const { setNavActionButton } = useNav();
     const router = useRouter();
 
     useEffect(() => {
@@ -38,25 +37,6 @@ export default function Home() {
 
 
     const { auth, initialized } = useAuth();
-
-    useEffect(() => {
-        if (initialized && auth?.authenticated) {
-            setNavActionButton({
-                label: 'Write',
-                action: () => router.push('/blog/new')
-            });
-        } else {
-            setNavActionButton({
-                label: '',
-                action: () => { }
-            });
-        }
-
-        return () => setNavActionButton({
-            label: '', action: () => {
-            }
-        });
-    }, [router, setNavActionButton, initialized, auth?.authenticated]);
 
     return (
         <>
@@ -81,6 +61,7 @@ export default function Home() {
                 </div>
             )}
             {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later." />}
+            {initialized && auth?.authenticated && <FloatingButton url="/blog/new" />}
         </>
     );
 }

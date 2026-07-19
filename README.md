@@ -21,7 +21,9 @@
 npm install
 ```
 
-2. Create/update your `.env` file (see `docs/ENVIRONMENT_REFERENCE.md`).
+2. Create/update your `.env` file (see `docs/ENVIRONMENT_REFERENCE.md`). 
+   Ensure `NEXT_PUBLIC_BLOG_API` and `NEXT_PUBLIC_PORTFOLIO_API_URL` point to your local backend instances (e.g., `http://localhost:8000/api/v1/blogs` and `http://localhost:8080/`).
+
 3. Start the development server:
 
 ```sh

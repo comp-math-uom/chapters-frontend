@@ -1,7 +1,7 @@
 import InnerLayout from './innerLayout';
 
 export const metadata = {
-    title: "CHAPTERS | Portfolio",
+    title: "CHAPTERS | Blogs",
     description: "Chapters - AI/ML Portal",
 };
 
