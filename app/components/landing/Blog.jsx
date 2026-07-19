@@ -5,17 +5,16 @@ import { motion } from "framer-motion";
 
 function Blog() {
     return (
-        <div className="w-full my-8 md:my-16 ml-4 md:ml-0">
+        <div className="w-full my-8 md:my-16">
             <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8 md:gap-16 lg:gap-32">
                 <motion.div
                     className="w-full md:w-1/3 mt-8 md:mt-0"
-                    initial={{ opacity: 0, x: -40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7 }}
                 >
                     <div className="relative">
-                        <div className="absolute top-0 right-0 w-48 h-48 rounded-full -z-10 translate-x-1/4"></div>
                         <motion.div
                             animate={{
                                 rotate: [0, 5, 0, -5, 0],
@@ -40,8 +39,8 @@ function Blog() {
 
                 <motion.div
                     className="w-full md:w-2/3 flex flex-col"
-                    initial={{ opacity: 0, x: 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7 }}
                 >

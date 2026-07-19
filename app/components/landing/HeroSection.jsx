@@ -8,8 +8,8 @@ function HeroSection() {
             <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
                 <motion.div
                     className="w-full lg:w-1/2 lg:pr-8 xl:pr-16"
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7 }}
                 >
@@ -45,8 +45,8 @@ function HeroSection() {
                 </motion.div>
                 <motion.div
                     className="w-full lg:w-1/2 mt-6 lg:mt-0"
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7 }}
                 >

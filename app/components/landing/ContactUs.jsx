@@ -50,7 +50,7 @@ function ContactUs() {
 
     return (
         <motion.div id="contactUs"
-            className="flex flex-col md:flex-row gap-8 my-8 md:my-16 w-full ml-4 md:ml-0"
+            className="flex flex-col md:flex-row gap-8 my-8 md:my-16 w-full"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -59,8 +59,8 @@ function ContactUs() {
             {/* Left side - Contact information and image */}
             <motion.div
                 className="w-full md:w-1/3 flex flex-col items-center md:items-end"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
             >
@@ -96,8 +96,8 @@ function ContactUs() {
             {/* Right side - Contact form */}
             <motion.div
                 className="w-full md:w-2/3"
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 }}
             >

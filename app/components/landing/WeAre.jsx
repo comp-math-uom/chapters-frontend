@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 function WeAre() {
     return (
         <motion.div
-            className="w-full bg-black text-white rounded-3xl p-6 sm:p-8 md:p-12 my-8 md:my-16 ml-4 md:ml-0"
+            className="w-full bg-black text-white rounded-3xl p-6 sm:p-8 md:p-12 my-8 md:my-16"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -14,8 +14,8 @@ function WeAre() {
             <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                 <motion.div
                     className="w-full md:w-1/2"
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
@@ -47,8 +47,8 @@ function WeAre() {
 
                 <motion.div
                     className="w-full md:w-1/2 flex justify-center mt-6 md:mt-0"
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >

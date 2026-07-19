@@ -47,8 +47,8 @@ function Portfolio() {
                 <div className="flex flex-col md:flex-row items-stretch justify-between gap-4 mt-4 md:mt-0">
                     <motion.div
                         className="w-full md:w-2/5 flex flex-col text-center md:text-right"
-                        initial={{ x: -30, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
@@ -58,8 +58,8 @@ function Portfolio() {
                     </motion.div>
                     <motion.div
                         className="w-full md:w-3/5 flex flex-col"
-                        initial={{ x: 30, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
