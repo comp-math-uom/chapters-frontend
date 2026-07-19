@@ -13,7 +13,7 @@ function Portfolio() {
 
     useEffect(() => {
         (async () => {
-            // Featured + visible only — backend handles visibility filtering.
+            // Featured + visible only - backend handles visibility filtering.
             const items = await portfolioService.fetchGalleryItems(true);
             setFeatured(items.slice(0, 6));
             setIsLoading(false);

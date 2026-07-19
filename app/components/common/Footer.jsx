@@ -88,7 +88,7 @@ export default function Footer() {
                     gap={2}
                 >
                     <Text fontSize="xs" color="gray.500">
-                        &copy; {year} CHAPTERS — AI Student Chapter, University of Moratuwa. All rights reserved.
+                        &copy; {year} CHAPTERS, AI Student Chapter, University of Moratuwa. All rights reserved.
                     </Text>
                 </Flex>
             </Container>

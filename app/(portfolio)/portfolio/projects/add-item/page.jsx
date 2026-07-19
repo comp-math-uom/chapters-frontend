@@ -17,7 +17,7 @@ export default function Page() {
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
-    // Admin-only — students and anonymous users are redirected home.
+    // Admin-only - students and anonymous users are redirected home.
     useEffect(() => {
         if (!initialized) return;
         if (!auth?.authenticated) {

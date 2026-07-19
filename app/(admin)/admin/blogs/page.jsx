@@ -140,7 +140,7 @@ export default function AdminBlogsPage() {
                                                 </Text>
                                             </Td>
                                             <Td>{author}</Td>
-                                            <Td>{b.postedAt ? new Date(b.postedAt).toLocaleDateString() : '—'}</Td>
+                                            <Td>{b.postedAt ? new Date(b.postedAt).toLocaleDateString() : '-'}</Td>
                                             <Td>
                                                 <Badge colorScheme={visible ? 'green' : 'red'}>
                                                     {visible ? 'Visible' : 'Hidden'}

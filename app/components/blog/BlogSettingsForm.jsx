@@ -80,7 +80,7 @@ export default function BlogSettingsForm({ initialValues, handleCancel, isEditMo
             }
 
             // Author is implicit: the backend reads user_id from the JWT.
-            // We don't send a user_id field — sending one is ignored anyway.
+            // We don't send a user_id field - sending one is ignored anyway.
             const completeData = {
                 tags: values.tags,
                 post_image: imageUrl,
@@ -149,7 +149,7 @@ export default function BlogSettingsForm({ initialValues, handleCancel, isEditMo
                             {() => <ImageUploadField name="image" label="Preview Image" />}
                         </Field>
 
-                        {/* Author is the logged-in user — no selector needed. */}
+                        {/* Author is the logged-in user - no selector needed. */}
                         {!isEditMode && (
                             <FormControl className="mb-6">
                                 <FormLabel>Author</FormLabel>

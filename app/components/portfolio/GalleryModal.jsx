@@ -121,7 +121,7 @@ export default function GalleryModal({ isOpen, onClose, galleryItem }) {
                             <Box flex={1} px={7} overflowY="auto" maxHeight="calc(80vh - 60px)" overflowX="clip">
                                 <ModalHeader pl={0}>{galleryItem.topic}</ModalHeader>
 
-                                {/* Metadata row — batch, date, hidden badge for admins */}
+                                {/* Metadata row - batch, date, hidden badge for admins */}
                                 <HStack spacing={3} mb={3} flexWrap="wrap">
                                     {galleryItem.batch && (
                                         <Badge colorScheme="purple" variant="subtle" textTransform="uppercase">

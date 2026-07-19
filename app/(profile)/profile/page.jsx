@@ -40,7 +40,7 @@ export default function ProfilePage() {
     const user = session?.user;
     const displayName = auth.tokenParsed?.displayName || `${form.firstName} ${form.lastName}`.trim() || "User";
     const role = auth.role || "student";
-    const memberSince = user?.created_at ? new Date(user.created_at).toLocaleDateString() : "—";
+    const memberSince = user?.created_at ? new Date(user.created_at).toLocaleDateString() : "-";
 
     const onSave = async () => {
         setSaving(true);
