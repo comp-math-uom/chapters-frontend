@@ -1,0 +1,28 @@
+name: Supabase Keepalive
+
+# Supabase pauses free-tier projects after ~7 days with no API activity.
+# This pings the project every 3 days (well inside that window) so it never
+# goes idle long enough to be paused. Runs independently of how/where the
+# frontend or backend are actually hosted.
+
+on:
+  schedule:
+    - cron: '0 3 */3 * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    name: Ping Supabase
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Ping Auth service
+        run: |
+          curl --fail --silent --show-error \
+            --header "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            "${{ secrets.SUPABASE_URL }}/auth/v1/health"
+
+      - name: Ping REST/database service
+        run: |
+          curl --silent --show-error \
+            --header "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/" || true
