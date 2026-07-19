@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Box, Heading, SimpleGrid, Text, Image as ChakraImage } from "@chakra-ui/react";
+import { Badge, Box, Heading, HStack, SimpleGrid, Text, Image as ChakraImage } from "@chakra-ui/react";
+import { CalendarIcon } from "@chakra-ui/icons";
 import portfolioService from "@/app/lib/services/portfolioService";
 
 function Portfolio() {
@@ -92,37 +93,55 @@ function Portfolio() {
                             FEATURED PROJECTS
                         </Heading>
                         <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={4}>
-                            {featured.map((project) => (
-                                <Link key={project.id} href="/portfolio/projects" style={{ display: "block" }}>
-                                    <Box
-                                        borderRadius="md"
-                                        overflow="hidden"
-                                        bg="white"
-                                        boxShadow="sm"
-                                        _hover={{ boxShadow: "md", transform: "translateY(-2px)" }}
-                                        transition="all 0.2s"
-                                        h="100%"
-                                    >
-                                        <ChakraImage
-                                            src={project.image}
-                                            alt={project.topic}
-                                            w="100%"
-                                            h="160px"
-                                            objectFit="cover"
-                                        />
-                                        <Box p={3} textAlign="left">
-                                            <Text fontWeight="bold" fontSize="sm" noOfLines={2}>
-                                                {project.topic}
-                                            </Text>
-                                            {project.batch && (
-                                                <Text fontSize="xs" color="gray.500" mt={1}>
-                                                    {project.batch}
+                            {featured.map((project) => {
+                                const date = project.date ? new Date(project.date) : null;
+                                return (
+                                    <Link key={project.id} href="/portfolio/projects" style={{ display: "block", height: "100%" }}>
+                                        <Box
+                                            borderRadius="md"
+                                            overflow="hidden"
+                                            bg="white"
+                                            boxShadow="sm"
+                                            _hover={{ boxShadow: "lg", transform: "translateY(-4px)" }}
+                                            transition="all 0.2s"
+                                            h="100%"
+                                            display="flex"
+                                            flexDirection="column"
+                                        >
+                                            <ChakraImage
+                                                src={project.image}
+                                                alt={project.topic}
+                                                w="100%"
+                                                h="160px"
+                                                objectFit="cover"
+                                            />
+                                            <Box p={4} textAlign="left" flex={1} display="flex" flexDirection="column">
+                                                <HStack mb={2} justify="space-between" flexWrap="wrap">
+                                                    {project.batch && (
+                                                        <Badge colorScheme="gray" textTransform="uppercase">
+                                                            {project.batch}
+                                                        </Badge>
+                                                    )}
+                                                    {date && (
+                                                        <HStack spacing={1} color="gray.500" fontSize="xs">
+                                                            <CalendarIcon boxSize={2.5} />
+                                                            <Text>{date.toLocaleDateString()}</Text>
+                                                        </HStack>
+                                                    )}
+                                                </HStack>
+                                                <Text fontWeight="bold" fontSize="md" noOfLines={2} mb={1}>
+                                                    {project.topic}
                                                 </Text>
-                                            )}
+                                                {project.description && (
+                                                    <Text fontSize="sm" color="gray.600" noOfLines={2}>
+                                                        {project.description}
+                                                    </Text>
+                                                )}
+                                            </Box>
                                         </Box>
-                                    </Box>
-                                </Link>
-                            ))}
+                                    </Link>
+                                );
+                            })}
                         </SimpleGrid>
                     </Box>
                 )}

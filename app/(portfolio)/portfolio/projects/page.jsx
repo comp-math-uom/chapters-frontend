@@ -2,7 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import MediaGallery from "@/app/components/portfolio/MediaGallery";
+import { SimpleGrid, useDisclosure } from "@chakra-ui/react";
+import ProjectCard from "@/app/components/portfolio/ProjectCard";
+import GalleryModal from "@/app/components/portfolio/GalleryModal";
 import PortfolioHeader from "@/app/components/portfolio/PortfolioHeader";
 import PortfolioService from "@/app/lib/services/portfolioService";
 import NoSearchResults from "@/app/components/portfolio/NoResult";
@@ -21,6 +23,8 @@ export default function ProjectsPage() {
     const [isFiltered, setIsFiltered] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
+    const [selected, setSelected] = useState(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const { auth, initialized } = useAuth();
     const { setNavActionButton } = useNav();
     const router = useRouter();
@@ -73,6 +77,11 @@ export default function ProjectsPage() {
         return () => setNavActionButton({ label: "", action: () => { } });
     }, [isAdmin, setNavActionButton, router]);
 
+    const handleOpen = (project) => {
+        setSelected(project);
+        onOpen();
+    };
+
     const totalPages = isFiltered ? 1 : Math.max(1, Math.ceil(total / PAGE_SIZE));
 
     return (
@@ -85,7 +94,11 @@ export default function ProjectsPage() {
             />
             {galleryItems.length > 0 && !isLoading && !isError && (
                 <>
-                    <MediaGallery galleryItems={galleryItems} />
+                    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} pb={4}>
+                        {galleryItems.map((project) => (
+                            <ProjectCard key={project.id} project={project} onClick={() => handleOpen(project)} />
+                        ))}
+                    </SimpleGrid>
                     {!isFiltered && (
                         <Pagination page={page} totalPages={totalPages} onChange={loadPage} />
                     )}
@@ -94,6 +107,8 @@ export default function ProjectsPage() {
             {galleryItems.length === 0 && !isLoading && !isError && <NoSearchResults onClear={handleReset} />}
             {isLoading && <LoadingSpinner />}
             {isError && !isLoading && <ErrorBlock msg="We could not load data. Please try again later." />}
+
+            {selected && <GalleryModal isOpen={isOpen} onClose={onClose} galleryItem={selected} />}
         </div>
     );
 }

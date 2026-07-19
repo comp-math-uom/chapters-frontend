@@ -104,6 +104,8 @@ function AchievementsSection() {
                                             subtitle={achievement.category}
                                             description={achievement.description}
                                             image={achievement.image}
+                                            date={achievement.date}
+                                            batch={achievement.batch}
                                         />
                                     </motion.div>
                                 ))}
