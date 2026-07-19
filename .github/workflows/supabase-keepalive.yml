@@ -20,9 +20,3 @@ jobs:
           curl --fail --silent --show-error \
             --header "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             "${{ secrets.SUPABASE_URL }}/auth/v1/health"
-
-      - name: Ping REST/database service
-        run: |
-          curl --silent --show-error \
-            --header "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/" || true
