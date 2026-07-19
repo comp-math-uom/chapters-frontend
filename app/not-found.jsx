@@ -11,12 +11,12 @@ export default function NotFound() {
         <div className="flex flex-col min-h-screen">
             <Navbar/>
             <Flex
-                h="calc(100vh - 484px)"
+                flex="1"
                 alignItems="center"
                 justifyContent="center"
                 direction="column"
-                mt={90}
                 textAlign="center"
+                py={{ base: 12, md: 20 }}
             >
                 <Box mb={8}>
                     <Image src={img} alt="Page Not Found" width={500}/>
