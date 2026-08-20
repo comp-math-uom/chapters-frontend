@@ -102,7 +102,7 @@ export default function AchievementForm({ initialValues, handleSubmit }) {
                                 {({ field }) => (
                                     <FormControl className="mb-10">
                                         <FormLabel>Batch (optional)</FormLabel>
-                                        <Input {...field} placeholder="e.g. b22" />
+                                        <Input {...field} placeholder="e.g. b24" />
                                     </FormControl>
                                 )}
                             </Field>

@@ -9,7 +9,11 @@ export const batches = [
     },
     {
         value: "b23",
-        label: "Batch 23"
+        label: "Batch 23",
+    },
+    {
+        value: "b24",
+        label: "Batch 24"
     }
 ]
 

@@ -195,6 +195,7 @@ export default function PortfolioHeader({filterFn, resetFn, title = "PROJECTS", 
                                 <option value="b21">Batch 21</option>
                                 <option value="b22">Batch 22</option>
                                 <option value="b23">Batch 23</option>
+                                <option value="b24">Batch 24</option>
                             </Select>
 
                             <Flex
